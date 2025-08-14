@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShifoCRM - Tibbiyot uchun zamonaviy CRM tizimi</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#0B4F6C', secondary: '#2D936C' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0B4F6C, #2D936C);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease-out;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .sticky-header {
+            transition: all 0.3s ease;
+        }
+
+        .sticky-header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(11, 79, 108, 0.95), rgba(45, 147, 108, 0.95)), url('https://readdy.ai/api/search-image?query=modern%20medical%20clinic%20interior%20with%20clean%20white%20walls%2C%20soft%20natural%20lighting%2C%20professional%20healthcare%20environment%2C%20minimalist%20design%2C%20blue%20and%20green%20accents%2C%20peaceful%20atmosphere%2C%20high-tech%20medical%20equipment%20in%20background&width=1920&height=1080&seq=hero1&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .pulse-slow {
+            animation: pulse 3s infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0B4F6C, #2D936C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-slider {
+            overflow: hidden;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+    <header class="sticky-header fixed top-0 w-full z-50 py-4" id="header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class="ri-health-book-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-['Pacifico'] text-primary">ShifoCRM</span>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features"
+                        class="text-gray-700 hover:text-primary transition-colors duration-300">Xizmatlar</a>
+                    <a href="#demo" class="text-gray-700 hover:text-primary transition-colors duration-300">Demo</a>
+                    <a href="#testimonials"
+                        class="text-gray-700 hover:text-primary transition-colors duration-300">Mijozlar fikri</a>
+                    <a href="#contact" class="text-gray-700 hover:text-primary transition-colors duration-300">Aloqa</a>
+                    <button
+                        class="bg-primary text-white px-6 py-2 !rounded-button hover:bg-opacity-90 transition-all duration-300 hover:shadow-lg whitespace-nowrap">
+                        Bepul sinab ko'ring
+                    </button>
+                </div>
+
+                <button class="md:hidden w-8 h-8 flex items-center justify-center" id="mobile-menu-btn">
+                    <i class="ri-menu-line text-2xl text-primary"></i>
+                </button>
+            </nav>
+
+            <div class="md:hidden mt-4 hidden" id="mobile-menu">
+                <div class="flex flex-col space-y-4 py-4 border-t border-gray-200">
+                    <a href="#features"
+                        class="text-gray-700 hover:text-primary transition-colors duration-300">Xizmatlar</a>
+                    <a href="#demo" class="text-gray-700 hover:text-primary transition-colors duration-300">Demo</a>
+                    <a href="#testimonials"
+                        class="text-gray-700 hover:text-primary transition-colors duration-300">Mijozlar fikri</a>
+                    <a href="#contact" class="text-gray-700 hover:text-primary transition-colors duration-300">Aloqa</a>
+                    <button
+                        class="bg-primary text-white px-6 py-2 !rounded-button hover:bg-opacity-90 transition-all duration-300 whitespace-nowrap w-full">
+                        Bepul sinab ko'ring
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6 fade-in">
+                        Zamonaviy tibbiyot <span class="gradient-text">boshqaruvi</span>
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-100 fade-in" style="transition-delay: 0.2s;">
+                        ShifoCRM bilan klinikangizni raqamlashtiring. Bemorlar bilan ishlash, onlayn qabullar va
+                        avtomatik eslatmalar bir joyda.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 fade-in" style="transition-delay: 0.4s;">
+                        <button
+                            class="bg-secondary text-white px-8 py-4 !rounded-button hover:bg-opacity-90 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 whitespace-nowrap">
+                            <i class="ri-play-circle-line mr-2"></i>
+                            Bepul Demo
+                        </button>
+                        <button
+                            class="border-2 border-white text-white px-8 py-4 !rounded-button hover:bg-white hover:text-primary transition-all duration-300 whitespace-nowrap">
+                            Batafsil ma'lumot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative slide-in-right floating">
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+                        <div class="bg-white rounded-xl p-6 shadow-2xl">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">CRM Dashboard</h3>
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                            <i class="ri-user-line text-white text-sm"></i>
+                                        </div>
+                                        <span class="text-sm text-gray-700">Bugungi bemorlar</span>
+                                    </div>
+                                    <span class="text-primary font-semibold">24</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-secondary/5 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
+                                            <i class="ri-calendar-check-line text-white text-sm"></i>
+                                        </div>
+                                        <span class="text-sm text-gray-700">Qabullar</span>
+                                    </div>
+                                    <span class="text-secondary font-semibold">18</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <i class="ri-notification-line text-white text-sm"></i>
+                                        </div>
+                                        <span class="text-sm text-gray-700">Eslatmalar</span>
+                                    </div>
+                                    <span class="text-blue-500 font-semibold">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 fade-in">Bizning xizmatlarimiz</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto fade-in" style="transition-delay: 0.2s;">
+                    ShifoCRM sizga klinikangizni samarali boshqarish uchun barcha zarur vositalarni taqdim etadi
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover fade-in" style="transition-delay: 0.1s;">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-calendar-schedule-line text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Onlayn qabullar</h3>
+                    <p class="text-gray-600">Bemorlar 24/7 onlayn qabul yozdirishlari mumkin. Avtomatik tasdiqlash va
+                        eslatmalar.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover fade-in" style="transition-delay: 0.2s;">
+                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-database-2-line text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">CRM tizimi</h3>
+                    <p class="text-gray-600">Bemorlar ma'lumotlarini xavfsiz saqlash, tibbiy tarixni kuzatish va
+                        hisobotlar.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover fade-in" style="transition-delay: 0.3s;">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-smartphone-line text-blue-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Moslashuvchan veb-sayt</h3>
+                    <p class="text-gray-600">Klinikangiz uchun professional veb-sayt. Mobil qurilmalarga moslashgan
+                        dizayn.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover fade-in" style="transition-delay: 0.4s;">
+                    <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="ri-notification-badge-line text-orange-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Avtomatik eslatmalar</h3>
+                    <p class="text-gray-600">SMS va email orqali avtomatik eslatmalar. Qabul vaqtini unutish xavfi yo'q.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="slide-in-left">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">
+                        Klinikangizni raqamlashtiring
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        ShifoCRM bilan bemorlar bilan ishlash jarayonini soddalashtiring va klinikangizning
+                        samaradorligini oshiring.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ri-check-line text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Oson foydalanish</h4>
+                                <p class="text-gray-600">Intuitiv interfeys va oddiy navigatsiya. Maxsus o'qitish talab
+                                    qilinmaydi.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ri-check-line text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Xavfsiz ma'lumotlar</h4>
+                                <p class="text-gray-600">Bemorlar ma'lumotlari shifrlangan holda saqlanadi. GDPR
+                                    standartlariga mos.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="ri-check-line text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">24/7 qo'llab-quvvatlash</h4>
+                                <p class="text-gray-600">Texnik yordam va maslahatlar uchun doimo aloqada bo'lamiz.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-in-right">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=modern%20medical%20CRM%20dashboard%20interface%20on%20computer%20screen%2C%20clean%20white%20background%2C%20blue%20and%20green%20color%20scheme%2C%20professional%20healthcare%20software%20design%2C%20patient%20management%20system%2C%20appointment%20scheduling%20interface&width=600&height=400&seq=demo1&orientation=landscape"
+                            alt="ShifoCRM Dashboard" class="rounded-2xl shadow-2xl object-top object-cover w-full h-80">
+                        <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="ri-shield-check-line text-green-500 text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">100% Xavfsiz</p>
+                                    <p class="text-xs text-gray-600">SSL shifrlash</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-20 bg-gradient-to-r from-primary to-secondary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center text-white">
+                <div class="scale-in" style="transition-delay: 0.1s;">
+                    <div class="text-5xl font-bold mb-2 counter" data-count="500">0</div>
+                    <p class="text-xl">Faol klinikalar</p>
+                </div>
+                <div class="scale-in" style="transition-delay: 0.2s;">
+                    <div class="text-5xl font-bold mb-2 counter" data-count="50000">0</div>
+                    <p class="text-xl">Ro'yxatdan o'tgan bemorlar</p>
+                </div>
+                <div class="scale-in" style="transition-delay: 0.3s;">
+                    <div class="text-5xl font-bold mb-2 counter" data-count="99">0</div>
+                    <p class="text-xl">Mijozlar mamnunligi %</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 fade-in">Mijozlarimiz fikri</h2>
+                <p class="text-xl text-gray-600 fade-in" style="transition-delay: 0.2s;">
+                    ShifoCRM dan foydalanayotgan klinikalar rahbarlari va shifokorlarning fikrlari
+                </p>
+            </div>
+
+            <div class="testimonial-slider relative">
+                <div class="testimonial-track" id="testimonial-track">
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <img src="https://readdy.ai/api/search-image?query=professional%20uzbek%20male%20doctor%20in%20white%20coat%2C%20friendly%20smile%2C%20medical%20clinic%20background%2C%20portrait%20photo%2C%20clean%20professional%20lighting&width=80&height=80&seq=doctor1&orientation=squarish"
+                                    alt="Dr. Aziz Karimov" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Dr. Aziz Karimov</h4>
+                                    <p class="text-gray-600">Toshkent Tibbiyot Markazi, Bosh shifokor</p>
+                                </div>
+                            </div>
+                            <p class="text-lg text-gray-700 italic">
+                                "ShifoCRM bizning klinikamizda ishni tubdan o'zgartirdi. Bemorlar bilan ishlash jarayoni
+                                ancha osonlashdi va vaqtni tejashga yordam berdi. Onlayn qabullar tizimi juda qulay."
+                            </p>
+                            <div class="flex text-yellow-400 mt-4">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <img src="https://readdy.ai/api/search-image?query=professional%20uzbek%20female%20doctor%20in%20white%20coat%2C%20confident%20expression%2C%20modern%20medical%20office%20background%2C%20portrait%20photo%2C%20professional%20lighting&width=80&height=80&seq=doctor2&orientation=squarish"
+                                    alt="Dr. Malika Abdullayeva" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Dr. Malika Abdullayeva</h4>
+                                    <p class="text-gray-600">Samarqand Bolalar Klinikasi, Pediatr</p>
+                                </div>
+                            </div>
+                            <p class="text-lg text-gray-700 italic">
+                                "Avtomatik eslatmalar tizimi ajoyib! Bemorlar endi qabulga kechikishmaydi. Tibbiy
+                                ma'lumotlarni saqlash va qidirish ham juda oson. Tavsiya etaman!"
+                            </p>
+                            <div class="flex text-yellow-400 mt-4">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <img src="https://readdy.ai/api/search-image?query=professional%20uzbek%20male%20clinic%20administrator%20in%20business%20suit%2C%20modern%20office%20environment%2C%20confident%20pose%2C%20professional%20headshot%20photo&width=80&height=80&seq=admin1&orientation=squarish"
+                                    alt="Bobur Rahimov" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Bobur Rahimov</h4>
+                                    <p class="text-gray-600">Buxoro Diagnostika Markazi, Administrator</p>
+                                </div>
+                            </div>
+                            <p class="text-lg text-gray-700 italic">
+                                "Hisobotlar va statistikalar juda batafsil. Klinikamizning ish faoliyatini tahlil qilish
+                                osonlashdi. Qo'llab-quvvatlash xizmati ham a'lo darajada."
+                            </p>
+                            <div class="flex text-yellow-400 mt-4">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+                    id="prev-btn">
+                    <i class="ri-arrow-left-line text-gray-600"></i>
+                </button>
+                <button
+                    class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+                    id="next-btn">
+                    <i class="ri-arrow-right-line text-gray-600"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div class="slide-in-left">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Biz bilan bog'laning</h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        ShifoCRM haqida ko'proq ma'lumot olish yoki bepul demo uchun biz bilan bog'laning.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="ri-phone-line text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Telefon</h4>
+                                <p class="text-gray-600">+998 71 123 45 67</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                                <i class="ri-mail-line text-secondary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Email</h4>
+                                <p class="text-gray-600">info@shifocrm.uz</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="ri-map-pin-line text-blue-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Manzil</h4>
+                                <p class="text-gray-600">Toshkent sh., Yunusobod tumani, Amir Temur ko'chasi 108</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-in-right">
+                    <form class="bg-gray-50 p-8 rounded-2xl">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="fade-in" style="transition-delay: 0.1s;">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ism</label>
+                                <input type="text"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors text-sm">
+                            </div>
+                            <div class="fade-in" style="transition-delay: 0.2s;">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Familiya</label>
+                                <input type="text"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors text-sm">
+                            </div>
+                        </div>
+
+                        <div class="mb-6 fade-in" style="transition-delay: 0.3s;">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors text-sm">
+                        </div>
+
+                        <div class="mb-6 fade-in" style="transition-delay: 0.4s;">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                            <input type="tel"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors text-sm">
+                        </div>
+
+                        <div class="mb-6 fade-in" style="transition-delay: 0.5s;">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Xabar</label>
+                            <textarea rows="4"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors text-sm resize-none"></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-primary text-white py-4 !rounded-button hover:bg-opacity-90 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 font-semibold fade-in whitespace-nowrap"
+                            style="transition-delay: 0.6s;">
+                            Xabar yuborish
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="fade-in">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="ri-health-book-line text-white text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-['Pacifico']">ShifoCRM</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        Tibbiyot sohasida zamonaviy CRM yechimlari bilan klinikangizni rivojlantiring.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors pulse-slow">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors pulse-slow">
+                            <i class="ri-instagram-line"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors pulse-slow">
+                            <i class="ri-telegram-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.1s;">
+                    <h4 class="text-lg font-semibold mb-6">Xizmatlar</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Onlayn qabullar</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">CRM tizimi</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Veb-sayt yaratish</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Avtomatik eslatmalar</a></li>
+                    </ul>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.2s;">
+                    <h4 class="text-lg font-semibold mb-6">Kompaniya</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Biz haqimizda</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Yangiliklar</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Karyera</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Hamkorlik</a></li>
+                    </ul>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.3s;">
+                    <h4 class="text-lg font-semibold mb-6">Qo'llab-quvvatlash</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Yordam markazi</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Qo'llanma</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API hujjatlari</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Aloqa</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 ShifoCRM. Barcha huquqlar himoyalangan.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Maxfiylik siyosati</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Foydalanish
+                        shartlari</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-to-top"
+        class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-300 opacity-0 pointer-events-none">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+
+    <script id="preloader-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 2000);
+        });
+    </script>
+
+    <script id="navigation-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.getElementById('header');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            mobileMenuBtn.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script id="scroll-animations-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+
+    <script id="counter-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const counters = document.querySelectorAll('.counter');
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.dataset.count);
+                        let current = 0;
+                        const increment = target / 100;
+
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                counter.textContent = Math.floor(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = target;
+                            }
+                        };
+
+                        updateCounter();
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => observer.observe(counter));
+        });
+    </script>
+
+    <script id="testimonial-slider-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const track = document.getElementById('testimonial-track');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            let currentSlide = 0;
+            const totalSlides = 3;
+            function updateSlider() {
+                const translateX = -currentSlide * 100;
+                track.style.transform = `translateX(${translateX}%)`;
+            }
+
+            nextBtn.addEventListener('click', function () {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            });
+
+            prevBtn.addEventListener('click', function () {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            });
+
+            setInterval(function () {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }, 5000);
+        });
+    </script>
+
+    <script id="scroll-to-top-script">
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollToTopBtn = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 500) {
+                    scrollToTopBtn.style.opacity = '1';
+                    scrollToTopBtn.style.pointerEvents = 'auto';
+                } else {
+                    scrollToTopBtn.style.opacity = '0';
+                    scrollToTopBtn.style.pointerEvents = 'none';
+                }
+            });
+
+            scrollToTopBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <script>
+        const API_URL = "http://localhost:3000";
+
+        // Bemorlarni yuklash
+        async function loadPatients() {
+            const res = await fetch(`${API_URL}/patients`);
+            const patients = await res.json();
+            const tbody = document.querySelector('#patients-section table tbody');
+            tbody.innerHTML = "";
+            patients.forEach(p => {
+                tbody.innerHTML += `
+      <tr>
+        <td>${p.name} (${p.age} yosh)</td>
+        <td>${p.phone}</td>
+        <td>${p.lastVisit}</td>
+        <td>${p.status}</td>
+        <td>
+          <button onclick="deletePatient(${p.id})" class="text-red-600">O'chirish</button>
+        </td>
+      </tr>
+    `;
+            });
+        }
+
+        // Bemor qo‘shish
+        async function addPatient(patient) {
+            await fetch(`${API_URL}/patients`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(patient)
+            });
+            loadPatients();
+        }
+
+        // Bemor o‘chirish
+        async function deletePatient(id) {
+            await fetch(`${API_URL}/patients/${id}`, { method: "DELETE" });
+            loadPatients();
+        }
+
+        document.addEventListener("DOMContentLoaded", loadPatients);
+    </script>
+
+</body>
+
+</html>

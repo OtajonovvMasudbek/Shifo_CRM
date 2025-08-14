@@ -1,0 +1,76 @@
+{
+  "patients": [
+    {
+      "id": "1",
+      "name": "Zarina Abdullayeva",
+      "age": 29,
+      "phone": "+998 90 123 45 67",
+      "lastVisit": "2025-01-02",
+      "status": "Faol",
+      "statusv": "Faol"
+    },
+    {
+      "id": "2",
+      "name": "Aziz Saidov",
+      "age": 45,
+      "phone": "+998 91 234 56 78",
+      "lastVisit": "2024-12-28",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "3",
+      "name": "Malika Karimova",
+      "age": 32,
+      "phone": "+998 93 345 67 89",
+      "lastVisit": "2024-12-30",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "dba8",
+      "name": ".skjebfiudsf",
+      "age": "2131",
+      "phone": "23424",
+      "lastVisit": "2025-08-06",
+      "status": "qwefrew"
+    },
+    {
+      "id": "c0f7",
+      "name": "Masudbek Otajonov",
+      "age": 20,
+      "phone": "+998940542722",
+      "lastVisit": "2025-08-16",
+      "status": "Kutilmoqda"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1",
+      "patient": "Zarina Abdullayeva",
+      "doctor": "Dr. Olimjon Rahimov",
+      "speciality": "Terapevt",
+      "date": "2025-01-03",
+      "time": "10:30",
+      "status": "Rejalashtirilgan"
+    },
+    {
+      "id": "2",
+      "patient": "Aziz Saidov",
+      "doctor": "Dr. Sevara Nazarova",
+      "speciality": "Kardiolog",
+      "date": "2025-01-07",
+      "time": "14:00",
+      "status": "Rejalashtirilgan"
+    }
+  ],
+  "reminders": [
+    {
+      "id": "1",
+      "title": "Zarina uchun qo'ng'iroq",
+      "description": "Tahlil natijalarini muhokama qilish",
+      "priority": "Muhim",
+      "responsible": "Dr. Olimjon Rahimov",
+      "date": "2025-01-02",
+      "time": "14:30"
+    }
+  ]
+}
