@@ -1,45 +1,34 @@
 {
   "patients": [
     {
-      "id": "1",
-      "name": "Zarina Abdullayeva",
-      "age": 29,
-      "phone": "+998 90 123 45 67",
-      "lastVisit": "2025-01-02",
-      "status": "Faol",
-      "statusv": "Faol"
-    },
-    {
-      "id": "2",
-      "name": "Aziz Saidov",
-      "age": 45,
-      "phone": "+998 91 234 56 78",
-      "lastVisit": "2024-12-28",
-      "status": "Kutilmoqda"
-    },
-    {
-      "id": "3",
-      "name": "Malika Karimova",
-      "age": 32,
-      "phone": "+998 93 345 67 89",
-      "lastVisit": "2024-12-30",
-      "status": "Yakunlangan"
-    },
-    {
-      "id": "dba8",
-      "name": ".skjebfiudsf",
-      "age": "2131",
-      "phone": "23424",
-      "lastVisit": "2025-08-06",
-      "status": "qwefrew"
-    },
-    {
-      "id": "c0f7",
-      "name": "Masudbek Otajonov",
+      "id": "cfc1",
+      "name": "Otajonov Masudbek",
       "age": 20,
-      "phone": "+998940542722",
-      "lastVisit": "2025-08-16",
+      "phone": "+998-94-054-2722",
+      "lastVisit": "2025-08-20",
       "status": "Kutilmoqda"
+    },
+    {
+      "id": "meh0f57y",
+      "name": "masudbek",
+      "age": 40,
+      "phone": "534523456324",
+      "lastVisit": "2025-08-14",
+      "status": "Yakunlangan"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "d1",
+      "fullname": "Dr. Olimjon Rahimov",
+      "username": "olimjon",
+      "password": "12345"
+    },
+    {
+      "id": "meh0pjor",
+      "fullname": "Otajonov Masudbek",
+      "username": "masudbek",
+      "password": "2005"
     }
   ],
   "appointments": [

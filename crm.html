@@ -467,7 +467,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Reminders List -->
                         <div class="divide-y divide-gray-200">
                             <div class="p-6 hover:bg-gray-50">
                                 <div class="flex items-start gap-4">
@@ -1033,7 +1032,7 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const API_URL = "http://localhost:3000/patients";
+            const API_URL = "http://localhost:3001/patients";
             const tableBody = document.getElementById('patientsTableBody');
             const addPatientBtn = document.getElementById('addPatientBtn');
             const addPatientModal = document.getElementById('addPatientModal');
@@ -1068,7 +1067,6 @@
                 });
             }
 
-            // 🟢 Yangi bemor qo‘shish
             addPatientForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const formData = new FormData(addPatientForm);

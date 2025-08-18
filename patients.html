@@ -4,162 +4,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShifoCRM Demo - Tibbiy Amaliyot Boshqaruv Tizimi</title>
-    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script>tailwind.config = { theme: { extend: { colors: { primary: '#2E7D32', secondary: '#4CAF50' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-    <style>
-        :where([class^="ri-"])::before {
-            content: "\f3c2";
-        }
-
-        .demo-badge {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-        }
-
-        .sidebar-transition {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .modal-backdrop {
-            backdrop-filter: blur(4px);
-        }
-    </style>
+    <title>Bemorlar boshqaruvi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<!-- Patients Section -->
-<div id="patients-section" class="section active">
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <!-- Search and Add New Patient -->
-        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+
+<body class="bg-gray-50 font-sans">
+    <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6">Bemorlar ro'yxati</h1>
+
+        <!-- Qidirish va yangi qo‘shish -->
+        <div class="flex justify-between items-center mb-4">
             <input id="searchInput" type="text" placeholder="Bemor qidirish..."
-                class="w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
-            <button id="addPatientBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90">+ Yangi
-                bemor</button>
+                class="w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+            <button id="addPatientBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                + Yangi bemor
+            </button>
         </div>
 
-        <!-- Patients Table -->
+        <!-- Jadval -->
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-50">
+            <table class="w-full border-collapse border border-gray-200">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            F.I.O.</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Telefon</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Oxirgi tashrif</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status</th>
+                        <th class="border px-4 py-2">F.I.O.</th>
+                        <th class="border px-4 py-2">Telefon</th>
+                        <th class="border px-4 py-2">Oxirgi tashrif</th>
+                        <th class="border px-4 py-2">Status</th>
+                        <th class="border px-4 py-2 text-center">Amallar</th>
                     </tr>
                 </thead>
-                <tbody id="patientsTableBody" class="bg-white divide-y divide-gray-200">
-                    <!-- JS orqali to‘ldiriladi -->
-                </tbody>
+                <tbody id="patientsTableBody"></tbody>
             </table>
         </div>
     </div>
-</div>
 
-<div id="addPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Yangi bemor qo‘shish</h3>
-        <form id="addPatientForm" class="space-y-4">
-            <input type="text" name="name" placeholder="Ism Familiya" required
-                class="w-full px-4 py-2 border rounded-lg">
-            <input type="number" name="age" placeholder="Yoshi" required class="w-full px-4 py-2 border rounded-lg">
-            <input type="text" name="phone" placeholder="Telefon" required class="w-full px-4 py-2 border rounded-lg">
-            <input type="date" name="lastVisit" required class="w-full px-4 py-2 border rounded-lg">
-            <select name="status" required class="w-full px-4 py-2 border rounded-lg">
-                <option value="Faol">Faol</option>
-                <option value="Kutilmoqda">Kutilmoqda</option>
-                <option value="Yakunlangan">Yakunlangan</option>
-            </select>
-            <div class="flex justify-end gap-2">
-                <button type="button" id="cancelAddPatient" class="px-4 py-2 border rounded-lg">Bekor qilish</button>
-                <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg">Saqlash</button>
-            </div>
-        </form>
+    <!-- ✅ Yangi bemor qo‘shish MODAL -->
+    <div id="addPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Yangi bemor qo‘shish</h3>
+            <form id="addPatientForm" class="space-y-4">
+                <input type="text" name="name" placeholder="Ism Familiya" required
+                    class="w-full px-4 py-2 border rounded-lg">
+                <input type="number" name="age" placeholder="Yoshi" required class="w-full px-4 py-2 border rounded-lg">
+                <input type="text" name="phone" placeholder="Telefon" required
+                    class="w-full px-4 py-2 border rounded-lg">
+                <input type="date" name="lastVisit" required class="w-full px-4 py-2 border rounded-lg">
+                <select name="status" required class="w-full px-4 py-2 border rounded-lg">
+                    <option value="Faol">Faol</option>
+                    <option value="Kutilmoqda">Kutilmoqda</option>
+                    <option value="Yakunlangan">Yakunlangan</option>
+                </select>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancelAddPatient" class="px-4 py-2 border rounded-lg">Bekor
+                        qilish</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg">Saqlash</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
+    <div id="editPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Bemorni tahrirlash</h3>
+            <form id="editPatientForm" class="space-y-4">
+                <input type="hidden" name="id">
+                <input type="text" name="name" placeholder="Ism Familiya" required
+                    class="w-full px-4 py-2 border rounded-lg">
+                <input type="number" name="age" placeholder="Yoshi" required class="w-full px-4 py-2 border rounded-lg">
+                <input type="text" name="phone" placeholder="Telefon" required
+                    class="w-full px-4 py-2 border rounded-lg">
+                <input type="date" name="lastVisit" required class="w-full px-4 py-2 border rounded-lg">
+                <select name="status" required class="w-full px-4 py-2 border rounded-lg">
+                    <option value="Faol">Faol</option>
+                    <option value="Kutilmoqda">Kutilmoqda</option>
+                    <option value="Yakunlangan">Yakunlangan</option>
+                </select>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancelEditPatient" class="px-4 py-2 border rounded-lg">Bekor
+                        qilish</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Yangilash</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const API_URL = "http://localhost:3000/patients";
-        const tableBody = document.getElementById('patientsTableBody');
-        const addPatientBtn = document.getElementById('addPatientBtn');
-        const addPatientModal = document.getElementById('addPatientModal');
-        const cancelAddPatient = document.getElementById('cancelAddPatient');
-        const addPatientForm = document.getElementById('addPatientForm');
-        const searchInput = document.getElementById('searchInput');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const API_URL = "http://localhost:3001/patients";
+            const tableBody = document.getElementById('patientsTableBody');
+            const addPatientBtn = document.getElementById('addPatientBtn');
+            const addPatientModal = document.getElementById('addPatientModal');
+            const cancelAddPatient = document.getElementById('cancelAddPatient');
+            const addPatientForm = document.getElementById('addPatientForm');
+            const editPatientModal = document.getElementById('editPatientModal');
+            const cancelEditPatient = document.getElementById('cancelEditPatient');
+            const editPatientForm = document.getElementById('editPatientForm');
+            const searchInput = document.getElementById('searchInput');
 
-        // 🟢 Bemorlarni olish
-        function loadPatients(query = "") {
-            fetch(API_URL)
-                .then(res => res.json())
-                .then(data => {
+            function closeModal(modal) { modal.classList.add('hidden'); }
+            function openModal(modal) { modal.classList.remove('hidden'); }
+
+            async function loadPatients(query = "") {
+                try {
+                    const res = await fetch(API_URL);
+                    const data = await res.json();
+
                     let filtered = data.filter(p =>
-                        p.name.toLowerCase().includes(query.toLowerCase())
+                        p.name.toLowerCase().includes(query.toLowerCase()) ||
+                        p.phone.includes(query) ||
+                        p.status.toLowerCase().includes(query.toLowerCase())
                     );
+
                     renderPatients(filtered);
+                } catch (error) {
+                    console.error("Xato:", error);
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">Xatolik yuz berdi</td></tr>`;
+                }
+            }
+
+            function renderPatients(patients) {
+                tableBody.innerHTML = "";
+                if (patients.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-gray-500 py-4">Bemor topilmadi</td></tr>`;
+                    return;
+                }
+
+                patients.forEach(p => {
+                    const row = `
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>${p.phone}</td>
+                            <td>${p.lastVisit}</td>
+                            <td>${p.status}</td>
+                            <td class="text-center">
+                                <button onclick="editPatient(${p.id})" class="bg-blue-500 text-white px-3 py-1 rounded-lg mr-2">Edit</button>
+                                <button onclick="deletePatient(${p.id})" class="bg-red-500 text-white px-3 py-1 rounded-lg">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
                 });
-        }
+            }
 
-        // 🟢 Jadvalni to‘ldirish
-        function renderPatients(patients) {
-            tableBody.innerHTML = "";
-            patients.forEach(p => {
-                const row = `
-                <tr>
-                    <td class="px-6 py-4">${p.name} <br><small>${p.age} yosh</small></td>
-                    <td class="px-6 py-4">${p.phone}</td>
-                    <td class="px-6 py-4">${p.lastVisit}</td>
-                    <td class="px-6 py-4">${p.status}</td>
-                </tr>
-            `;
-                tableBody.innerHTML += row;
-            });
-        }
+            addPatientForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const formData = new FormData(addPatientForm);
 
-        // 🟢 Yangi bemor qo‘shish
-        addPatientForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(addPatientForm);
-            const newPatient = {
-                name: formData.get('name'),
-                age: parseInt(formData.get('age')),
-                phone: formData.get('phone'),
-                lastVisit: formData.get('lastVisit'),
-                status: formData.get('status')
-            };
-            fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newPatient)
-            })
-                .then(res => res.json())
-                .then(() => {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const maxId = data.length > 0 ? Math.max(...data.map(p => Number(p.id))) : 0;
+
+                const newPatient = {
+                    id: String(maxId + 1),
+                    name: formData.get('name'),
+                    age: Number(formData.get('age')),
+                    phone: formData.get('phone'),
+                    lastVisit: formData.get('lastVisit'),
+                    status: formData.get('status')
+                };
+
+                try {
+                    await fetch(API_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(newPatient)
+                    });
                     loadPatients();
-                    addPatientModal.classList.add('hidden');
+                    closeModal(addPatientModal);
                     addPatientForm.reset();
+                } catch (error) {
+                    alert("Xatolik: " + error.message);
+                }
+            });
+
+            window.editPatient = async function (id) {
+                const res = await fetch(`${API_URL}/${id}`);
+                const patient = await res.json();
+
+                editPatientForm.id.value = patient.id;
+                editPatientForm.name.value = patient.name;
+                editPatientForm.age.value = patient.age;
+                editPatientForm.phone.value = patient.phone;
+                editPatientForm.lastVisit.value = patient.lastVisit;
+                editPatientForm.status.value = patient.status;
+
+                openModal(editPatientModal);
+            }
+
+            editPatientForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const formData = new FormData(editPatientForm);
+                const updatedPatient = {
+                    id: Number(formData.get('id')),
+                    name: formData.get('name'),
+                    age: Number(formData.get('age')),
+                    phone: formData.get('phone'),
+                    lastVisit: formData.get('lastVisit'),
+                    status: formData.get('status')
+                };
+
+                await fetch(`${API_URL}/${updatedPatient.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(updatedPatient)
                 });
+                loadPatients();
+                closeModal(editPatientModal);
+            });
+
+            // ✅ O‘chirish
+            window.deletePatient = async function (id) {
+                if (confirm("Rostdan ham ushbu bemorni o‘chirmoqchimisiz?")) {
+                    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+                    loadPatients();
+                }
+            };
+
+            // ✅ Modal boshqaruvi
+            addPatientBtn.addEventListener('click', () => openModal(addPatientModal));
+            cancelAddPatient.addEventListener('click', () => closeModal(addPatientModal));
+            cancelEditPatient.addEventListener('click', () => closeModal(editPatientModal));
+
+            // ✅ Qidirish
+            searchInput.addEventListener('input', () => {
+                loadPatients(searchInput.value);
+            });
+
+            loadPatients();
         });
+    </script>
 
-        // 🟢 Modal boshqarish
-        addPatientBtn.addEventListener('click', () => addPatientModal.classList.remove('hidden'));
-        cancelAddPatient.addEventListener('click', () => addPatientModal.classList.add('hidden'));
-
-        // 🟢 Qidirish
-        searchInput.addEventListener('input', () => {
-            loadPatients(searchInput.value);
-        });
-
-        // Boshlang‘ich yuklash
-        loadPatients();
-    });
-
-</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shifokor Login / Ro'yxatdan o'tish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Yuqori gradient header -->
+        <div class="bg-gradient-to-r from-green-600 to-green-400 p-6 text-center">
+            <h2 id="formTitle" class="text-2xl font-bold text-white">Kirish</h2>
+            <p class="text-green-100 text-sm mt-1">Shifokorlar uchun CRM tizimi</p>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6 sm:p-8">
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <input type="text" name="username" placeholder="Login"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                        required>
+                </div>
+                <div>
+                    <input type="password" name="password" placeholder="Parol"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                        required>
+                </div>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold shadow-md hover:from-green-700 hover:to-green-600 transition">
+                    Kirish
+                </button>
+            </form>
+
+            <!-- Register Form (hidden by default) -->
+            <form id="registerForm" class="space-y-5 hidden">
+                <div>
+                    <input type="text" name="fullname" placeholder="F.I.O"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required>
+                </div>
+                <div>
+                    <input type="text" name="username" placeholder="Login"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required>
+                </div>
+                <div>
+                    <input type="password" name="password" placeholder="Parol"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        required>
+                </div>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-blue-600 transition">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+
+            <!-- Switch -->
+            <p id="switchText" class="text-center text-sm mt-6 text-gray-600">
+                Ro'yxatdan o'tmaganmisiz?
+                <button id="switchBtn" class="text-green-600 font-medium hover:underline transition">Ro'yxatdan
+                    o'tish</button>
+            </p>
+
+            <!-- Message -->
+            <p id="message" class="text-center text-sm mt-4 text-red-500"></p>
+        </div>
+    </div>
+
+
+    <script>
+        const API_URL = "http://localhost:3001/doctors"; // json-server doctorlar bo‘limi
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        const switchBtn = document.getElementById("switchBtn");
+        const switchText = document.getElementById("switchText");
+        const formTitle = document.getElementById("formTitle");
+        const message = document.getElementById("message");
+
+        let showLogin = true;
+
+        // 🔄 Login / Register almashtirish
+        switchBtn.addEventListener("click", () => {
+            showLogin = !showLogin;
+            if (showLogin) {
+                loginForm.classList.remove("hidden");
+                registerForm.classList.add("hidden");
+                formTitle.textContent = "Kirish";
+                switchText.innerHTML = `Ro'yxatdan o'tmaganmisiz? 
+          <button id="switchBtn" class="text-blue-600 underline">Ro'yxatdan o'tish</button>`;
+            } else {
+                loginForm.classList.add("hidden");
+                registerForm.classList.remove("hidden");
+                formTitle.textContent = "Ro'yxatdan o'tish";
+                switchText.innerHTML = `Allaqachon ro'yxatdan o'tganmisiz?
+          <button id="switchBtn" class="text-blue-600 underline">Kirish</button>`;
+            }
+        });
+
+        // 🔑 Login
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new FormData(loginForm);
+            const username = data.get("username");
+            const password = data.get("password");
+
+            const res = await fetch(API_URL);
+            const doctors = await res.json();
+            const doctor = doctors.find(d => d.username === username && d.password === password);
+
+            if (doctor) {
+                localStorage.setItem("doctor", JSON.stringify(doctor)); // sessiya uchun
+                window.location.href = "crm.html"; // ✅ CRM ga o'tkazish
+            } else {
+                message.textContent = "❌ Login yoki parol noto'g'ri!";
+            }
+        });
+
+        // 📝 Ro'yxatdan o'tish
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new FormData(registerForm);
+            const newDoctor = {
+                id: Date.now().toString(36),
+                fullname: data.get("fullname"),
+                username: data.get("username"),
+                password: data.get("password")
+            };
+
+            const res = await fetch(API_URL);
+            const doctors = await res.json();
+            const exists = doctors.find(d => d.username === newDoctor.username);
+
+            if (exists) {
+                message.textContent = "❌ Bu login band!";
+            } else {
+                await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newDoctor)
+                });
+                message.textContent = "✅ Muvaffaqiyatli ro'yxatdan o'tdingiz. Endi kirishingiz mumkin.";
+                registerForm.reset();
+                // avtomatik login qilmoqchi bo'lsangiz:
+                // window.location.href = "crm.html";
+            }
+        });
+    </script>
+</body>
+
+</html>
