@@ -72,7 +72,7 @@
 
 
     <script>
-        const API_URL = "http://localhost:3001/doctors"; // json-server doctorlar bo‘limi
+        const API_URL = "http://localhost:5001/doctors";
         const loginForm = document.getElementById("loginForm");
         const registerForm = document.getElementById("registerForm");
         const switchBtn = document.getElementById("switchBtn");
@@ -113,7 +113,7 @@
 
             if (doctor) {
                 localStorage.setItem("doctor", JSON.stringify(doctor)); // sessiya uchun
-                window.location.href = "crm.html"; // ✅ CRM ga o'tkazish
+                window.location.href = "patients.html"; // ✅ CRM ga o'tkazish
             } else {
                 message.textContent = "❌ Login yoki parol noto'g'ri!";
             }

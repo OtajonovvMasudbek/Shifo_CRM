@@ -169,7 +169,7 @@
     <div class="preloader" id="preloader">
         <div class="loader"></div>
     </div>
-    <header class="sticky-header fixed top-0 w-full z-50 py-4" id="header">
+    <header class="fixed top-0 w-full z-50 py-4 bg-white shadow-md transition-all duration-300" id="header">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
@@ -831,7 +831,7 @@
         });
     </script>
     <script>
-        const API_URL = "http://localhost:3000";
+        const API_URL = "http://localhost:5001";
 
         // Bemorlarni yuklash
         async function loadPatients() {
