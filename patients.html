@@ -25,40 +25,82 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <style>
         body {
-            padding-bottom: 72px; /* Bottom nav barni joylashtirish uchun */
+            padding-bottom: 72px;
+            /* Bottom nav barni joylashtirish uchun */
         }
+
         .demo-badge {
             background: linear-gradient(45deg, #FF6B6B, #FF8E53);
         }
+
         .modal-backdrop {
             backdrop-filter: blur(4px);
             transition: opacity 0.3s ease-in-out;
             opacity: 0;
             pointer-events: none;
         }
+
         .modal-backdrop.active {
             opacity: 1;
             pointer-events: auto;
         }
+
         .modal-content-bottom {
             transform: translateY(100%);
             transition: transform 0.3s ease-in-out;
         }
+
         .modal-backdrop.active .modal-content-bottom {
             transform: translateY(0);
         }
+
+        .nav-item.active {
+            background-color: #196d1d;
+            /* blue-500 */
+            color: white;
+        }
+
+
         @media (max-width: 1023px) {
             .desktop-sidebar {
                 display: none;
             }
+
             .main-content {
                 width: 100%;
             }
         }
+
         @media (min-width: 1024px) {
             .mobile-bottom-nav {
                 display: none;
             }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .toast {
+            animation: slideIn 0.3s ease-out, fadeOut 4s ease-in forwards;
         }
     </style>
 </head>
@@ -75,42 +117,53 @@
                     <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
                     <div class="demo-badge text-white text-xs px-2 py-1 rounded-full mt-1 inline-block">DEMO</div>
                 </div>
+
             </div>
         </div>
+
+        <!-- Avvalgi nav qismi shu pastda davom etadi -->
         <nav class="flex-1 p-4">
             <ul class="space-y-2">
                 <li>
-                    <button class="nav-item w-full flex items-center bg-black gap-3 px-4 py-3 rounded-lg  text-white"
+                    <button
+                        class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition"
                         data-section="patients">
                         <i class="ri-user-heart-line"></i><span>Bemorlar ro'yxati</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100"
+                    <button
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
                         data-section="appointment">
                         <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100"
+                    <button
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
                         data-section="calendar">
                         <i class="ri-calendar-line"></i><span>Kalendar</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100"
+                    <button
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
                         data-section="reminders">
                         <i class="ri-notification-line"></i><span>Eslatmalar</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100"
+                    <button
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
                         data-section="statistics">
                         <i class="ri-bar-chart-line"></i><span>Statistika</span>
                     </button>
                 </li>
             </ul>
         </nav>
+
+        <!-- Toast container -->
+
         <div class="p-4 border-t border-gray-200">
             <button
                 class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors">
@@ -120,34 +173,72 @@
     </aside>
 
     <main class="flex-1 p-4 lg:p-8 main-content">
-        <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
-            <h1 class="text-xl md:text-2xl font-bold mb-6">🧑‍🤝‍🧑 Bemorlar ro'yxati</h1>
+        <div class="bg-white p-4 md:p-6  shadow-md">
+            <h1 class="text-xl md:text-2xl  font-semibold mb-6">Bemorlar ro'yxati</h1>
 
             <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
                 <div class="flex-1 min-w-[200px]">
                     <input id="searchInput" type="text" placeholder="Bemor qidirish..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none text-sm">
+
                 </div>
                 <button id="addPatientBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                    + Yangi bemor
+                    <i class="ri-user-add-line"></i> Bemor qo'shish
                 </button>
             </div>
 
             <div class="overflow-x-auto rounded-lg">
-                <table class="w-full border-collapse border border-gray-200">
-                    <thead class="bg-gray-100">
+                <table class="w-full min-w-[600px] border-collapse border border-gray-200">
+                    <thead class="bg-gray-100 text-sm text-gray-700">
                         <tr>
-                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('name')">F.I.O. ⬍</th>
-                            <th class="border px-4 py-2">Telefon</th>
-                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('lastVisit')">Oxirgi tashrif
-                                ⬍</th>
-                            <th class="border px-4 py-2">Status</th>
-                            <th class="border px-4 py-2 text-center">Amallar</th>
+                            <!-- F.I.O. -->
+                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('name')">
+                                <div class="flex items-center gap-1">
+                                    <i class="ri-user-line text-gray-500"></i>
+                                    <span>F.I.O.</span>
+                                    <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
+                                </div>
+                            </th>
+
+                            <!-- Telefon -->
+                            <th class="border px-4 py-2">
+                                <div class="flex items-center gap-1">
+                                    <i class="ri-phone-line text-green-600"></i>
+                                    <span>Telefon</span>
+                                </div>
+                            </th>
+
+                            <!-- Oxirgi tashrif -->
+                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('lastVisit')">
+                                <div class="flex items-center gap-1">
+                                    <i class="ri-calendar-line text-blue-500"></i>
+                                    <span>Oxirgi tashrif</span>
+                                    <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
+                                </div>
+                            </th>
+
+                            <!-- Status -->
+                            <th class="border px-4 py-2">
+                                <div class="flex items-center gap-1">
+                                    <i class="ri-shield-user-line text-yellow-500"></i>
+                                    <span>Status</span>
+                                </div>
+                            </th>
+
+                            <!-- Amallar -->
+                            <th class="border px-4 py-2 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <i class="ri-settings-3-line text-gray-600"></i>
+                                    <span>Amallar</span>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody id="patientsTableBody"></tbody>
+
+                    <tbody id="patientsTableBody" class="text-sm"></tbody>
                 </table>
             </div>
+
         </div>
     </main>
 
@@ -160,79 +251,160 @@
                 </button>
             </li>
             <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors" data-section="appointment">
+                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
+                    data-section="appointment">
                     <i class="ri-calendar-check-line text-2xl"></i>
                     <span class="text-xs">Qabul</span>
                 </button>
             </li>
             <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors" data-section="calendar">
+                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
+                    data-section="calendar">
                     <i class="ri-calendar-line text-2xl"></i>
                     <span class="text-xs">Kalendar</span>
                 </button>
             </li>
             <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors" data-section="reminders">
+                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
+                    data-section="reminders">
                     <i class="ri-notification-line text-2xl"></i>
                     <span class="text-xs">Eslatmalar</span>
                 </button>
             </li>
             <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors" data-section="statistics">
+                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
+                    data-section="statistics">
                     <i class="ri-bar-chart-line text-2xl"></i>
                     <span class="text-xs">Statistika</span>
                 </button>
             </li>
         </ul>
     </nav>
-
-
-    <div id="addPatientModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-end justify-center z-50">
-        <div class="bg-white p-6 rounded-t-3xl w-full max-w-lg modal-content-bottom shadow-2xl">
+    <div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">➕ Yangi bemor qo‘shish</h3>
-                <button id="cancelAddPatient" class="text-gray-500 hover:text-gray-800 transition">
+                <h3 class="text-lg font-semibold">👤 Mening Profilim</h3>
+                <button onclick="closeModal(profileModal)" class="text-gray-500 hover:text-gray-700">
                     <i class="ri-close-line text-2xl"></i>
                 </button>
             </div>
+            <div class="flex items-center gap-4 mb-4">
+                <img id="modalAvatar" src="https://via.placeholder.com/64" class="w-16 h-16 rounded-full shadow">
+                <div>
+                    <h2 id="modalName" class="font-semibold text-gray-800">-</h2>
+                    <p id="modalRole" class="text-sm text-gray-500">-</p>
+                    <p id="modalEmail" class="text-sm text-gray-500">-</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                    onclick="closeModal(profileModal)">Yopish</button>
+                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Tahrirlash</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Jadval -->
+    <div class="overflow-x-auto rounded-lg">
+        <table class="w-full border-collapse border border-gray-200">
+
+            <tbody id="patientsTableBody"></tbody>
+        </table>
+    </div>
+
+
+    <div id="addPatientModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center z-50 px-4">
+
+        <div
+            class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl transform transition-all duration-300 max-h-[90vh] overflow-y-auto">
+
+            <!-- Modal header -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800"> Yangi bemor qo‘shish</h3>
+                <button id="cancelAddPatient"
+                    class="text-gray-500 hover:text-gray-800 transition font-bold text-2xl leading-none">×</button>
+            </div>
+
+            <!-- Form -->
             <form id="addPatientForm" class="space-y-4">
-                <input type="text" name="name" placeholder="Ism Familiya" required
-                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                <input type="number" name="age" placeholder="Yoshi" required
-                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                <input type="text" name="phone" placeholder="Telefon" required
-                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                <input type="date" name="lastVisit" required
-                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                <select name="status" required
-                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                    <option value="Faol">Faol</option>
-                    <option value="Kutilmoqda">Kutilmoqda</option>
-                    <option value="Yakunlangan">Yakunlangan</option>
-                </select>
+                <!-- Ism Familiya -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Ism Familiya</label>
+                    <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+
+                <!-- Yoshi -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Yoshi</label>
+                    <input type="number" name="age" placeholder="Masalan: 32" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+
+                <!-- Telefon -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Telefon</label>
+                    <input type="text" name="phone" placeholder="+998 90 123 45 67" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+
+                <!-- Oxirgi tashrif -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
+                    <input type="date" name="lastVisit" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Status</label>
+                    <select name="status" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        <option value="Faol">Faol</option>
+                        <option value="Kutilmoqda">Kutilmoqda</option>
+                        <option value="Yakunlangan">Yakunlangan</option>
+                    </select>
+                </div>
+
+                <!-- Narx -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Narx (so‘m)</label>
+                    <input type="number" name="price" placeholder="Masalan: 150000" required
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+
+                <!-- Tugmalar -->
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">Saqlash</button>
+                    <button type="button" id="cancelAddPatient2"
+                        class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">Bekor qilish</button>
+                    <button type="submit"
+                        class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">Saqlash</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
+
+
     <div id="viewPatientModal"
         class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-end justify-center z-50">
         <div class="bg-white p-6 rounded-t-3xl w-full max-w-lg modal-content-bottom shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">👤 Bemor tafsilotlari</h3>
+                <h3 class="text-xl font-semibold text-gray-800">Bemor tafsilotlari</h3>
                 <button onclick="closeModal(viewPatientModal)" class="text-gray-500 hover:text-gray-800 transition">
                     <i class="ri-close-line text-2xl"></i>
                 </button>
             </div>
             <div id="patientDetails" class="space-y-2 text-gray-700"></div>
             <div class="flex justify-end mt-4">
-                <button onclick="closeModal(viewPatientModal)" class="px-4 py-2 bg-gray-200 rounded-full">Yopish</button>
+                <button onclick="closeModal(viewPatientModal)"
+                    class="px-4 py-2 bg-gray-200 rounded-full">Yopish</button>
             </div>
         </div>
     </div>
+    <div id="toastContainer" class="fixed top-4 right-4 space-y-3 z-50"></div>
 
     <script>
         const API_URL = "http://localhost:5001/patients";
@@ -267,7 +439,7 @@
                     p.phone.includes(query) ||
                     p.status.toLowerCase().includes(query.toLowerCase())
                 );
-                
+
                 if (sortKey) {
                     filtered.sort((a, b) => {
                         if (a[sortKey] < b[sortKey]) return sortAsc ? -1 : 1;
@@ -325,7 +497,7 @@
         addPatientForm.addEventListener("submit", async e => {
             e.preventDefault();
             const formData = new FormData(addPatientForm);
-            
+
             let newId = patientsData.length > 0
                 ? Math.max(...patientsData.map(p => p.id)) + 1
                 : 1;
@@ -400,12 +572,12 @@
 
         addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
         cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
-        
-        window.onclick = function(event) {
+
+        window.onclick = function (event) {
             if (event.target == addPatientModal) {
                 closeModal(addPatientModal);
             }
-             if (event.target == viewPatientModal) {
+            if (event.target == viewPatientModal) {
                 closeModal(viewPatientModal);
             }
         }
@@ -422,23 +594,46 @@
                 }
             });
         }
-        
+
         navItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 const section = e.currentTarget.getAttribute('data-section');
-                // Hozircha faqat 'patients' bo'limi uchun ma'lumot yuklanadi
                 if (section === 'patients') {
                     setActiveNavItem(section);
                     loadPatients(searchInput.value);
                 } else {
-                    alert(`Bu bo'lim (${section}) demo versiyada mavjud emas.`);
+                    showToast(`Bu bo'lim (${section}) demo versiyada mavjud emas.`, "info");
                 }
             });
         });
 
         loadPatients();
         setActiveNavItem('patients');
+        const currentUsername = localStorage.getItem("username"); // login paytida saqlanadi
+
+        function showToast(message, type = "info") {
+            const container = document.getElementById("toastContainer");
+
+            const toast = document.createElement("div");
+            toast.className = `toast px-4 py-3 rounded-lg shadow-md text-white flex items-center gap-2
+        ${type === "error" ? "bg-red-500" : type === "success" ? "bg-green-500" : "bg-blue-500"}`;
+
+            toast.innerHTML = `
+        <i class="ri-information-line text-xl"></i>
+        <span>${message}</span>
+    `;
+
+            container.appendChild(toast);
+
+            // 3 soniyadan keyin o‘chirish
+            setTimeout(() => {
+                toast.style.animation = "fadeOut 3s forwards";
+                setTimeout(() => toast.remove(), 3000);
+            }, 30000);
+        }
+
     </script>
+
 </body>
 
 </html>

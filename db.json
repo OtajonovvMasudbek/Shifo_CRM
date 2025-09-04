@@ -2,43 +2,19 @@
   "patients": [
     {
       "id": 1,
-      "name": "Masudbek",
-      "age": 19,
-      "phone": "94 054 27 22",
-      "lastVisit": "2025-09-19",
-      "status": "Kutilmoqda"
+      "name": "asdas",
+      "age": 12,
+      "phone": "12",
+      "lastVisit": "2025-09-12",
+      "status": "Yakunlangan"
     },
     {
       "id": 2,
-      "name": "My audience",
-      "age": 19,
-      "phone": "+998 94 054 27 22",
-      "lastVisit": "2025-09-14",
-      "status": "Faol"
-    },
-    {
-      "id": 3,
       "name": "Masudbek",
       "age": 19,
-      "phone": "+998937335437",
-      "lastVisit": "2025-09-27",
-      "status": "Faol"
-    },
-    {
-      "id": 4,
-      "name": "My audience",
-      "age": 19,
-      "phone": "+998 94 054 27 22",
-      "lastVisit": "2025-09-20",
-      "status": "Faol"
-    },
-    {
-      "id": 5,
-      "name": "Masudbek",
-      "age": 19,
-      "phone": "+998 94 054 27 22",
-      "lastVisit": "2025-09-03",
-      "status": "Faol"
+      "phone": "94 054 27 22",
+      "lastVisit": "2005-03-12",
+      "status": "Kutilmoqda"
     }
   ],
   "doctors": [
@@ -53,6 +29,36 @@
       "fullname": "Otajonov Masudbek",
       "username": "masudbek",
       "password": "2005"
+    },
+    {
+      "id": "mf3zu00y",
+      "fullname": "qiuwerhw",
+      "username": "mas",
+      "password": "12"
+    },
+    {
+      "id": "mf510x6i",
+      "fullname": "Otajonov Masudbek",
+      "username": "masud",
+      "password": "2005"
+    },
+    {
+      "id": "mf5139rn",
+      "fullname": "Otajonov Masudbek",
+      "username": "123123",
+      "password": "123"
+    },
+    {
+      "id": "mf51ca1l",
+      "fullname": "asdasdas",
+      "username": "masd",
+      "password": "12"
+    },
+    {
+      "id": "mf522a9l",
+      "fullname": "asds",
+      "username": "mass",
+      "password": "1223"
     }
   ],
   "appointments": [

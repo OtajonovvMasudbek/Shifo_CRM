@@ -1,154 +1,158 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Shifokor Login / Ro'yxatdan o'tish</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shifokor Login / Ro'yxatdan o'tish</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-enter { opacity: 0; transform: translateY(20px); }
+    .fade-enter-active { opacity: 1; transform: translateY(0); transition: all 0.4s ease; }
+  </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
-        <!-- Yuqori gradient header -->
-        <div class="bg-gradient-to-r from-green-600 to-green-400 p-6 text-center">
-            <h2 id="formTitle" class="text-2xl font-bold text-white">Kirish</h2>
-            <p class="text-green-100 text-sm mt-1">Shifokorlar uchun CRM tizimi</p>
-        </div>
+<body class="bg-gradient-to-br from-green-100 to-blue-100 min-h-screen flex items-center justify-center p-4">
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-5 right-5 z-50 hidden"></div>
 
-        <!-- Body -->
-        <div class="p-6 sm:p-8">
-            <!-- Login Form -->
-            <form id="loginForm" class="space-y-5">
-                <div>
-                    <input type="text" name="username" placeholder="Login"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
-                        required>
-                </div>
-                <div>
-                    <input type="password" name="password" placeholder="Parol"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
-                        required>
-                </div>
-                <button type="submit"
-                    class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold shadow-md hover:from-green-700 hover:to-green-600 transition">
-                    Kirish
-                </button>
-            </form>
-
-            <!-- Register Form (hidden by default) -->
-            <form id="registerForm" class="space-y-5 hidden">
-                <div>
-                    <input type="text" name="fullname" placeholder="F.I.O"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        required>
-                </div>
-                <div>
-                    <input type="text" name="username" placeholder="Login"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        required>
-                </div>
-                <div>
-                    <input type="password" name="password" placeholder="Parol"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        required>
-                </div>
-                <button type="submit"
-                    class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-blue-600 transition">
-                    Ro'yxatdan o'tish
-                </button>
-            </form>
-
-            <!-- Switch -->
-            <p id="switchText" class="text-center text-sm mt-6 text-gray-600">
-                Ro'yxatdan o'tmaganmisiz?
-                <button id="switchBtn" class="text-green-600 font-medium hover:underline transition">Ro'yxatdan
-                    o'tish</button>
-            </p>
-
-            <!-- Message -->
-            <p id="message" class="text-center text-sm mt-4 text-red-500"></p>
-        </div>
+  <div class="w-full max-w-md bg-white/90 backdrop-blur rounded-2xl shadow-2xl overflow-hidden">
+    <!-- Tabs -->
+    <div class="flex">
+      <button id="tabLogin"
+        class="w-1/2 py-4 text-center font-semibold border-b-2 border-green-600 text-green-600 transition-all">
+        Kirish
+      </button>
+      <button id="tabRegister"
+        class="w-1/2 py-4 text-center font-semibold border-b-2 border-transparent text-gray-500 hover:text-green-600 transition-all">
+        Ro'yxatdan o'tish
+      </button>
     </div>
 
+    <!-- Body -->
+    <div class="p-6 sm:p-8 relative">
+      <!-- Login Form -->
+      <form id="loginForm" class="space-y-5 fade-enter-active">
+        <input type="text" name="username" placeholder="Login"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" required>
+        <input type="password" name="password" placeholder="Parol"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" required>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 hover:shadow-lg transition-transform">
+          Kirish
+        </button>
+        <p class="text-center text-sm text-gray-600">Ro'yxatdan o'tmaganmisiz?
+          <button type="button" id="switchToRegister" class="text-green-600 hover:underline">Ro'yxatdan o'tish</button>
+        </p>
+      </form>
 
-    <script>
-        const API_URL = "http://localhost:5001/doctors";
-        const loginForm = document.getElementById("loginForm");
-        const registerForm = document.getElementById("registerForm");
-        const switchBtn = document.getElementById("switchBtn");
-        const switchText = document.getElementById("switchText");
-        const formTitle = document.getElementById("formTitle");
-        const message = document.getElementById("message");
+      <!-- Register Form -->
+      <form id="registerForm" class="space-y-5 hidden">
+        <input type="text" name="fullname" placeholder="F.I.O"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+        <input type="text" name="username" placeholder="Login"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+        <input type="password" name="password" placeholder="Parol"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 hover:shadow-lg transition-transform">
+          Ro'yxatdan o'tish
+        </button>
+        <p class="text-center text-sm text-gray-600">Allaqachon ro'yxatdan o'tganmisiz?
+          <button type="button" id="switchToLogin" class="text-blue-600 hover:underline">Kirish</button>
+        </p>
+      </form>
+    </div>
+  </div>
 
-        let showLogin = true;
+  <script>
+    const API_URL = "http://localhost:5001/doctors";
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabRegister = document.getElementById("tabRegister");
+    const switchToRegister = document.getElementById("switchToRegister");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const toast = document.getElementById("toast");
 
-        // 🔄 Login / Register almashtirish
-        switchBtn.addEventListener("click", () => {
-            showLogin = !showLogin;
-            if (showLogin) {
-                loginForm.classList.remove("hidden");
-                registerForm.classList.add("hidden");
-                formTitle.textContent = "Kirish";
-                switchText.innerHTML = `Ro'yxatdan o'tmaganmisiz? 
-          <button id="switchBtn" class="text-blue-600 underline">Ro'yxatdan o'tish</button>`;
-            } else {
-                loginForm.classList.add("hidden");
-                registerForm.classList.remove("hidden");
-                formTitle.textContent = "Ro'yxatdan o'tish";
-                switchText.innerHTML = `Allaqachon ro'yxatdan o'tganmisiz?
-          <button id="switchBtn" class="text-blue-600 underline">Kirish</button>`;
-            }
+    // Toast funksiya
+    function showToast(message, type = "success") {
+      toast.innerHTML = `
+        <div class="px-4 py-3 rounded-lg shadow-lg text-white ${type === "error" ? "bg-red-500" : "bg-green-500"}">
+          ${message}
+        </div>`;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3000);
+    }
+
+    function showLogin() {
+      loginForm.classList.remove("hidden");
+      registerForm.classList.add("hidden");
+      tabLogin.classList.add("border-green-600","text-green-600");
+      tabRegister.classList.remove("border-green-600","text-green-600");
+      tabRegister.classList.add("text-gray-500");
+    }
+
+    function showRegister() {
+      registerForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+      tabRegister.classList.add("border-green-600","text-green-600");
+      tabLogin.classList.remove("border-green-600","text-green-600");
+      tabLogin.classList.add("text-gray-500");
+    }
+
+    tabLogin.addEventListener("click", showLogin);
+    tabRegister.addEventListener("click", showRegister);
+    switchToRegister.addEventListener("click", showRegister);
+    switchToLogin?.addEventListener("click", showLogin);
+
+    // 🔑 Login
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(loginForm);
+      const username = data.get("username");
+      const password = data.get("password");
+
+      const res = await fetch(API_URL);
+      const doctors = await res.json();
+      const doctor = doctors.find(d => d.username === username && d.password === password);
+
+      if (doctor) {
+        localStorage.setItem("doctor", JSON.stringify(doctor));
+        showToast("✅ Muvaffaqiyatli kirdingiz!", "success");
+        setTimeout(() => window.location.href = "patients.html", 1000);
+      } else {
+        showToast("❌ Login yoki parol noto'g'ri!", "error");
+      }
+    });
+
+    // 📝 Ro'yxatdan o'tish
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(registerForm);
+      const newDoctor = {
+        id: Date.now().toString(36),
+        fullname: data.get("fullname"),
+        username: data.get("username"),
+        password: data.get("password")
+      };
+
+      const res = await fetch(API_URL);
+      const doctors = await res.json();
+      const exists = doctors.find(d => d.username === newDoctor.username);
+
+      if (exists) {
+        showToast("❌ Bu login band!", "error");
+      } else {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newDoctor)
         });
-
-        // 🔑 Login
-        loginForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = new FormData(loginForm);
-            const username = data.get("username");
-            const password = data.get("password");
-
-            const res = await fetch(API_URL);
-            const doctors = await res.json();
-            const doctor = doctors.find(d => d.username === username && d.password === password);
-
-            if (doctor) {
-                localStorage.setItem("doctor", JSON.stringify(doctor)); // sessiya uchun
-                window.location.href = "patients.html"; // ✅ CRM ga o'tkazish
-            } else {
-                message.textContent = "❌ Login yoki parol noto'g'ri!";
-            }
-        });
-
-        // 📝 Ro'yxatdan o'tish
-        registerForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = new FormData(registerForm);
-            const newDoctor = {
-                id: Date.now().toString(36),
-                fullname: data.get("fullname"),
-                username: data.get("username"),
-                password: data.get("password")
-            };
-
-            const res = await fetch(API_URL);
-            const doctors = await res.json();
-            const exists = doctors.find(d => d.username === newDoctor.username);
-
-            if (exists) {
-                message.textContent = "❌ Bu login band!";
-            } else {
-                await fetch(API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(newDoctor)
-                });
-                message.textContent = "✅ Muvaffaqiyatli ro'yxatdan o'tdingiz. Endi kirishingiz mumkin.";
-                registerForm.reset();
-                // avtomatik login qilmoqchi bo'lsangiz:
-                // window.location.href = "crm.html";
-            }
-        });
-    </script>
+        showToast("✅ Ro'yxatdan o'tdingiz!", "success");
+        registerForm.reset();
+        showLogin();
+      }
+    });
+  </script>
 </body>
-
 </html>
