@@ -232,13 +232,13 @@
                                     <span>Amallar</span>
                                 </div>
                             </th>
+
                         </tr>
                     </thead>
                     <tbody id="patientsTableBody" class="text-sm"></tbody>
                     <div id="patientModal"
                         class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
                         <div class="relative bg-white rounded-2xl shadow-lg p-6 w-96">
-                            <!-- Yopish tugmasi o‘ng yuqorida -->
                             <button onclick="closePatientModal()"
                                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
                                 <i class="ri-close-circle-line text-2xl"></i>
@@ -246,7 +246,6 @@
 
                             <h2 class="text-xl font-semibold mb-4 text-center">Bemor ma'lumotlari</h2>
                             <div id="modalContent" class="space-y-2">
-                                <!-- JS orqali to‘ldiriladi -->
                             </div>
                         </div>
                     </div>
@@ -345,61 +344,80 @@
             </div>
 
             <!-- Form -->
-            <form id="addPatientForm" class="space-y-4">
-                <!-- Ism Familiya -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Ism Familiya</label>
-                    <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+            <form id="addPatientForm" class="space-y-6 bg-white p-6 rounded-2xl shadow-lg border">
+                <!-- Shaxsiy ma’lumotlar -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Shaxsiy ma’lumotlar</h3>
+
+                    <!-- Ism Familiya -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Ism Familiya</label>
+                        <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Yoshi -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Yoshi</label>
+                        <input type="number" name="age" placeholder="Masalan: 32" required min="1" max="120"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Telefon -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Telefon</label>
+                        <input type="text" name="phone" placeholder="+998 90 123 45 67" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
                 </div>
 
-                <!-- Yoshi -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Yoshi</label>
-                    <input type="number" name="age" placeholder="Masalan: 32" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
+                <!-- Tibbiy ma’lumotlar -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Tibbiy ma’lumotlar</h3>
 
-                <!-- Telefon -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Telefon</label>
-                    <input type="text" name="phone" placeholder="+998 90 123 45 67" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
+                    <!-- Oxirgi tashrif -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
+                        <input type="date" name="lastVisit" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
 
-                <!-- Oxirgi tashrif -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
-                    <input type="date" name="lastVisit" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
+                    <!-- Status -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
+                        <select name="status" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                            <option value="Faol">Faol</option>
+                            <option value="Kutilmoqda">Kutilmoqda</option>
+                            <option value="Yakunlangan">Yakunlangan</option>
+                        </select>
+                    </div>
 
-                <!-- Status -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Status</label>
-                    <select name="status" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        <option value="Faol">Faol</option>
-                        <option value="Kutilmoqda">Kutilmoqda</option>
-                        <option value="Yakunlangan">Yakunlangan</option>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Narx (so‘m)</label>
+                        <input type="number" name="price" placeholder="Masalan: 150000" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
 
-                <!-- Narx -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Narx (so‘m)</label>
-                    <input type="number" name="price" placeholder="Masalan: 150000" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Izoh</label>
+                        <textarea name="description" rows="3" placeholder="Bemor haqida qo‘shimcha ma’lumot..."
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"></textarea>
+                    </div>
+
                 </div>
 
                 <!-- Tugmalar -->
-                <div class="flex justify-end gap-2 pt-2">
+                <div class="flex justify-end gap-2 pt-4">
                     <button type="button" id="cancelAddPatient2"
                         class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">Bekor qilish</button>
                     <button type="submit"
-                        class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">Saqlash</button>
+                        class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition disabled:opacity-50">
+                        Saqlash
+                    </button>
                 </div>
             </form>
+
         </div>
     </div>
 
@@ -515,6 +533,45 @@
             loadPatients(searchInput.value);
         }
 
+        // Telefon input avtomatik formatlash
+        const phoneInput = document.querySelector('input[name="phone"]');
+        phoneInput.addEventListener("input", e => {
+            let value = e.target.value.replace(/\D/g, ""); // faqat raqam qoldiramiz
+
+            // doim 998 bilan boshlanishini ta'minlash
+            if (!value.startsWith("998")) {
+                value = "998" + value;
+            }
+
+            // faqat 12 ta raqam qabul qiladi: 998 XX XXX XX XX
+            if (value.length > 12) {
+                value = value.slice(0, 12);
+            }
+
+            // formatlash
+            let formatted = "+998";
+            if (value.length > 3) formatted += " " + value.slice(3, 5);
+            if (value.length > 5) formatted += " " + value.slice(5, 8);
+            if (value.length > 8) formatted += " " + value.slice(8, 10);
+            if (value.length > 10) formatted += " " + value.slice(10, 12);
+
+            e.target.value = formatted;
+        });
+
+        const priceInput = document.querySelector('input[name="price"]');
+        priceInput.addEventListener("input", e => {
+            let value = e.target.value.replace(/\D/g, ""); // faqat raqam
+
+            // katta sonlarni . bilan formatlash
+            if (value) {
+                value = Number(value).toLocaleString("uz-UZ"); // 1500000 → 1 500 000
+                value = value.replace(/ /g, "."); // probel o‘rniga nuqta
+            }
+
+            e.target.value = value;
+        });
+
+        // Form submit – API ga yuborishda asl raqamlarni olish
         addPatientForm.addEventListener("submit", async e => {
             e.preventDefault();
             const formData = new FormData(addPatientForm);
@@ -523,13 +580,18 @@
                 ? Math.max(...patientsData.map(p => p.id)) + 1
                 : 1;
 
+            const phoneRaw = formData.get("phone").replace(/\D/g, ""); // faqat raqamlar
+            const priceRaw = formData.get("price").replace(/\D/g, ""); // faqat raqamlar
+
             const newPatient = {
                 id: newId,
                 name: formData.get("name"),
                 age: Number(formData.get("age")),
-                phone: formData.get("phone"),
+                phone: "+" + phoneRaw, // +998901234567 ko‘rinishda
                 lastVisit: formData.get("lastVisit"),
-                status: formData.get("status")
+                status: formData.get("status"),
+                price: Number(priceRaw), // API uchun raqam
+                description: formData.get("description") || ""
             };
 
             const response = await fetch(API_URL, {
@@ -789,7 +851,7 @@
         <i class="ri-stethoscope-line text-base"></i> Qisqa tibbiy tarix
       </p>
       <p class="text-gray-700 leading-relaxed whitespace-pre-line break-words">
-        ${patient.history || "Ma'lumot kiritilmagan"}
+        ${patient.description || "Ma'lumot kiritilmagan"}
       </p>
     </div>
   </div>
