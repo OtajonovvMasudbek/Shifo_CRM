@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShifoCRM - Dental Chart</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16a34a',
+                        secondary: '#2563eb'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+        .tooth-status-healthy { background-color: #16a34a; }
+        .tooth-status-caries { background-color: #dc2626; }
+        .tooth-status-filled { background-color: #2563eb; }
+        .tooth-status-removed { background-color: #6b7280; }
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-white shadow-lg">
+            <div class="p-6 border-b border-gray-200">
+                <h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
+            </div>
+            <nav class="mt-6">
+                <div class="px-6 py-3 text-gray-600 text-sm font-medium uppercase tracking-wider">Asosiy</div>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-dashboard-line"></i>
+                    </div>
+                    Bosh sahifa
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    Bemorlar
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 bg-primary text-white">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-tooth-line"></i>
+                    </div>
+                    Dental Chart
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-calendar-line"></i>
+                    </div>
+                    Uchrashuvlar
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-file-text-line"></i>
+                    </div>
+                    Hisobotlar
+                </a>
+                <div class="px-6 py-3 text-gray-600 text-sm font-medium uppercase tracking-wider mt-6">Sozlamalar</div>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-settings-line"></i>
+                    </div>
+                    Sozlamalar
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <div class="w-5 h-5 flex items-center justify-center mr-3">
+                        <i class="ri-logout-box-line"></i>
+                    </div>
+                    Chiqish
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-auto">
+            <div class="p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Dental Chart – Bemor kartasi</h1>
+                    <p class="text-gray-600">Bemorning tishlar holatini boshqarish va kuzatish</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Bemor ma'lumotlari</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Ism familiya</label>
+                            <p class="text-lg font-semibold text-gray-900 mt-1">Abdullayev Jasur Karimovich</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Telefon raqami</label>
+                            <a href="tel:+998901234567" class="text-lg font-semibold text-secondary hover:underline mt-1 block">+998 90 123 45 67</a>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Oxirgi tashrif</label>
+                            <p class="text-lg font-semibold text-gray-900 mt-1">2025-09-01</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">Status</label>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mt-1">Faol</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Tishlar jadvali (Odontogramma)</h2>
+                    
+                    <div class="max-w-4xl mx-auto">
+                        <div class="grid grid-cols-16 gap-2 mb-4">
+                            <div class="col-span-8 grid grid-cols-8 gap-2">
+                                <div class="tooth-cell" data-tooth="18">18</div>
+                                <div class="tooth-cell" data-tooth="17">17</div>
+                                <div class="tooth-cell" data-tooth="16">16</div>
+                                <div class="tooth-cell" data-tooth="15">15</div>
+                                <div class="tooth-cell" data-tooth="14">14</div>
+                                <div class="tooth-cell" data-tooth="13">13</div>
+                                <div class="tooth-cell" data-tooth="12">12</div>
+                                <div class="tooth-cell" data-tooth="11">11</div>
+                            </div>
+                            <div class="col-span-8 grid grid-cols-8 gap-2">
+                                <div class="tooth-cell" data-tooth="21">21</div>
+                                <div class="tooth-cell" data-tooth="22">22</div>
+                                <div class="tooth-cell" data-tooth="23">23</div>
+                                <div class="tooth-cell" data-tooth="24">24</div>
+                                <div class="tooth-cell" data-tooth="25">25</div>
+                                <div class="tooth-cell" data-tooth="26">26</div>
+                                <div class="tooth-cell" data-tooth="27">27</div>
+                                <div class="tooth-cell" data-tooth="28">28</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-16 gap-2">
+                            <div class="col-span-8 grid grid-cols-8 gap-2">
+                                <div class="tooth-cell" data-tooth="48">48</div>
+                                <div class="tooth-cell" data-tooth="47">47</div>
+                                <div class="tooth-cell" data-tooth="46">46</div>
+                                <div class="tooth-cell" data-tooth="45">45</div>
+                                <div class="tooth-cell" data-tooth="44">44</div>
+                                <div class="tooth-cell" data-tooth="43">43</div>
+                                <div class="tooth-cell" data-tooth="42">42</div>
+                                <div class="tooth-cell" data-tooth="41">41</div>
+                            </div>
+                            <div class="col-span-8 grid grid-cols-8 gap-2">
+                                <div class="tooth-cell" data-tooth="31">31</div>
+                                <div class="tooth-cell" data-tooth="32">32</div>
+                                <div class="tooth-cell" data-tooth="33">33</div>
+                                <div class="tooth-cell" data-tooth="34">34</div>
+                                <div class="tooth-cell" data-tooth="35">35</div>
+                                <div class="tooth-cell" data-tooth="36">36</div>
+                                <div class="tooth-cell" data-tooth="37">37</div>
+                                <div class="tooth-cell" data-tooth="38">38</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-center space-x-8">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-primary rounded mr-2"></div>
+                            <span class="text-sm text-gray-700">Sog'lom</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-600 rounded mr-2"></div>
+                            <span class="text-sm text-gray-700">Kariyes</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-secondary rounded mr-2"></div>
+                            <span class="text-sm text-gray-700">Plombalangan</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-gray-500 rounded mr-2"></div>
+                            <span class="text-sm text-gray-700">Olib tashlangan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toothModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Tish ma'lumotlari</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <div class="w-6 h-6 flex items-center justify-center">
+                        <i class="ri-close-line"></i>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tish raqami</label>
+                    <input type="text" id="toothNumber" readonly class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 text-gray-900">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Holati</label>
+                    <select id="toothStatus" class="w-full px-3 py-2 border border-gray-300 rounded text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="healthy">Sog'lom</option>
+                        <option value="caries">Kariyes</option>
+                        <option value="filled">Plombalangan</option>
+                        <option value="removed">Olib tashlangan</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Eslatma</label>
+                    <textarea id="toothNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Qo'shimcha eslatmalar..."></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Muolaja sanasi</label>
+                    <input type="date" id="treatmentDate" class="w-full px-3 py-2 border border-gray-300 rounded text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Narx (so'm)</label>
+                    <input type="text" id="treatmentPrice" class="w-full px-3 py-2 border border-gray-300 rounded text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary" placeholder="0">
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <button id="cancelModal" class="px-4 py-2 text-gray-700 border border-gray-300 rounded !rounded-button hover:bg-gray-50 whitespace-nowrap">Bekor qilish</button>
+                <button id="saveToothData" class="px-4 py-2 bg-primary text-white rounded !rounded-button hover:bg-green-700 whitespace-nowrap">Saqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip absolute bg-gray-900 text-white text-sm rounded px-2 py-1 z-50 pointer-events-none"></div>
+
+    <script id="tooth-data-manager">
+        const teethData = {};
+        let currentTooth = null;
+
+        function initializeTeeth() {
+            const toothCells = document.querySelectorAll('.tooth-cell');
+            toothCells.forEach(cell => {
+                const toothNumber = cell.dataset.tooth;
+                cell.className = 'tooth-cell w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-sm font-semibold cursor-pointer hover:border-primary transition-colors bg-white';
+                
+                if (!teethData[toothNumber]) {
+                    teethData[toothNumber] = {
+                        status: 'healthy',
+                        note: '',
+                        treatmentDate: '',
+                        price: ''
+                    };
+                }
+                
+                updateToothAppearance(cell, teethData[toothNumber]);
+            });
+        }
+
+        function updateToothAppearance(cell, data) {
+            cell.classList.remove('tooth-status-healthy', 'tooth-status-caries', 'tooth-status-filled', 'tooth-status-removed');
+            cell.classList.add(`tooth-status-${data.status}`);
+            
+            if (data.status === 'removed') {
+                cell.style.color = 'white';
+            } else {
+                cell.style.color = data.status === 'healthy' ? 'white' : 'white';
+            }
+        }
+
+        function formatPrice(value) {
+            const numericValue = value.replace(/\D/g, '');
+            return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+    </script>
+
+    <script id="modal-controller">
+        const modal = document.getElementById('toothModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelModalBtn = document.getElementById('cancelModal');
+        const saveBtn = document.getElementById('saveToothData');
+        const priceInput = document.getElementById('treatmentPrice');
+
+        function openModal(toothNumber) {
+            currentTooth = toothNumber;
+            const data = teethData[toothNumber];
+            
+            document.getElementById('toothNumber').value = toothNumber;
+            document.getElementById('toothStatus').value = data.status;
+            document.getElementById('toothNote').value = data.note;
+            document.getElementById('treatmentDate').value = data.treatmentDate;
+            document.getElementById('treatmentPrice').value = data.price;
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            currentTooth = null;
+        }
+
+        function saveToothData() {
+            if (!currentTooth) return;
+            
+            const data = {
+                status: document.getElementById('toothStatus').value,
+                note: document.getElementById('toothNote').value,
+                treatmentDate: document.getElementById('treatmentDate').value,
+                price: document.getElementById('treatmentPrice').value
+            };
+            
+            teethData[currentTooth] = data;
+            
+            const cell = document.querySelector(`[data-tooth="${currentTooth}"]`);
+            updateToothAppearance(cell, data);
+            
+            closeModal();
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+        saveBtn.addEventListener('click', saveToothData);
+
+        priceInput.addEventListener('input', function(e) {
+            const formatted = formatPrice(e.target.value);
+            e.target.value = formatted;
+        });
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+
+    <script id="tooltip-controller">
+        const tooltip = document.getElementById('tooltip');
+
+        function showTooltip(e, toothNumber) {
+            const data = teethData[toothNumber];
+            const statusText = {
+                'healthy': 'Sog\'lom',
+                'caries': 'Kariyes',
+                'filled': 'Plombalangan',
+                'removed': 'Olib tashlangan'
+            };
+            
+            let tooltipText = `${toothNumber} – ${statusText[data.status]}`;
+            if (data.treatmentDate) {
+                tooltipText += `, oxirgi muolaja: ${data.treatmentDate}`;
+            }
+            
+            tooltip.textContent = tooltipText;
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY - 10 + 'px';
+            tooltip.classList.add('show');
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('show');
+        }
+    </script>
+
+    <script id="event-listeners">
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTeeth();
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tooth-cell')) {
+                    const toothNumber = e.target.dataset.tooth;
+                    openModal(toothNumber);
+                }
+            });
+            
+            document.addEventListener('mouseover', function(e) {
+                if (e.target.classList.contains('tooth-cell')) {
+                    const toothNumber = e.target.dataset.tooth;
+                    showTooltip(e, toothNumber);
+                }
+            });
+            
+            document.addEventListener('mouseout', function(e) {
+                if (e.target.classList.contains('tooth-cell')) {
+                    hideTooltip();
+                }
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (tooltip.classList.contains('show')) {
+                    tooltip.style.left = e.pageX + 10 + 'px';
+                    tooltip.style.top = e.pageY - 10 + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

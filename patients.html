@@ -321,7 +321,6 @@
     </div>
 
 
-    <!-- Jadval -->
     <div class="overflow-x-auto rounded-lg">
         <table class="w-full border-collapse border border-gray-200">
 
@@ -409,8 +408,7 @@
 
                 <!-- Tugmalar -->
                 <div class="flex justify-end gap-2 pt-4">
-                    <button type="button" id="cancelAddPatient2"
-                        class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">Bekor qilish</button>
+                    
                     <button type="submit"
                         class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition disabled:opacity-50">
                         Saqlash
@@ -559,17 +557,20 @@
         });
 
         const priceInput = document.querySelector('input[name="price"]');
+
+        // Faqat raqamlarni yozishga ruxsat beramiz
         priceInput.addEventListener("input", e => {
-            let value = e.target.value.replace(/\D/g, ""); // faqat raqam
-
-            // katta sonlarni . bilan formatlash
-            if (value) {
-                value = Number(value).toLocaleString("uz-UZ"); // 1500000 → 1 500 000
-                value = value.replace(/ /g, "."); // probel o‘rniga nuqta
-            }
-
-            e.target.value = value;
+            e.target.value = e.target.value.replace(/\D/g, "");
         });
+
+        // Inputdan chiqqanda formatlab qo'yamiz
+        priceInput.addEventListener("blur", e => {
+            let value = e.target.value.replace(/\D/g, "");
+            if (value) {
+                e.target.value = Number(value).toLocaleString("uz-UZ").replace(/ /g, ".");
+            }
+        });
+
 
         // Form submit – API ga yuborishda asl raqamlarni olish
         addPatientForm.addEventListener("submit", async e => {
@@ -584,7 +585,7 @@
             const priceRaw = formData.get("price").replace(/\D/g, ""); // faqat raqamlar
 
             const newPatient = {
-                id: newId,
+                id: String(newId),
                 name: formData.get("name"),
                 age: Number(formData.get("age")),
                 phone: "+" + phoneRaw, // +998901234567 ko‘rinishda
