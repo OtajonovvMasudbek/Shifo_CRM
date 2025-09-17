@@ -1,4 +1,4 @@
-const API_URL = "https://shifo-crm-5.onrender.com/patients";
+const API_URL = "https://shifo-crm-6.onrender.com/patients";
 const tableBody = document.getElementById("patientsTableBody");
 const addPatientBtn = document.getElementById("addPatientBtn");
 const addPatientModal = document.getElementById("addPatientModal");
