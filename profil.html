@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shifokor Profili</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-green-600 text-white p-4 flex justify-between items-center shadow-md">
+    <h1 class="text-xl font-bold">👨‍⚕️ Shifokor Profil Sahifasi</h1>
+    <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition">Chiqish</button>
+  </header>
+
+  <main class="flex-1 p-6">
+    <!-- Doctor Info -->
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6">
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">Shaxsiy ma’lumotlar</h2>
+      <p><strong>F.I.O:</strong> <span id="fullname">-</span></p>
+      <p><strong>Login:</strong> <span id="username">-</span></p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6">
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">📊 Statistikalar</h2>
+      <p><strong>Jami bemorlar:</strong> <span id="totalPatients">0</span></p>
+      <p><strong>Kutilayotganlar:</strong> <span id="pendingPatients">0</span></p>
+      <p><strong>Yakunlanganlar:</strong> <span id="finishedPatients">0</span></p>
+    </div>
+
+    <!-- Patient List -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">🧑‍🤝‍🧑 Bemorlar ro‘yxati</h2>
+      <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="border px-4 py-2">F.I.O</th>
+            <th class="border px-4 py-2">Telefon</th>
+            <th class="border px-4 py-2">Oxirgi tashrif</th>
+            <th class="border px-4 py-2">Status</th>
+          </tr>
+        </thead>
+        <tbody id="patientTableBody" class="text-sm"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const API_DOCTORS = "http://localhost:3001/doctors";
+    const API_PATIENTS = "http://localhost:3001/patients";
+
+    // 🔑 Login qilgan doctorni olish
+    const params = new URLSearchParams(window.location.search);
+    const doctorId = params.get("id");
+
+    async function loadProfile() {
+      // Shifokor ma’lumotlari
+      const resDoctor = await fetch(API_DOCTORS);
+      const doctors = await resDoctor.json();
+      const doctor = doctors.find(d => d.id === doctorId);
+
+      if (!doctor) {
+        alert("Shifokor topilmadi!");
+        return;
+      }
+
+      document.getElementById("fullname").textContent = doctor.fullname;
+      document.getElementById("username").textContent = doctor.username;
+
+      // Faqat shu shifokorga tegishli bemorlar
+      const resPatients = await fetch(API_PATIENTS);
+      const patients = await resPatients.json();
+      const myPatients = patients.filter(p => p.doctorId === doctor.id);
+
+      // Statistikalar
+      document.getElementById("totalPatients").textContent = myPatients.length;
+      document.getElementById("pendingPatients").textContent =
+        myPatients.filter(p => p.status === "Kutilmoqda").length;
+      document.getElementById("finishedPatients").textContent =
+        myPatients.filter(p => p.status === "Yakunlangan").length;
+
+      // Jadvalga chiqarish
+      const tbody = document.getElementById("patientTableBody");
+      tbody.innerHTML = "";
+      myPatients.forEach(p => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="border px-4 py-2">${p.name}</td>
+            <td class="border px-4 py-2">${p.phone}</td>
+            <td class="border px-4 py-2">${p.lastVisit || "-"}</td>
+            <td class="border px-4 py-2">${p.status}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem("doctor");
+      window.location.href = "register.html";
+    }
+
+    loadProfile();
+  </script>
+
+</body>
+</html>

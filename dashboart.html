@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-green-600 text-white py-4 px-6 flex justify-between items-center">
+    <h1 class="text-xl font-bold">🦷 CRM Dashboard</h1>
+    <div>
+      <span id="userName" class="mr-4 font-semibold"></span>
+      <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded-lg">Chiqish</button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="p-6">
+    <div id="clinicSection" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">🏥 Klinikaga tegishli ma’lumotlar</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Doctors -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-xl font-semibold mb-2">👩‍⚕️ Shifokorlar</h3>
+          <ul id="clinicDoctors" class="space-y-2 text-gray-700"></ul>
+        </div>
+        <!-- Patients -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-xl font-semibold mb-2">🧑‍🤝‍🧑 Bemorlar</h3>
+          <ul id="clinicPatients" class="space-y-2 text-gray-700"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="doctorSection" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">👨‍⚕️ Shifokor profili</h2>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-3">Mening bemorlarim</h3>
+        <ul id="doctorPatients" class="space-y-2 text-gray-700"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const DOCTOR_API = "http://localhost:3001/doctors";
+    const CLINIC_API = "http://localhost:3001/clinics";
+    const PATIENT_API = "http://localhost:3001/patients";
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      window.location.href = "index.html"; // agar login qilmagan bo'lsa
+    }
+
+    document.getElementById("userName").textContent = user.fullname || user.name || user.username;
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("user");
+      window.location.href = "index.html";
+    }
+
+    // Klinikaga tegishli ma’lumotlarni yuklash
+    async function loadClinicData() {
+      document.getElementById("clinicSection").classList.remove("hidden");
+
+      // Shifokorlarni olish
+      const resDoctors = await fetch(DOCTOR_API);
+      const doctors = await resDoctors.json();
+      const clinicDoctors = doctors.filter(d => d.clinicId == user.id);
+
+      const docList = document.getElementById("clinicDoctors");
+      docList.innerHTML = "";
+      clinicDoctors.forEach(d => {
+        const li = document.createElement("li");
+        li.textContent = `${d.fullname} (${d.speciality})`;
+        docList.appendChild(li);
+      });
+
+      // Bemorlarni olish
+      const resPatients = await fetch(PATIENT_API);
+      const patients = await resPatients.json();
+      const clinicPatients = patients.filter(p => clinicDoctors.some(d => d.id === p.doctorId));
+
+      const patList = document.getElementById("clinicPatients");
+      patList.innerHTML = "";
+      clinicPatients.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = `${p.name} - ${p.status}`;
+        patList.appendChild(li);
+      });
+    }
+
+    // Shifokorga tegishli ma’lumotlarni yuklash
+    async function loadDoctorData() {
+      document.getElementById("doctorSection").classList.remove("hidden");
+
+      const resPatients = await fetch(PATIENT_API);
+      const patients = await resPatients.json();
+      const myPatients = patients.filter(p => p.doctorId == user.id);
+
+      const patList = document.getElementById("doctorPatients");
+      patList.innerHTML = "";
+      myPatients.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = `${p.name} (${p.status}) - Oxirgi tashrif: ${p.lastVisit}`;
+        patList.appendChild(li);
+      });
+    }
+
+    // Foydalanuvchi roliga qarab yuklash
+    if (user.role === "clinic") {
+      loadClinicData();
+    } else if (user.role === "doctor") {
+      loadDoctorData();
+    }
+  </script>
+</body>
+</html>

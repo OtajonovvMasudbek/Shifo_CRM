@@ -1,36 +1,211 @@
 {
   "patients": [
     {
-      "id": 1,
-      "name": "asdas",
-      "age": 12,
-      "phone": "12",
-      "lastVisit": "2025-09-12",
-      "status": "Yakunlangan"
-    },
-    {
-      "id": 2,
-      "name": "Masudbek",
-      "age": 19,
-      "phone": "94 054 27 22",
-      "lastVisit": "2005-03-12",
+      "id": "1",
+      "doctorId": "d1",
+      "name": "Ali Valiyev",
+      "age": 25,
+      "phone": "+998901234567",
+      "lastVisit": "2025-09-10",
       "status": "Kutilmoqda"
     },
     {
-      "id": 3,
-      "name": "asda",
-      "age": 123,
-      "phone": "+998937335437",
+      "id": "2",
+      "doctorId": "d1",
+      "name": "Dilshod Karimov",
+      "age": 30,
+      "phone": "+998909998877",
+      "lastVisit": "2025-08-21",
+      "status": "Faol"
+    },
+    {
+      "id": "3",
+      "doctorId": "d1",
+      "name": "Shahnoza Ismoilova",
+      "age": 19,
+      "phone": "+998933214567",
+      "lastVisit": "2025-09-05",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "4",
+      "doctorId": "meh0pjor",
+      "name": "Sardorbek Yo‘ldoshev",
+      "age": 28,
+      "phone": "+998977654321",
+      "lastVisit": "2025-09-12",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "5",
+      "doctorId": "meh0pjor",
+      "name": "Aziza Nurmatova",
+      "age": 22,
+      "phone": "+998931112233",
+      "lastVisit": "2025-08-30",
+      "status": "Faol"
+    },
+    {
+      "id": "6",
+      "doctorId": "meh0pjor",
+      "name": "Bobur Toshpulatov",
+      "age": 35,
+      "phone": "+998935556677",
+      "lastVisit": "2025-09-01",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "7",
+      "doctorId": "mf3zu00y",
+      "name": "Umid Rahmatov",
+      "age": 40,
+      "phone": "+998909009009",
+      "lastVisit": "2025-08-25",
+      "status": "Faol"
+    },
+    {
+      "id": "8",
+      "doctorId": "mf3zu00y",
+      "name": "Dilafruz Qodirova",
+      "age": 27,
+      "phone": "+998932224455",
+      "lastVisit": "2025-09-03",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "9",
+      "doctorId": "mf3zu00y",
+      "name": "Otabek Raximov",
+      "age": 31,
+      "phone": "+998936667788",
+      "lastVisit": "2025-08-28",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "10",
+      "doctorId": "mf510x6i",
+      "name": "Gulbahor Xasanova",
+      "age": 29,
+      "phone": "+998909876543",
+      "lastVisit": "2025-09-07",
+      "status": "Faol"
+    },
+    {
+      "id": "11",
+      "doctorId": "mf510x6i",
+      "name": "Jamshid Xoliqov",
+      "age": 33,
+      "phone": "+998935432198",
+      "lastVisit": "2025-09-02",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "12",
+      "doctorId": "mf510x6i",
+      "name": "Malika Shodmonova",
+      "age": 21,
+      "phone": "+998933334455",
+      "lastVisit": "2025-09-11",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "13",
+      "doctorId": "mf5139rn",
+      "name": "Sherzod Yusupov",
+      "age": 26,
+      "phone": "+998931212121",
+      "lastVisit": "2025-09-08",
+      "status": "Faol"
+    },
+    {
+      "id": "14",
+      "doctorId": "mf5139rn",
+      "name": "Laylo Tursunova",
+      "age": 24,
+      "phone": "+998935656565",
+      "lastVisit": "2025-09-06",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "15",
+      "doctorId": "mf5139rn",
+      "name": "Rustam Abdurahmonov",
+      "age": 37,
+      "phone": "+998939898989",
+      "lastVisit": "2025-08-29",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "16",
+      "doctorId": "mf51ca1l",
+      "name": "Mohira Karimova",
+      "age": 20,
+      "phone": "+998901112200",
+      "lastVisit": "2025-09-04",
+      "status": "Faol"
+    },
+    {
+      "id": "17",
+      "doctorId": "mf51ca1l",
+      "name": "Shohruh Nazarov",
+      "age": 34,
+      "phone": "+998932332332",
+      "lastVisit": "2025-09-09",
+      "status": "Kutilmoqda"
+    },
+    {
+      "id": "18",
+      "doctorId": "mf51ca1l",
+      "name": "Feruza Alimova",
+      "age": 27,
+      "phone": "+998933445566",
+      "lastVisit": "2025-09-10",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "19",
+      "doctorId": "mf522a9l",
+      "name": "Hasan Bozorov",
+      "age": 32,
+      "phone": "+998937771122",
+      "lastVisit": "2025-09-01",
+      "status": "Faol"
+    },
+    {
+      "id": "20",
+      "doctorId": "mf522a9l",
+      "name": "Shaxnoza To‘xtaeva",
+      "age": 23,
+      "phone": "+998939999000",
       "lastVisit": "2025-09-05",
       "status": "Kutilmoqda"
     },
     {
-      "id": 4,
-      "name": "asd",
-      "age": 123,
-      "phone": "94 054 27 22",
-      "lastVisit": "2025-09-18",
-      "status": "Kutilmoqda"
+      "id": "21",
+      "doctorId": "mf522a9l",
+      "name": "Bekzod Sodiqov",
+      "age": 36,
+      "phone": "+998935551234",
+      "lastVisit": "2025-09-08",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": 1757951640168,
+      "name": "wdfasdfasdf",
+      "age": "23",
+      "phone": "+998 12 342 34 12",
+      "lastVisit": "2025-09-17",
+      "status": "Kutilmoqda",
+      "doctorId": "mf3zu00y"
+    },
+    {
+      "id": 1757951836027,
+      "name": "otajonovmasudbek",
+      "age": "45",
+      "phone": "+998 12 342 34 12",
+      "lastVisit": "2025-09-19",
+      "status": "Kutilmoqda",
+      "doctorId": "mflb3lik"
     }
   ],
   "doctors": [
@@ -75,6 +250,61 @@
       "fullname": "asds",
       "username": "mass",
       "password": "1223"
+    },
+    {
+      "id": "mfij4z7r",
+      "fullname": "masudbek",
+      "speciality": "stamatolig",
+      "clinicId": "12345",
+      "username": "123123",
+      "password": "123",
+      "role": "doctor"
+    },
+    {
+      "id": "mflb3lik",
+      "fullname": "masudbek",
+      "username": "12",
+      "password": "12"
+    }
+  ],
+  "clinics": [
+    {
+      "id": "10001",
+      "name": "Smile Dental Clinic",
+      "address": "Toshkent, Chilonzor",
+      "phone": "+998901234567",
+      "username": "smile",
+      "password": "clinic123",
+      "services": [
+        "Implantatsiya",
+        "Ortodontiya",
+        "Plomba",
+        "Protez"
+      ],
+      "role": "clinic"
+    },
+    {
+      "id": "10002",
+      "name": "DentCare",
+      "address": "Toshkent, Yunusobod",
+      "phone": "+998909998877",
+      "username": "dentcare",
+      "password": "clinic456",
+      "services": [
+        "Karies davolash",
+        "Tish oqartirish",
+        "Protez"
+      ],
+      "role": "clinic"
+    },
+    {
+      "id": "92032",
+      "name": "masudbek",
+      "address": "yunusobot",
+      "phone": "+998940542722",
+      "username": "1234",
+      "password": "1234",
+      "role": "clinic"
     }
   ],
   "appointments": [
@@ -106,6 +336,69 @@
       "responsible": "Dr. Olimjon Rahimov",
       "date": "2025-01-02",
       "time": "14:30"
+    }
+  ],
+  "dentalCharts": [
+    {
+      "id": "dc1",
+      "patientId": 1,
+      "visitDate": "2025-09-09",
+      "teeth": [
+        {
+          "id": "11",
+          "status": "healthy",
+          "note": ""
+        },
+        {
+          "id": "16",
+          "status": "filled",
+          "note": "Plomba bor"
+        },
+        {
+          "id": "12",
+          "status": "filled",
+          "note": ""
+        },
+        {
+          "id": "32",
+          "status": "missing",
+          "note": "umuman tish talabga javob bermaydi"
+        }
+      ]
+    },
+    {
+      "id": "dc2",
+      "patientId": 2,
+      "visitDate": "2025-09-05",
+      "teeth": [
+        {
+          "id": "21",
+          "status": "caries",
+          "note": "Kichik karies"
+        },
+        {
+          "id": "26",
+          "status": "missing",
+          "note": "Olib tashlangan"
+        }
+      ]
+    },
+    {
+      "id": "dc1757414506795",
+      "patientId": 4,
+      "visitDate": "2025-09-09",
+      "teeth": [
+        {
+          "id": "11",
+          "status": "filled",
+          "note": "asdwe"
+        },
+        {
+          "id": "20",
+          "status": "cariyes",
+          "note": "asda"
+        }
+      ]
     }
   ]
 }
