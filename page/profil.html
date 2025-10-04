@@ -10,6 +10,7 @@
 
   <!-- Header -->
   <header class="bg-green-600 text-white p-4 flex justify-between items-center shadow-md">
+    <img src="./tish/tish.svg" alt="logo">
     <h1 class="text-xl font-bold">👨‍⚕️ Shifokor Profil Sahifasi</h1>
     <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition">Chiqish</button>
   </header>
@@ -48,31 +49,25 @@
   </main>
 
   <script>
-    const API_DOCTORS = "https://shifo-crm-6.onrender.com/doctors";
-    const API_PATIENTS = "https://shifo-crm-6.onrender.com/patients";
+    const API_PATIENTS = "https://shifo-crm-7.onrender.com/patients";
 
-    // 🔑 Login qilgan doctorni olish
-    const params = new URLSearchParams(window.location.search);
-    const doctorId = params.get("id");
+    // 🔑 localStorage dan doctorni olish
+    const doctor = JSON.parse(localStorage.getItem("doctor"));
+
+    if (!doctor) {
+      alert("❌ Avval tizimga kiring!");
+      window.location.href = "register.html";
+    }
 
     async function loadProfile() {
-      // Shifokor ma’lumotlari
-      const resDoctor = await fetch(API_DOCTORS);
-      const doctors = await resDoctor.json();
-      const doctor = doctors.find(d => d.id === doctorId);
-
-      if (!doctor) {
-        alert("Shifokor topilmadi!");
-        return;
-      }
-
+      // Doctor ma’lumotlari
       document.getElementById("fullname").textContent = doctor.fullname;
       document.getElementById("username").textContent = doctor.username;
 
-      // Faqat shu shifokorga tegishli bemorlar
+      // Faqat shu doctor bemorlari
       const resPatients = await fetch(API_PATIENTS);
       const patients = await resPatients.json();
-      const myPatients = patients.filter(p => p.doctorId === doctor.id);
+      const myPatients = patients.filter(p => String(p.doctorId) === String(doctor.id));
 
       // Statistikalar
       document.getElementById("totalPatients").textContent = myPatients.length;

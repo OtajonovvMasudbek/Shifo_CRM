@@ -49,7 +49,7 @@
             transform: translateY(0);
         }
 
-        
+
 
         @media (max-width: 1023px) {
             .desktop-sidebar {
@@ -97,81 +97,92 @@
 
 <body class="bg-gray-50 font-sans flex lg:flex-row flex-col">
 
-    <aside class="w-64 bg-white shadow-lg flex-col desktop-sidebar h-screen fixed lg:relative z-30">
-        <div class="p-6 border-b border-gray-200">
+    <aside id="sidebar"
+        class="w-64 bg-white shadow-lg flex flex-col h-screen fixed lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                     <i class="ri-hospital-line text-white text-xl"></i>
                 </div>
-                <div>
+                <a href="/" class="flex flex-col">
                     <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
-                    <div class="demo-badge text-white text-xs px-2 py-1 rounded-full mt-1 inline-block">DEMO</div>
-                </div>
-
+                    <div
+                        class="demo-badge text-white text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 w-fit">
+                        DEMO
+                    </div>
+                </a>
             </div>
+            <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-red-600">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
         </div>
 
         <nav class="flex-1 p-4">
             <ul class="space-y-2">
                 <li>
-                    <a href="./patients.html" class="nav-item w-full flex hover:text-white items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
-                              hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <i class="ri-user-heart-line"></i>
-                        <span>Bemorlar ro'yxati</span>
+                    <a href="./patients.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
+                        <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
                     </a>
                 </li>
-
-
                 <li>
-                    <a href="./dental_chart.html" class="nav-item w-full flex hover:text-white items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
-                              hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <i class="ri-tooth-line"></i>
-                        <span>Dental Chart</span>
+                    <a href="../dental_chart.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
+                        <i class="ri-tooth-line"></i> <span>Dental Chart</span>
                     </a>
                 </li>
-
                 <li>
                     <button
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
-                        data-section="appointment">
+                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
                         <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
                     </button>
                 </li>
                 <li>
                     <button
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
-                        data-section="calendar">
+                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
                         <i class="ri-calendar-line"></i><span>Kalendar</span>
                     </button>
                 </li>
                 <li>
                     <button
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
-                        data-section="reminders">
+                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
                         <i class="ri-notification-line"></i><span>Eslatmalar</span>
                     </button>
                 </li>
                 <li>
                     <button
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500 hover:text-white transition"
-                        data-section="statistics">
+                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
                         <i class="ri-bar-chart-line"></i><span>Statistika</span>
                     </button>
                 </li>
             </ul>
         </nav>
 
-        <!-- Toast container -->
-
         <div class="p-4 border-t border-gray-200">
-            <button
-                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors">
+            <a href="./index.html"
+                class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition">
                 <i class="ri-logout-box-line"></i><span>Demo rejimdan chiqish</span>
-            </button>
+            </a>
         </div>
     </aside>
 
-    <main class="flex-1 p-4 lg:p-8 main-content">
+    <main class="flex-1  lg: main-content">
+        <header class="bg-white shadow p-4 flex justify-between items-center">
+            <!-- Hamburger tugma (faqat mobil) -->
+            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-green-600">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+
+            <!-- O‘ng tarafdagi profil tugmasi -->
+            <a href="./profil.html" class="ml-auto">
+                <button
+                    class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow transition">
+                    <i class="ri-account-circle-line text-lg"></i>
+                    <span>Profil</span>
+                </button>
+            </a>
+        </header>
+
         <div class="bg-white p-4 md:p-6  shadow-md">
             <h1 class="text-xl md:text-2xl  font-semibold mb-6">Bemorlar ro'yxati</h1>
 
@@ -190,7 +201,6 @@
                 <table class="w-full min-w-[600px] border-collapse border border-gray-200">
                     <thead class="bg-gray-100 text-sm text-gray-700">
                         <tr>
-                            <!-- F.I.O. -->
                             <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('name')">
                                 <div class="flex items-center gap-1">
                                     <i class="ri-user-line text-gray-500"></i>
@@ -199,7 +209,6 @@
                                 </div>
                             </th>
 
-                            <!-- Telefon -->
                             <th class="border px-4 py-2">
                                 <div class="flex items-center gap-1">
                                     <i class="ri-phone-line text-green-600"></i>
@@ -207,7 +216,6 @@
                                 </div>
                             </th>
 
-                            <!-- Oxirgi tashrif -->
                             <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('lastVisit')">
                                 <div class="flex items-center gap-1">
                                     <i class="ri-calendar-line text-blue-500"></i>
@@ -216,7 +224,6 @@
                                 </div>
                             </th>
 
-                            <!-- Status -->
                             <th class="border px-4 py-2">
                                 <div class="flex items-center gap-1">
                                     <i class="ri-shield-user-line text-yellow-500"></i>
@@ -224,7 +231,6 @@
                                 </div>
                             </th>
 
-                            <!-- Amallar -->
                             <th class="border px-4 py-2 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     <i class="ri-settings-3-line text-gray-600"></i>
@@ -257,44 +263,7 @@
         </div>
     </main>
 
-    <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-50">
-        <ul class="flex justify-around items-center h-16">
-            <li>
-                <button class="nav-item flex flex-col items-center text-primary" data-section="patients">
-                    <i class="ri-user-heart-line text-2xl"></i>
-                    <span class="text-xs font-semibold">Bemorlar</span>
-                </button>
-            </li>
-            <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
-                    data-section="appointment">
-                    <i class="ri-calendar-check-line text-2xl"></i>
-                    <span class="text-xs">Qabul</span>
-                </button>
-            </li>
-            <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
-                    data-section="calendar">
-                    <i class="ri-calendar-line text-2xl"></i>
-                    <span class="text-xs">Kalendar</span>
-                </button>
-            </li>
-            <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
-                    data-section="reminders">
-                    <i class="ri-notification-line text-2xl"></i>
-                    <span class="text-xs">Eslatmalar</span>
-                </button>
-            </li>
-            <li>
-                <button class="nav-item flex flex-col items-center text-gray-400 hover:text-primary transition-colors"
-                    data-section="statistics">
-                    <i class="ri-bar-chart-line text-2xl"></i>
-                    <span class="text-xs">Statistika</span>
-                </button>
-            </li>
-        </ul>
-    </nav>
+
     <div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl">
             <div class="flex justify-between items-center mb-4">
@@ -333,20 +302,16 @@
         <div
             class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl transform transition-all duration-300 max-h-[90vh] overflow-y-auto">
 
-            <!-- Modal header -->
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-gray-800"> Yangi bemor qo‘shish</h3>
                 <button id="cancelAddPatient"
                     class="text-gray-500 hover:text-gray-800 transition font-bold text-2xl leading-none">×</button>
             </div>
 
-            <!-- Form -->
             <form id="addPatientForm" class="space-y-6 bg-white p-6 rounded-2xl shadow-lg border">
-                <!-- Shaxsiy ma’lumotlar -->
                 <div class="space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Shaxsiy ma’lumotlar</h3>
 
-                    <!-- Ism Familiya -->
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Ism Familiya</label>
                         <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
@@ -372,18 +337,15 @@
                 </div>
 
 
-                <!-- Tibbiy ma’lumotlar -->
                 <div class="space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Tibbiy ma’lumotlar</h3>
 
-                    <!-- Oxirgi tashrif -->
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
                         <input type="date" name="lastVisit" required
                             class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                     </div>
 
-                    <!-- Status -->
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
                         <select name="status" required
@@ -424,23 +386,50 @@
 
 
     <div id="viewPatientModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center z-50 px-4">
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
         <div
-            class="bg-white p-6 rounded-2xl w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh] transform transition-all duration-300">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">Bemor tafsilotlari</h3>
-                <button onclick="closeModal(viewPatientModal)" class="text-gray-500 hover:text-gray-800 transition">
+            class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh] transform transition-all duration-300 scale-95 hover:scale-100">
+
+            <!-- Header -->
+            <div
+                class="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-5 rounded-t-2xl flex justify-between items-center">
+                <h3 class="text-lg sm:text-xl font-semibold flex items-center gap-2">
+                    <i class="ri-user-heart-line text-2xl"></i>
+                    Bemor tafsilotlari
+                </h3>
+                <button onclick="closeModal(viewPatientModal)" class="text-white hover:text-gray-200 transition">
                     <i class="ri-close-line text-2xl"></i>
                 </button>
             </div>
-            <div id="patientDetails" class="space-y-2 text-gray-700"></div>
 
+            <!-- Content -->
+            <div id="patientDetails" class="p-6 space-y-3 text-gray-700">
+                <!-- Dinamik bemor ma’lumotlari JS orqali qo‘yiladi -->
+                <!-- Masalan:
+      <p><span class="font-medium">Ism:</span> Aliyev Jamshid</p>
+      <p><span class="font-medium">Yosh:</span> 25</p>
+      <p><span class="font-medium">Telefon:</span> +998 90 123 45 67</p>
+      <p><span class="font-medium">Oxirgi tashrif:</span> 2025-09-20</p>
+      -->
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-end gap-3 p-4 border-t border-gray-100">
+                <button onclick="closeModal(viewPatientModal)"
+                    class="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                    Bekor qilish
+                </button>
+                <button class="px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow transition">
+                    ✏️ Tahrirlash
+                </button>
+            </div>
         </div>
     </div>
+
     <div id="toastContainer" class="fixed top-4 right-4 space-y-3 z-50"></div>
 
 
-    <script src="./patients.js">
+    <script src="/patients.js">
 
     </script>
 </body>

@@ -28,60 +28,6 @@
       "status": "Yakunlangan"
     },
     {
-      "id": "4",
-      "doctorId": "meh0pjor",
-      "name": "Sardorbek Yo‘ldoshev",
-      "age": 28,
-      "phone": "+998977654321",
-      "lastVisit": "2025-09-12",
-      "status": "Kutilmoqda"
-    },
-    {
-      "id": "5",
-      "doctorId": "meh0pjor",
-      "name": "Aziza Nurmatova",
-      "age": 22,
-      "phone": "+998931112233",
-      "lastVisit": "2025-08-30",
-      "status": "Faol"
-    },
-    {
-      "id": "6",
-      "doctorId": "meh0pjor",
-      "name": "Bobur Toshpulatov",
-      "age": 35,
-      "phone": "+998935556677",
-      "lastVisit": "2025-09-01",
-      "status": "Yakunlangan"
-    },
-    {
-      "id": "7",
-      "doctorId": "mf3zu00y",
-      "name": "Umid Rahmatov",
-      "age": 40,
-      "phone": "+998909009009",
-      "lastVisit": "2025-08-25",
-      "status": "Faol"
-    },
-    {
-      "id": "8",
-      "doctorId": "mf3zu00y",
-      "name": "Dilafruz Qodirova",
-      "age": 27,
-      "phone": "+998932224455",
-      "lastVisit": "2025-09-03",
-      "status": "Kutilmoqda"
-    },
-    {
-      "id": "9",
-      "doctorId": "mf3zu00y",
-      "name": "Otabek Raximov",
-      "age": 31,
-      "phone": "+998936667788",
-      "lastVisit": "2025-08-28",
-      "status": "Yakunlangan"
-    },
-    {
       "id": "10",
       "doctorId": "mf510x6i",
       "name": "Gulbahor Xasanova",
@@ -106,33 +52,6 @@
       "age": 21,
       "phone": "+998933334455",
       "lastVisit": "2025-09-11",
-      "status": "Yakunlangan"
-    },
-    {
-      "id": "13",
-      "doctorId": "mf5139rn",
-      "name": "Sherzod Yusupov",
-      "age": 26,
-      "phone": "+998931212121",
-      "lastVisit": "2025-09-08",
-      "status": "Faol"
-    },
-    {
-      "id": "14",
-      "doctorId": "mf5139rn",
-      "name": "Laylo Tursunova",
-      "age": 24,
-      "phone": "+998935656565",
-      "lastVisit": "2025-09-06",
-      "status": "Kutilmoqda"
-    },
-    {
-      "id": "15",
-      "doctorId": "mf5139rn",
-      "name": "Rustam Abdurahmonov",
-      "age": 37,
-      "phone": "+998939898989",
-      "lastVisit": "2025-08-29",
       "status": "Yakunlangan"
     },
     {
@@ -190,22 +109,142 @@
       "status": "Yakunlangan"
     },
     {
-      "id": 1757951640168,
-      "name": "wdfasdfasdf",
-      "age": "23",
-      "phone": "+998 12 342 34 12",
-      "lastVisit": "2025-09-17",
+      "id": "1",
+      "name": "asdas",
+      "age": 12,
+      "phone": "+998123112341",
+      "lastVisit": "2025-09-19",
       "status": "Kutilmoqda",
+      "price": 234,
+      "description": "qwedfsfsd",
+      "address": "1234343412412"
+    },
+    {
+      "id": "1758962760400",
+      "name": "asdas",
+      "age": "12",
+      "phone": "+998 12 311 23 41",
+      "lastVisit": "2025-09-19",
+      "status": "Kutilmoqda",
+      "doctorId": "meh0pjor"
+    },
+    {
+      "id": "1",
+      "name": "asda",
+      "age": 12,
+      "phone": "+998123412434",
+      "lastVisit": "2025-09-19",
+      "status": "Kutilmoqda",
+      "price": 123,
+      "description": "sdfdsf",
+      "address": "1241234134"
+    },
+    {
+      "id": "1",
+      "name": "dasda",
+      "age": 16,
+      "phone": "+998234234232",
+      "lastVisit": "2025-09-19",
+      "status": "Kutilmoqda",
+      "price": 12,
+      "description": "sdfw",
+      "address": "sdfwerwer"
+    },
+    {
+      "id": "1759138063000",
+      "name": "asdasd",
+      "age": 34,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-09-26",
+      "status": "Kutilmoqda",
+      "price": 123,
+      "description": "",
+      "address": "Sobirtepa qishlog'i",
       "doctorId": "mf3zu00y"
     },
     {
-      "id": 1757951836027,
-      "name": "otajonovmasudbek",
-      "age": "45",
-      "phone": "+998 12 342 34 12",
-      "lastVisit": "2025-09-19",
+      "id": "1759140076370",
+      "name": "sdfg",
+      "age": 34,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-09-27",
       "status": "Kutilmoqda",
+      "price": 312,
+      "description": "asdasdfa",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mf3zu00y"
+    },
+    {
+      "id": "1759218276944",
+      "name": "asdasd",
+      "age": 33,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-09-18",
+      "status": "Kutilmoqda",
+      "price": 123,
+      "description": "asdsfrqweqwrq",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mf5139rn"
+    },
+    {
+      "id": "1759219999159",
+      "name": "dasdsa",
+      "age": 12,
+      "phone": "+998 31 231 23 12",
+      "lastVisit": "2025-09-26",
+      "status": "Kutilmoqda",
+      "price": 233,
+      "description": "qwdasfasf",
+      "address": "yunusobot",
       "doctorId": "mflb3lik"
+    },
+    {
+      "id": "1759390531378",
+      "name": "lasdfhask",
+      "age": 12,
+      "phone": "+998 23 423 42 34",
+      "lastVisit": "2025-10-03",
+      "status": "Kutilmoqda",
+      "price": 123,
+      "description": "asdasdfasf",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mg93o2l4"
+    },
+    {
+      "id": "1759390985270",
+      "name": "asdasd",
+      "age": 12,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-10-17",
+      "status": "Kutilmoqda",
+      "price": 233,
+      "description": "asdsad",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mg93o2l4"
+    },
+    {
+      "id": "1759431063115",
+      "name": "Otajonov Masudbek",
+      "age": 19,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-10-25",
+      "status": "Faol",
+      "price": 312,
+      "description": "HGCGTHJB",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "1759478327102",
+      "name": "Otajonov Masudbek",
+      "age": 19,
+      "phone": "+998 94 054 27 22",
+      "lastVisit": "2025-10-19",
+      "status": "Yakunlangan",
+      "price": 312,
+      "description": ",hjgyuilhkj",
+      "address": "Sobirtepa qishlog'i",
+      "doctorId": "mg9rt4ro"
     }
   ],
   "doctors": [
@@ -264,6 +303,18 @@
       "id": "mflb3lik",
       "fullname": "masudbek",
       "username": "12",
+      "password": "12"
+    },
+    {
+      "id": "mg93o2l4",
+      "fullname": "Otajonov Masudbek",
+      "username": "m",
+      "password": "m"
+    },
+    {
+      "id": "mg9rt4ro",
+      "fullname": "Otajonov Masudbek",
+      "username": "ma",
       "password": "12"
     }
   ],
@@ -399,6 +450,81 @@
           "note": "asda"
         }
       ]
+    },
+    {
+      "id": "dc1759222873126",
+      "patientId": "19",
+      "visitDate": "2025-09-30",
+      "teeth": [
+        {
+          "id": "5",
+          "status": "filled",
+          "note": "asdasd"
+        },
+        {
+          "id": "6",
+          "status": "cariyes",
+          "note": ""
+        },
+        {
+          "id": "8",
+          "status": "missing",
+          "note": ""
+        },
+        {
+          "id": "1",
+          "status": "missing",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dc1759390586050",
+      "patientId": "1759390531378",
+      "doctorId": "mg93o2l4",
+      "visitDate": "2025-10-02",
+      "teeth": [
+        {
+          "id": "2",
+          "status": "healthy",
+          "note": "asdasdas"
+        },
+        {
+          "id": "4",
+          "status": "filled",
+          "note": ""
+        },
+        {
+          "id": "5",
+          "status": "missing",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dc1759478085467",
+      "patientId": "1759431063115",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-03",
+      "teeth": [
+        {
+          "id": "23",
+          "status": "missing",
+          "note": ""
+        },
+        {
+          "id": "11",
+          "status": "filled",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dc1759489417641",
+      "patientId": "1759218276944",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-10-03",
+      "teeth": []
     }
   ]
 }

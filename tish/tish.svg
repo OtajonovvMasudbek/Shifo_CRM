@@ -1,0 +1,231 @@
+<!-- odontogram.svg (inline SVG) -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 500"
+     width="1200"
+     height="500"
+     role="img"
+     aria-label="Dental odontogram - 32 teeth">
+  <style>
+    .tooth { cursor: pointer; }
+    .tooth .shade { fill: #ffffff; stroke: #333333; stroke-width: 2; rx: 8; ry: 8; }
+    .tooth text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; pointer-events: none; }
+    .tooth:hover .shade { fill: #f0f8ff; }        /* hover */
+    .tooth.active .shade { fill: #ffd7d7; }      /* selected */
+    .label { font-size: 12px; fill: #555; }
+    .row-label { font-size: 16px; fill: #222; font-weight: bold; }
+  </style>
+
+  <!-- Top row label -->
+  <text x="40" y="30" class="row-label">Upper (1–16)</text>
+
+  <!-- Upper jaw: 16 teeth arranged left→right -->
+  <!-- We'll generate visually evenly spaced tooth blocks -->
+  <g id="upper" transform="translate(20,40)">
+    <!-- parameters -->
+    <!-- tooth width 70, gap 10 -->
+    <!-- looped manually for clarity -->
+    <!-- Teeth 1..16 -->
+    <!-- x position = (idx-1) * (70 + 10) -->
+    <!-- Each tooth group has class "tooth" and data-number -->
+    <!-- adjust y for nice arc visual with slight translateY based on index (optional) -->
+    <!-- Row 1 -->
+    <g class="tooth" data-number="1" id="tooth-1" transform="translate(0, 0)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">1</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="2" id="tooth-2" transform="translate(80, -4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">2</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="3" id="tooth-3" transform="translate(160, -7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">3</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="4" id="tooth-4" transform="translate(240, -9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">4</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="5" id="tooth-5" transform="translate(320, -10)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">5</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="6" id="tooth-6" transform="translate(400, -9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">6</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="7" id="tooth-7" transform="translate(480, -7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">7</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="8" id="tooth-8" transform="translate(560, -4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">8</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="9" id="tooth-9" transform="translate(640, 0)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">9</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="10" id="tooth-10" transform="translate(720, 4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">10</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="11" id="tooth-11" transform="translate(800, 7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">11</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="12" id="tooth-12" transform="translate(880, 9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">12</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="13" id="tooth-13" transform="translate(960, 10)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">13</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="14" id="tooth-14" transform="translate(1040, 9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">14</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="15" id="tooth-15" transform="translate(1120, 7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">15</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+
+    <g class="tooth" data-number="16" id="tooth-16" transform="translate(1200, 4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">16</text>
+      <text x="35" y="62" text-anchor="middle" class="label">U</text>
+    </g>
+  </g>
+
+  <!-- Lower row label -->
+  <text x="40" y="220" class="row-label">Lower (17–32)</text>
+
+  <!-- Lower jaw: 16 teeth arranged left→right -->
+  <g id="lower" transform="translate(20, 240)">
+    <!-- Teeth 17..32 -->
+    <g class="tooth" data-number="17" id="tooth-17" transform="translate(0, 10)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">17</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="18" id="tooth-18" transform="translate(80, 7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">18</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="19" id="tooth-19" transform="translate(160, 4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">19</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="20" id="tooth-20" transform="translate(240, 0)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">20</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="21" id="tooth-21" transform="translate(320, -4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">21</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="22" id="tooth-22" transform="translate(400, -7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">22</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="23" id="tooth-23" transform="translate(480, -9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">23</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="24" id="tooth-24" transform="translate(560, -10)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">24</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="25" id="tooth-25" transform="translate(640, -9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">25</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="26" id="tooth-26" transform="translate(720, -7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">26</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="27" id="tooth-27" transform="translate(800, -4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">27</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="28" id="tooth-28" transform="translate(880, 0)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">28</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="29" id="tooth-29" transform="translate(960, 4)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">29</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="30" id="tooth-30" transform="translate(1040, 7)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">30</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="31" id="tooth-31" transform="translate(1120, 9)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">31</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+
+    <g class="tooth" data-number="32" id="tooth-32" transform="translate(1200, 10)">
+      <rect class="shade" x="0" y="0" width="70" height="70" rx="10" ry="10"/>
+      <text x="35" y="40" text-anchor="middle">32</text>
+      <text x="35" y="62" text-anchor="middle" class="label">L</text>
+    </g>
+  </g>
+</svg>

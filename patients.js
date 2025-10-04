@@ -1,4 +1,9 @@
-const API_URL = "https://shifo-crm-6.onrender.com/patients";
+
+const API_URL = "https://shifo-crm-7.onrender.com/patients";
+// DOM elementlar (existence tekshiriladi)
+const sidebar = document.getElementById("sidebar");
+const openSidebar = document.getElementById("openSidebar");
+const closeSidebar = document.getElementById("closeSidebar");
 const tableBody = document.getElementById("patientsTableBody");
 const addPatientBtn = document.getElementById("addPatientBtn");
 const addPatientModal = document.getElementById("addPatientModal");
@@ -7,475 +12,453 @@ const addPatientForm = document.getElementById("addPatientForm");
 const searchInput = document.getElementById("searchInput");
 const viewPatientModal = document.getElementById("viewPatientModal");
 const patientDetails = document.getElementById("patientDetails");
+const toastContainer = document.getElementById("toastContainer");
 const navItems = document.querySelectorAll(".nav-item");
 
 let patientsData = [];
 let sortKey = null;
 let sortAsc = true;
-let activeSection = 'patients';
-
-function closeModal(modal) { modal.classList.add("hidden"); modal.classList.remove("active"); }
-function openModal(modal) { modal.classList.remove("hidden"); setTimeout(() => modal.classList.add("active"), 10); }
-
-async function loadPatients(query = "") {
-    try {
-        const res = await fetch(API_URL);
-        if (!res.ok) {
-            throw new Error(`Server xatosi: ${res.status}`);
-        }
-        patientsData = await res.json();
-
-        let filtered = patientsData.filter(p =>
-            p.name.toLowerCase().includes(query.toLowerCase()) ||
-            p.phone.includes(query) ||
-            p.status.toLowerCase().includes(query.toLowerCase())
-        );
-
-        if (sortKey) {
-            filtered.sort((a, b) => {
-                if (a[sortKey] < b[sortKey]) return sortAsc ? -1 : 1;
-                if (a[sortKey] > b[sortKey]) return sortAsc ? 1 : -1;
-                return 0;
-            });
-        }
-
-        renderPatients(filtered);
-    } catch (error) {
-        console.error("Ma'lumotlarni yuklashda xato:", error);
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q.</td></tr>`;
-    }
+let debounceTimeout = null;
+openSidebar?.addEventListener("click", () => sidebar.classList.remove("-translate-x-full"));
+closeSidebar?.addEventListener("click", () => sidebar.classList.add("-translate-x-full"));
+// --- Utility helpers ---
+function showToast(message, type = "info") {
+  if (!toastContainer) return;
+  const toast = document.createElement("div");
+  toast.className = `toast px-4 py-3 rounded-lg shadow-md text-white flex items-center gap-2 ${type === "error" ? "bg-red-500" : type === "success" ? "bg-green-500" : "bg-blue-500"
+    }`;
+  toast.innerHTML = `<i class="ri-information-line text-xl"></i><span>${message}</span>`;
+  toastContainer.appendChild(toast);
+  setTimeout(() => { toast.style.animation = "fadeOut 1s forwards"; setTimeout(() => toast.remove(), 1000); }, 2500);
 }
 
-function renderPatients(patients) {
-    tableBody.innerHTML = "";
-    if (patients.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-gray-500 py-4">❌ Bemor topilmadi</td></tr>`;
-        return;
+function openModal(modal) {
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  setTimeout(() => modal.classList.add("active"), 10);
+}
+function closeModal(modal) {
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.classList.remove("active");
+}
+
+function normalizePatient(p) {
+  return {
+    ...p,
+    id: String(p.id),
+    age: typeof p.age === 'string' && p.age !== '' ? Number(p.age) : (p.age || 0),
+    phone: (p.phone || "").toString(),
+    lastVisit: p.lastVisit || "",
+    status: p.status || "Faol",
+    price: p.price ? Number(p.price) : (p.price === 0 ? 0 : null),
+    description: p.description || "",
+    address: p.address || "",
+    doctorId: p.doctorId ? String(p.doctorId) : null
+  };
+}
+
+function formatNumberWithCommas(value) {
+  if (value === null || value === undefined || value === "") return "";
+  const v = String(value).replace(/\D/g, "");
+  if (!v) return "";
+  return v.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function normalizePhoneDigits(value) {
+  if (!value) return "";
+  const digits = value.toString().replace(/\D/g, "");
+  // Make sure it starts with 998 (Uzbekistan) or just return digits
+  if (digits.startsWith("998")) return digits;
+  // if user typed local number like 90..., prepend 998
+  if (digits.length === 9 || digits.length === 10) return "998" + digits.slice(-9);
+  // fallback: return digits
+  return digits;
+}
+
+function formatPhoneDisplay(digits) {
+  if (!digits) return "";
+  const v = digits.replace(/\D/g, "");
+  if (!v) return "";
+  // expect 12 digits like 998901234567 -> +998 90 123 45 67
+  let formatted = "+" + v.slice(0, 3);
+  if (v.length > 3) formatted += " " + v.slice(3, 5);
+  if (v.length > 5) formatted += " " + v.slice(5, 8);
+  if (v.length > 8) formatted += " " + v.slice(8, 10);
+  if (v.length > 10) formatted += " " + v.slice(10, 12);
+  return formatted;
+}
+
+function safeFetch(url, options = {}) {
+  return fetch(url, options).then(async res => {
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      const err = new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+      err.status = res.status;
+      throw err;
     }
-    patients.forEach(p => {
-        const badgeColors = {
-            "Faol": "bg-green-100 text-green-700",
-            "Kutilmoqda": "bg-yellow-100 text-yellow-700",
-            "Yakunlangan": "bg-gray-200 text-gray-700"
-        };
-        tableBody.innerHTML += `
-    <tr onclick='openPatientModal(${JSON.stringify(p)})' 
-        class="hover:bg-gray-50 cursor-pointer">
-        <td class="px-4 py-2">${p.name}</td>
-        <td class="px-4 py-2">${p.phone}</td>
-        <td class="px-4 py-2">${p.lastVisit}</td>
-        <td class="px-4 py-2">
-            <span class="px-2 py-1 rounded-full text-xs ${badgeColors[p.status] || "bg-gray-100"}">${p.status}</span>
-        </td>
-        <td class="px-4 py-2 text-center flex gap-2 justify-center"
-            onclick="event.stopPropagation()">
-            <button onclick="viewPatient(${p.id}); event.stopPropagation();" 
-                class="text-blue-500 p-2 rounded-lg hover:bg-blue-50 transition-colors">
-                <i class="ri-edit-2-line"></i>
-            </button>
-            <button onclick="deletePatient(${p.id}); event.stopPropagation();" 
-                class="text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors">
-                <i class="ri-delete-bin-line"></i>
-            </button>
-        </td>
-    </tr>
-`;
+    return res.json().catch(() => null);
+  });
+}
 
+// --- Rendering & table operations ---
+function renderPatients(patients) {
+  if (!tableBody) return;
+  tableBody.innerHTML = "";
+  if (!patients || patients.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-gray-500 py-4">❌ Bemor topilmadi</td></tr>`;
+    return;
+  }
 
+  patients.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-gray-50 cursor-pointer';
+    tr.setAttribute('data-id', p.id);
+
+    const tdName = document.createElement('td'); tdName.className = 'px-4 py-2'; tdName.textContent = p.name;
+    const tdPhone = document.createElement('td'); tdPhone.className = 'px-4 py-2'; tdPhone.textContent = p.phone;
+    const tdLast = document.createElement('td'); tdLast.className = 'px-4 py-2'; tdLast.textContent = p.lastVisit;
+    const tdStatus = document.createElement('td'); tdStatus.className = 'px-4 py-2';
+
+    const badge = document.createElement('span');
+    badge.className = `px-2 py-1 rounded-full text-xs ${p.status === 'Faol' ? 'bg-green-100 text-green-700' : p.status === 'Kutilmoqda' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-200 text-gray-700'
+      }`;
+    badge.textContent = p.status;
+    tdStatus.appendChild(badge);
+
+    const tdActions = document.createElement('td'); tdActions.className = 'px-4 py-2 text-center flex gap-2 justify-center';
+
+    const btnView = document.createElement('button'); btnView.className = 'text-blue-500 p-2 rounded-lg hover:bg-blue-50 transition-colors'; btnView.setAttribute('title', 'Tahrirlash');
+    btnView.innerHTML = '<i class="ri-edit-2-line"></i>';
+    btnView.addEventListener('click', (e) => { e.stopPropagation(); openEditModal(p.id); });
+
+    const btnDelete = document.createElement('button');
+    btnDelete.className = 'text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors';
+    btnDelete.setAttribute('title', "O'chirish");
+    btnDelete.innerHTML = '<i class="ri-delete-bin-line"></i>';
+    btnDelete.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deletePatient(p.id);
     });
+
+    btnDelete.addEventListener('click', (e) => { e.stopPropagation(); deletePatient(p.id); });
+
+    tdActions.appendChild(btnView); tdActions.appendChild(btnDelete);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdPhone);
+    tr.appendChild(tdLast);
+    tr.appendChild(tdStatus);
+    tr.appendChild(tdActions);
+
+    tr.addEventListener('click', () => openPatientDetails(p.id));
+
+    tableBody.appendChild(tr);
+  });
+}
+
+// --- Sorting & searching ---
+function sortPatientsList(list, key, asc = true) {
+  if (!key) return list;
+  const sorted = [...list];
+  sorted.sort((a, b) => {
+    const av = a[key] ?? '';
+    const bv = b[key] ?? '';
+    // If dates (ISO style), compare as dates
+    if (/^\d{4}-\d{2}-\d{2}$/.test(av) && /^\d{4}-\d{2}-\d{2}$/.test(bv)) {
+      const da = new Date(av).getTime();
+      const db = new Date(bv).getTime();
+      return asc ? da - db : db - da;
+    }
+    // fallback: string compare
+    return asc ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+  });
+  return sorted;
+}
+
+async function loadPatients(query = "") {
+  try {
+    const raw = await safeFetch(API_URL);
+    patientsData = Array.isArray(raw) ? raw.map(normalizePatient) : [];
+
+    // If doctor is set in localStorage, filter to that doctor's patients
+    const doctor = (() => {
+      try { return JSON.parse(localStorage.getItem('doctor') || 'null'); } catch (e) { return null; }
+    })();
+
+    let filtered = patientsData;
+    if (doctor && doctor.id) {
+      filtered = filtered.filter(p => String(p.doctorId) === String(doctor.id));
+    }
+
+    if (query && query.trim() !== "") {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(p =>
+        (p.name || "").toLowerCase().includes(q) ||
+        (p.phone || "").toLowerCase().includes(q) ||
+        (p.status || "").toLowerCase().includes(q) ||
+        (p.address || "").toLowerCase().includes(q)
+      );
+    }
+
+    if (sortKey) {
+      filtered = sortPatientsList(filtered, sortKey, sortAsc);
+    }
+
+    renderPatients(filtered);
+  } catch (err) {
+    console.error('loadPatients error', err);
+    if (!tableBody) return;
+    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q: ${err.message}</td></tr>`;
+  }
+}
+
+// --- Modals: view details & edit ---
+function openPatientDetails(id) {
+  const patient = patientsData.find(p => String(p.id) === String(id));
+  if (!patient) return showToast('Bemor topilmadi', 'error');
+  if (!viewPatientModal || !patientDetails) return;
+
+  const html = `
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold">${patient.name}</h3>
+        <div class="space-x-2">
+          <button id="openEditFromDetails" class="px-3 py-1 bg-green-600 text-white rounded">Tahrirlash</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-2 text-sm text-gray-700">
+        <div><strong>Telefon:</strong> <a href="tel:${patient.phone}" class="text-blue-600">${patient.phone}</a></div>
+        <div><strong>Yoshi:</strong> ${patient.age || '—'}</div>
+        <div><strong>Manzil:</strong> ${patient.address || '—'}</div>
+        <div><strong>Oxirgi tashrif:</strong> ${patient.lastVisit || '—'}</div>
+        <div><strong>Narx:</strong> ${patient.price !== null && patient.price !== undefined ? patient.price : '—'}</div>
+        <div><strong>Holat:</strong> ${patient.status}</div>
+        <div><strong>Qisqacha tarix:</strong><div class="mt-1">${patient.description || 'Ma’lumot yo‘q'}</div></div>
+      </div>
+    </div>
+  `;
+
+  patientDetails.innerHTML = html;
+  openModal(viewPatientModal);
+
+  const btn = document.getElementById('openEditFromDetails');
+  if (btn) btn.addEventListener('click', () => { openEditModal(id); });
+}
+
+function openEditModal(id) {
+  const patient = patientsData.find(p => String(p.id) === String(id));
+  if (!patient) return showToast('Bemor topilmadi', 'error');
+
+  const formHtml = `
+    <form id="editPatientForm" class="space-y-4">
+      <input type="hidden" name="id" value="${patient.id}" />
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Ism Familiya</label>
+        <input type="text" name="name" value="${patient.name}" required class="w-full px-4 py-3 border rounded-lg">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Yoshi</label>
+        <input type="number" name="age" value="${patient.age}" required class="w-full px-4 py-3 border rounded-lg">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Telefon</label>
+        <input type="text" name="phone" value="${patient.phone}" required placeholder="+998 90 123 45 67" class="w-full px-4 py-3 border rounded-lg">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
+        <input type="date" name="lastVisit" value="${patient.lastVisit}" required class="w-full px-4 py-3 border rounded-lg">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Status</label>
+        <select name="status" required class="w-full px-4 py-3 border rounded-lg">
+          <option value="Faol" ${patient.status === 'Faol' ? 'selected' : ''}>Faol</option>
+          <option value="Kutilmoqda" ${patient.status === 'Kutilmoqda' ? 'selected' : ''}>Kutilmoqda</option>
+          <option value="Yakunlangan" ${patient.status === 'Yakunlangan' ? 'selected' : ''}>Yakunlangan</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Narx (so'm)</label>
+        <input type="text" name="price" value="${patient.price !== null && patient.price !== undefined ? formatNumberWithCommas(patient.price) : ''}" class="w-full px-4 py-3 border rounded-lg">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Izoh</label>
+        <textarea name="description" rows="3" class="w-full px-4 py-3 border rounded-lg">${patient.description || ''}</textarea>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded-full">Saqlash</button>
+      </div>
+    </form>
+  `;
+
+  patientDetails.innerHTML = formHtml;
+  openModal(viewPatientModal);
+}
+
+// Delegated submit handler for edit form inside viewPatientModal
+// Delegated submit handler for edit form inside viewPatientModal
+if (document) {
+  document.addEventListener('submit', async (e) => {
+    const form = e.target;
+    if (!form) return;
+
+    if (form.id === 'editPatientForm') {
+      e.preventDefault();
+
+      const fd = new FormData(form);
+      const updated = Object.fromEntries(fd.entries());
+
+      const id = String(updated.id);
+      delete updated.id;
+
+      // normalize fields
+      if (updated.age) updated.age = Number(updated.age);
+      if (updated.phone) {
+        const digits = normalizePhoneDigits(updated.phone);
+        updated.phone = formatPhoneDisplay(digits);
+      }
+      if (updated.price) {
+        updated.price = Number(String(updated.price).replace(/\D/g, ""));
+      } else {
+        updated.price = null;
+      }
+
+      // ❗️ doctorId ni bemorning eski malumotidan olib qo‘shamiz
+      const oldPatient = patientsData.find(p => p.id === id);
+      if (oldPatient?.doctorId) {
+        updated.doctorId = oldPatient.doctorId;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated)
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        showToast("✅ Bemor ma'lumotlari yangilandi", "success");
+        closeModal(viewPatientModal);
+        await loadPatients(searchInput ? searchInput.value : '');
+      } catch (err) {
+        console.error("❌ edit submit error", err);
+        showToast("Yangilashda xato yuz berdi", "error");
+      }
+    }
+  });
+}
+
+
+if (addPatientForm) {
+  addPatientForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(addPatientForm);
+    const data = Object.fromEntries(fd.entries());
+
+    if (!data.name || !data.phone) { showToast('Ism va telefon majburiy', 'error'); return; }
+
+    const phoneDigits = normalizePhoneDigits(data.phone);
+    if (!phoneDigits) { showToast('Telefon noto\'g\'ri format', 'error'); return; }
+
+    const doctor = (() => { try { return JSON.parse(localStorage.getItem('doctor') || 'null'); } catch (e) { return null; } })();
+
+    const newPatient = {
+      id: Date.now().toString(),
+      name: data.name,
+      age: data.age ? Number(data.age) : null,
+      phone: formatPhoneDisplay(phoneDigits),
+      lastVisit: data.lastVisit || new Date().toISOString().slice(0, 10),
+      status: data.status || 'Faol',
+      price: data.price ? Number(String(data.price).replace(/\D/g, '')) : null,
+      description: data.description || '',
+      address: data.address || '',
+      doctorId: doctor && doctor.id ? String(doctor.id) : null
+    };
+
+    try {
+      await safeFetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPatient)
+      });
+
+      showToast('Bemor qo\'shildi', 'success');
+      addPatientForm.reset();
+      closeModal(addPatientModal);
+      await loadPatients(searchInput ? searchInput.value : '');
+    } catch (err) {
+      console.error('add patient error', err);
+      showToast('Bemor qo\'shishda xato yuz berdi', 'error');
+    }
+  });
+}
+
+// --- Delete ---
+async function deletePatient(id) {
+  if (!id) return showToast('ID topilmadi', 'error');
+  if (!confirm('Rostdan ham ushbu bemorni o\'chirmoqchimisiz?')) return;
+  try {
+    await safeFetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    showToast('Bemor o\'chirildi', 'success');
+    await loadPatients(searchInput ? searchInput.value : '');
+  } catch (err) {
+    console.error('delete error', err);
+    showToast('O\'chirishda xato yuz berdi', 'error');
+  }
+}
+
+
+if (searchInput) {
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => loadPatients(searchInput.value), 300);
+  });
 }
 
 function sortTable(key) {
-    sortAsc = (sortKey === key) ? !sortAsc : true;
-    sortKey = key;
-    loadPatients(searchInput.value);
+  sortAsc = (sortKey === key) ? !sortAsc : true;
+  sortKey = key;
+  loadPatients(searchInput ? searchInput.value : '');
 }
+window.sortTable = sortTable;
 
-// Telefon input avtomatik formatlash
-const phoneInput = document.querySelector('input[name="phone"]');
-phoneInput.addEventListener("input", e => {
-    let value = e.target.value.replace(/\D/g, ""); // faqat raqam qoldiramiz
-
-    // doim 998 bilan boshlanishini ta'minlash
-    if (!value.startsWith("998")) {
-        value = "998" + value;
-    }
-
-    // faqat 12 ta raqam qabul qiladi: 998 XX XXX XX XX
-    if (value.length > 12) {
-        value = value.slice(0, 12);
-    }
-
-    // formatlash
-    let formatted = "+998";
-    if (value.length > 3) formatted += " " + value.slice(3, 5);
-    if (value.length > 5) formatted += " " + value.slice(5, 8);
-    if (value.length > 8) formatted += " " + value.slice(8, 10);
-    if (value.length > 10) formatted += " " + value.slice(10, 12);
-
-    e.target.value = formatted;
+document.addEventListener('input', (e) => {
+  const t = e.target;
+  if (!t) return;
+  if (t.name === 'phone') {
+    const digits = normalizePhoneDigits(t.value);
+    t.value = formatPhoneDisplay(digits);
+  }
+  if (t.name === 'price') {
+    const oldPos = t.selectionStart || 0;
+    const oldLen = t.value.length;
+    t.value = formatNumberWithCommas(t.value);
+    const newLen = t.value.length;
+    const diff = newLen - oldLen;
+    try { t.setSelectionRange(oldPos + diff, oldPos + diff); } catch (e) { }
+  }
 });
-
-const priceInput = document.querySelector('input[name="price"]');
-
-function formatNumber(value) {
-    value = value.replace(/\D/g, ""); // faqat raqamlarni olamiz
-    value = value.replace(/^0+/, ""); // bosh nolni olib tashlaymiz
-    if (!value) return "";
-
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 3 xonadan keyin vergul
-}
-
-priceInput.addEventListener("input", e => {
-    const cursorPos = e.target.selectionStart;
-    const oldLength = e.target.value.length;
-
-    e.target.value = formatNumber(e.target.value);
-
-    const newLength = e.target.value.length;
-    const diff = newLength - oldLength;
-    e.target.setSelectionRange(cursorPos + diff, cursorPos + diff);
-});
-
-
-// Form submit – API ga yuborishda asl raqamlarni olish
-addPatientForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    const formData = new FormData(addPatientForm);
-
-    let newId = patientsData.length > 0
-        ? Math.max(...patientsData.map(p => p.id)) + 1
-        : 1;
-
-    const phoneRaw = formData.get("phone").replace(/\D/g, "");
-    const priceRaw = formData.get("price").replace(/\D/g, "");
-
-    const newPatient = {
-        id: String(newId),
-        name: formData.get("name"),
-        age: Number(formData.get("age")),
-        phone: "+" + phoneRaw,
-        lastVisit: formData.get("lastVisit"),
-        status: formData.get("status"),
-        price: Number(priceRaw),
-        description: formData.get("description") || "",
-        address: formData.get("address") // 🆕 qo‘shildi
-    };
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPatient)
-    });
-
-    if (response.ok) {
-        loadPatients();
-        closeModal(addPatientModal);
-        addPatientForm.reset();
-    } else {
-        alert("Bemor qo'shishda xato yuz berdi.");
-    }
-});
-
-window.viewPatient = function (id) {
-    const patient = patientsData.find(p => p.id == id);
-    if (!patient) {
-        alert("Bemor topilmadi.");
-        return;
-    }
-
-    // Modalni ochamiz
-    openModal(viewPatientModal);
-
-    // Modal ichidagi formni render qilamiz
-    patientDetails.innerHTML = `
-    
-
-    <form id="editPatientForm" class="space-y-4">
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Ism Familiya</label>
-            <input type="text" name="name" value="${patient.name}" required
-                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-        </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Yoshi</label>
-            <input type="number" name="age" value="${patient.age}" required
-                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-        </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Telefon</label>
-            <input type="text" name="phone" placeholder="+998" value="${patient.phone}" required
-                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-        </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
-            <input type="date" name="lastVisit" value="${patient.lastVisit}" required
-                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-        </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Status</label>
-            <select name="status" required class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none">
-                <option value="Faol" ${patient.status === 'Faol' ? 'selected' : ''}>Faol</option>
-                <option value="Kutilmoqda" ${patient.status === 'Kutilmoqda' ? 'selected' : ''}>Kutilmoqda</option>
-                <option value="Yakunlangan" ${patient.status === 'Yakunlangan' ? 'selected' : ''}>Yakunlangan</option>
-            </select>
-        </div>
-
-        <div class="flex justify-end gap-2 pt-2">
-            <button type="submit"
-                class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">Saqlash</button>
-        </div>
-    </form>
-`;
-
-    // Form submit bo‘lganda PATCH so‘rovini yuborish
-    const editForm = document.getElementById("editPatientForm");
-    editForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(editForm);
-
-        const updatedPatient = {
-            ...patient,
-            name: formData.get("name"),
-            age: Number(formData.get("age")),
-            phone: formData.get("phone"),
-            lastVisit: formData.get("lastVisit"),
-            status: formData.get("status")
-        };
-
-        try {
-            const res = await fetch(`${API_URL}/${patient.id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedPatient)
-            });
-
-            if (res.ok) {
-                showToast("Bemor ma'lumotlari yangilandi", "success");
-                loadPatients(searchInput.value);
-                closeModal(viewPatientModal);
-            } else {
-                showToast("Yangilashda xato yuz berdi", "error");
-            }
-        } catch (err) {
-            console.error(err);
-            showToast("Server bilan aloqa yo'q", "error");
-        }
-    });
-};
-
-window.deletePatient = async function (id) {
-    if (!id) {
-        alert("Xato: bemor ID aniqlanmadi!");
-        return;
-    }
-    if (confirm("Rostdan ham ushbu bemorni o‘chirmoqchimisiz?")) {
-        try {
-            const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-            if (res.ok) {
-                loadPatients(searchInput.value);
-            } else {
-                alert(`O'chirishda xato yuz berdi. Server javobi: ${res.status} ${res.statusText}`);
-            }
-        } catch (error) {
-            console.error("O'chirish so'rovida xato:", error);
-            alert("O'chirishda xato yuz berdi. Server bilan aloqa yo'q.");
-        }
-    }
-};
-
-let debounceTimeout;
-searchInput.addEventListener("input", () => {
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-        loadPatients(searchInput.value);
-    }, 300);
-});
-
-addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
-cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
-
-window.onclick = function (event) {
-    if (event.target == addPatientModal) {
-        closeModal(addPatientModal);
-    }
-    if (event.target == viewPatientModal) {
-        closeModal(viewPatientModal);
-    }
-}
-
-function setActiveNavItem(section) {
-    navItems.forEach(item => {
-        const itemSection = item.getAttribute('data-section');
-        if (itemSection === section) {
-            item.classList.add('text-primary', 'bg-primary/10', 'font-semibold');
-            item.classList.remove('text-gray-400', 'hover:text-primary');
-        } else {
-            item.classList.remove('text-primary', 'bg-primary/10', 'font-semibold');
-            item.classList.add('text-gray-400', 'hover:text-primary');
-        }
-    });
-}
 
 navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-        const section = e.currentTarget.getAttribute('data-section');
-        if (section === 'patients') {
-            setActiveNavItem(section);
-            loadPatients(searchInput.value);
-        } else {
-            showToast(`Bu bo'lim (${section}) demo versiyada mavjud emas.`, "info");
-        }
-    });
-});
-
-loadPatients();
-setActiveNavItem('patients');
-const currentUsername = localStorage.getItem("username");
-
-function showToast(message, type = "info") {
-    const container = document.getElementById("toastContainer");
-
-    const toast = document.createElement("div");
-    toast.className = `toast px-4 py-3 rounded-lg shadow-md text-white flex items-center gap-2
-        ${type === "error" ? "bg-red-500" : type === "success" ? "bg-green-500" : "bg-blue-500"}`;
-
-    toast.innerHTML = `
-        <i class="ri-information-line text-xl"></i>
-        <span>${message}</span>
-    `;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.style.animation = "fadeOut 3s forwards";
-        setTimeout(() => toast.remove(), 3000);
-    }, 30000);
-}
-function openPatientModal(patient) {
-    const modal = document.getElementById("patientModal");
-    const content = document.getElementById("modalContent");
-
-    content.innerHTML = `
-  <div class="relative bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6 border 
-              max-w-2xl mx-auto max-h-[85vh] overflow-y-auto">
-    
-    <!-- Header -->
-    <div class="text-center space-y-3">
-      <h3 class="text-xl sm:text-2xl font-bold text-gray-800 break-words">
-        ${patient.name}
-      </h3>
-      <span class="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-        ${patient.status || "Holati noma'lum"}
-      </span>
-    </div>
-
-    <!-- Asosiy ma'lumotlar -->
-    <div class="grid grid-cols-1 sm:gap-5 gap-4 text-sm sm:text-base text-gray-700">
-      <div class="flex justify-between items-center gap-2">
-        <span class="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-          <i class="ri-phone-line text-base"></i> Telefon
-        </span>
-        <a href="tel:${patient.phone}" 
-           class="text-blue-600 hover:underline font-medium break-words text-right">
-          ${patient.phone}
-        </a>
-      </div>
-
-      <div class="flex justify-between items-center gap-2">
-        <span class="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-          <i class="ri-cake-2-line text-base"></i> Yosh
-        </span>
-        <span class="font-medium">${patient.age || "—"}</span>
-      </div>
-
-      <div class="flex justify-between items-start gap-2">
-        <span class="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-          <i class="ri-home-4-line text-base"></i> Manzil
-        </span>
-        <span class="text-right sm:text-left break-words max-w-[70%] leading-relaxed">
-          ${patient.address || "—"}
-        </span>
-      </div>
-
-      <div class="flex justify-between items-center gap-2">
-        <span class="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-          <i class="ri-calendar-check-line text-base"></i> Muolaja narxi
-        </span>
-        <span class="font-medium break-words text-right">${patient.price}</span>
-      </div>
-
-      <div class="flex justify-between items-center gap-2">
-        <span class="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-          <i class="ri-calendar-event-line text-base"></i> Kelgusi tashrif
-        </span>
-        <span class="font-medium break-words text-right">${patient.nextVisit || "—"}</span>
-      </div>
-    </div>
-
-    <!-- Qisqa tibbiy tarix -->
-    <div class="bg-gray-50 p-4 sm:p-5 rounded-lg text-sm sm:text-base space-y-2">
-      <p class="flex items-center gap-2 font-medium text-gray-600">
-        <i class="ri-stethoscope-line text-base"></i> Qisqa tibbiy tarix
-      </p>
-      <p class="text-gray-700 leading-relaxed whitespace-pre-line break-words">
-        ${patient.description || "Ma'lumot kiritilmagan"}
-      </p>
-    </div>
-  </div>
-`;
-
-    modal.classList.remove("hidden");
-}
-
-function closePatientModal() {
-    document.getElementById("patientModal").classList.add("hidden");
-}
-const doctor = JSON.parse(localStorage.getItem("doctor"));
-
-document.getElementById("addPatientForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = new FormData(e.target);
-
-  const newPatient = {
-    id: Date.now(),
-    name: data.get("name"),
-    age: data.get("age"),
-    phone: data.get("phone"),
-    lastVisit: data.get("lastVisit"),
-    status: data.get("status"),
-    doctorId: doctor.id  // 🔑 kirgan shifokor ID sini qo'shdik
-  };
-
-  await fetch("http://localhost:3001/patients", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newPatient)
+  item.addEventListener('click', (e) => {
+    const section = e.currentTarget.getAttribute('data-section');
+    if (section === 'patients') {
+      navItems.forEach(it => it.classList.remove('text-primary', 'bg-primary/10', 'font-semibold'));
+      e.currentTarget.classList.add('text-primary', 'bg-primary/10', 'font-semibold');
+      loadPatients(searchInput ? searchInput.value : '');
+    } else {
+      showToast(`Bu bo'lim (${section}) demo versiyada mavjud emas.`, 'info');
+    }
   });
-
-  e.target.reset();
-  loadPatients(); 
 });
-async function loadPatients() {
-    const res = await fetch("http://localhost:3001/patients");
-    const patients = await res.json();
-  
-    // faqat shu shifokorning bemorlarini chiqaramiz
-    const myPatients = patients.filter(p => p.doctorId === doctor.id);
-  
-    const tbody = document.getElementById("patientsTableBody");
-    tbody.innerHTML = "";
-    myPatients.forEach(p => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="border px-4 py-2">${p.name}</td>
-        <td class="border px-4 py-2">${p.phone}</td>
-        <td class="border px-4 py-2">${p.lastVisit}</td>
-        <td class="border px-4 py-2">${p.status}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-  
-
+if (addPatientBtn) addPatientBtn.addEventListener('click', () => openModal(addPatientModal));
+if (cancelAddPatient) cancelAddPatient.addEventListener('click', () => closeModal(addPatientModal));
+window.onclick = function (event) {
+  if (event.target === addPatientModal) closeModal(addPatientModal);
+  if (event.target === viewPatientModal) closeModal(viewPatientModal);
+}
+loadPatients();
+window._patientsLoad = loadPatients;
+window._patientsData = () => patientsData;
 

@@ -65,7 +65,7 @@
   </div>
 
   <script>
-    const API_URL = "https://shifo-crm-6.onrender.com/doctors"; // faqat shifokorlar API
+    const API_URL = "https://shifo-crm-7.onrender.com/doctors"; // faqat shifokorlar API
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
     const tabLogin = document.getElementById("tabLogin");
@@ -117,14 +117,13 @@
 
       if (doctor) {
         localStorage.setItem("doctor", JSON.stringify(doctor));
-        showToast("✅ Muvaffaqiyatli kirdingiz!", "success");
-        setTimeout(() => window.location.href = "patients.html", 1000);
+        showToast("Muvaffaqiyatli kirdingiz!", "success");
+        setTimeout(() => window.location.href = "./patients.html", 1000);
       } else {
         showToast("❌ Login yoki parol noto'g'ri!", "error");
       }
     });
 
-    // 📝 Ro'yxatdan o'tish
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const data = new FormData(registerForm);
