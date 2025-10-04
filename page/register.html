@@ -44,7 +44,6 @@
           <button type="button" id="switchToRegister" class="text-green-600 hover:underline">Ro'yxatdan o'tish</button>
         </p>
       </form>
-
       <!-- Register Form -->
       <form id="registerForm" class="space-y-5 hidden">
         <input type="text" name="fullname" placeholder="F.I.O"
@@ -118,7 +117,7 @@
       if (doctor) {
         localStorage.setItem("doctor", JSON.stringify(doctor));
         showToast("Muvaffaqiyatli kirdingiz!", "success");
-        setTimeout(() => window.location.href = "./patients.html", 1000);
+        setTimeout(() => window.location.href = "./patients/patients.html", 1000);
       } else {
         showToast("❌ Login yoki parol noto'g'ri!", "error");
       }
