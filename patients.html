@@ -186,16 +186,21 @@
         <div class="bg-white p-4 md:p-6  shadow-md">
             <h1 class="text-xl md:text-2xl  font-semibold mb-6">Bemorlar ro'yxati</h1>
 
-            <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
-                <div class="flex-1 min-w-[200px]">
+            <div class="flex sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+                <!-- Qidiruv -->
+                <div class="flex-1 min-w-[180px]">
                     <input id="searchInput" type="text" placeholder="Bemor qidirish..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none text-sm">
-
                 </div>
-                <button id="addPatientBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                    <i class="ri-user-add-line"></i> Bemor qo'shish
+
+                <!-- Tugma -->
+                <button id="addPatientBtn"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center justify-center gap-2 sm:w-auto">
+                    <i class="ri-user-add-line text-lg"></i>
+                    <span class="hidden sm:inline">Bemor qo‘shish</span>
                 </button>
             </div>
+
 
             <div class="overflow-x-auto rounded-lg">
                 <table class="w-full min-w-[600px] border-collapse border border-gray-200">

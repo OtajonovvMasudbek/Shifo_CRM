@@ -22,73 +22,73 @@
     <div class="flex">
         <!-- Sidebar -->
         <aside id="sidebar"
-        class="w-64 bg-white shadow-lg flex flex-col h-screen fixed lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                    <i class="ri-hospital-line text-white text-xl"></i>
-                </div>
-                <a href="/" class="flex flex-col">
-                    <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
-                    <div
-                        class="demo-badge text-white text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 w-fit">
-                        DEMO
+            class="w-64 bg-white shadow-lg flex flex-col h-screen fixed lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="ri-hospital-line text-white text-xl"></i>
                     </div>
+                    <a href="/" class="flex flex-col">
+                        <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
+                        <div
+                            class="demo-badge text-white text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 w-fit">
+                            DEMO
+                        </div>
+                    </a>
+                </div>
+                <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-red-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="./patients.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
+                            <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./dental_chart.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
+                            <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button
+                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
+                            <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
+                            <i class="ri-calendar-line"></i><span>Kalendar</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
+                            <i class="ri-notification-line"></i><span>Eslatmalar</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
+                            <i class="ri-bar-chart-line"></i><span>Statistika</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200">
+                <a href="./register.html"
+                    class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition">
+                    <i class="ri-logout-box-line"></i><span>Demo rejimdan chiqish</span>
                 </a>
             </div>
-            <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-red-600">
-                <i class="ri-close-line text-2xl"></i>
-            </button>
-        </div>
-
-        <nav class="flex-1 p-4">
-            <ul class="space-y-2">
-                <li>
-                    <a href="./patients/patients.html"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                        <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="./dental_chart.html"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                        <i class="ri-tooth-line"></i> <span>Dental Chart</span>
-                    </a>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-calendar-line"></i><span>Kalendar</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-notification-line"></i><span>Eslatmalar</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-bar-chart-line"></i><span>Statistika</span>
-                    </button>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="p-4 border-t border-gray-200">
-            <a href="./index.html"
-                class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition">
-                <i class="ri-logout-box-line"></i><span>Demo rejimdan chiqish</span>
-            </a>
-        </div>
-    </aside>
+        </aside>
 
 
         <div class="flex-1">
@@ -97,83 +97,92 @@
                     <i class="ri-menu-line text-2xl"></i>
                 </button>
                 <a href="./profil.html" class="ml-auto">
-                    <button
-                      class="group flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 
+                    <button class="group flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 
                              text-white px-5 py-2.5 rounded-xl shadow-lg hover:shadow-xl 
                              hover:from-emerald-600 hover:to-green-500 
                              transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">
-                      <i class="ri-account-circle-line text-xl group-hover:rotate-12 transition-transform duration-300"></i>
-                      <span class="font-medium tracking-wide">Profil</span>
+                        <i
+                            class="ri-account-circle-line text-xl group-hover:rotate-12 transition-transform duration-300"></i>
+                        <span class="font-medium tracking-wide">Profil</span>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-xl font-bold uppercase">
+                                <span id="profileAvatar">D</span>
+                            </div>
+                            <span id="profileName" class="font-medium"></span>
+                        </div>
                     </button>
-                  </a>
-                  
+                </a>
+
             </header>
 
             <main class="p-4 sm:p-6">
                 <div class="bg-white shadow-md rounded-2xl p-5 mb-6 border border-gray-100">
-                  <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <i class="ri-search-line text-green-600"></i> Bemorni qidirish
-                  </h2>
-                  <div class="relative">
-                    <input type="text" id="patientSearch" placeholder="Ism yoki familiya kiriting..."
-                      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" />
-                    <ul id="searchResults"
-                      class="absolute z-20 bg-white border border-gray-200 w-full rounded-lg mt-1 shadow-lg hidden max-h-60 overflow-y-auto text-sm"></ul>
-                  </div>
+                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <i class="ri-search-line text-green-600"></i> Bemorni qidirish
+                    </h2>
+                    <div class="relative">
+                        <input type="text" id="patientSearch" placeholder="Ism yoki familiya kiriting..."
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" />
+                        <ul id="searchResults"
+                            class="absolute z-20 bg-white border border-gray-200 w-full rounded-lg mt-1 shadow-lg hidden max-h-60 overflow-y-auto text-sm">
+                        </ul>
+                    </div>
                 </div>
-              
+
                 <!-- Patient + Dental Chart -->
                 <div id="chartContainer" class="hidden">
-                  <!-- Patient Card -->
-                  <div id="patientCard"
-                    class="bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg rounded-2xl p-6 mb-6">
-                    <!-- Dinamik bemor ma’lumotlari JS bilan qo‘yiladi -->
-                  </div>
-              
-                  <!-- Dental Chart -->
-                  <div class="bg-white shadow-md rounded-2xl p-5 sm:p-6 border border-gray-100">
-                    <h2 class="text-xl font-semibold mb-5 text-center sm:text-left flex items-center gap-2">
-                      <i class="ri-tooth-line text-green-600"></i> Tishlar jadvali
-                    </h2>
-              
-                    <!-- Upper Jaw -->
-                    <div id="upperJaw"
-                      class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 mb-8 text-xs sm:text-sm"></div>
-              
-                    <!-- Divider -->
-                    <div class="border-t border-gray-200 my-4"></div>
-              
-                    <!-- Lower Jaw -->
-                    <div id="lowerJaw"
-                      class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm"></div>
-              
-                    <!-- Legend -->
-                    <div class="mt-8 flex flex-wrap gap-4 text-sm justify-center sm:justify-start">
-                      <span class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-green-500 shadow-sm"></div> Sog‘lom
-                      </span>
-                      <span class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-yellow-500 shadow-sm"></div> Kariyes
-                      </span>
-                      <span class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-blue-500 shadow-sm"></div> Plomba
-                      </span>
-                      <span class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-red-500 shadow-sm"></div> Olib tashlangan
-                      </span>
+                    <!-- Patient Card -->
+                    <div id="patientCard"
+                        class="bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg rounded-2xl p-6 mb-6">
+                        <!-- Dinamik bemor ma’lumotlari JS bilan qo‘yiladi -->
                     </div>
-              
-                    <!-- Save Button -->
-                    <div class="mt-8 flex justify-center sm:justify-end">
-                      <button id="saveChartBtn"
-                        class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl shadow-md hover:shadow-lg hover:scale-105 transform transition">
-                        💾 Saqlash
-                      </button>
+
+                    <!-- Dental Chart -->
+                    <div class="bg-white shadow-md rounded-2xl p-5 sm:p-6 border border-gray-100">
+                        <h2 class="text-xl font-semibold mb-5 text-center sm:text-left flex items-center gap-2">
+                            <i class="ri-tooth-line text-green-600"></i> Tishlar jadvali
+                        </h2>
+
+                        <!-- Upper Jaw -->
+                        <div id="upperJaw"
+                            class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 mb-8 text-xs sm:text-sm">
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="border-t border-gray-200 my-4"></div>
+
+                        <!-- Lower Jaw -->
+                        <div id="lowerJaw"
+                            class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm"></div>
+
+                        <!-- Legend -->
+                        <div class="mt-8 flex flex-wrap gap-4 text-sm justify-center sm:justify-start">
+                            <span class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded-full bg-green-500 shadow-sm"></div> Sog‘lom
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded-full bg-yellow-500 shadow-sm"></div> Kariyes
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded-full bg-blue-500 shadow-sm"></div> Plomba
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded-full bg-red-500 shadow-sm"></div> Olib tashlangan
+                            </span>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="mt-8 flex justify-center sm:justify-end">
+                            <button id="saveChartBtn"
+                                class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl shadow-md hover:shadow-lg hover:scale-105 transform transition">
+                                💾 Saqlash
+                            </button>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </main>
-              
+            </main>
+
         </div>
     </div>
 
@@ -218,7 +227,10 @@
         const toothStatus = document.getElementById("toothStatus");
         const toothNote = document.getElementById("toothNote");
         const saveToothBtn = document.getElementById("saveToothBtn");
+        const profileNameEl = document.getElementById("profileName");
+        const profileAvatarEl = document.getElementById("profileAvatar");
 
+        
         let doctor = JSON.parse(localStorage.getItem("doctor")) || { id: 1, fullname: "Test Doctor" };
         let patientsData = [];
         let currentPatient = null;
