@@ -1,284 +1,397 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shifokor Profili - ShifoCRM</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet" />
-  <style>
-    @media (max-width: 1023px) {
-      .desktop-sidebar { display: none; }
-      .mobile-bottom-nav { display: flex; }
-    }
-    @media (min-width: 1024px) {
-      .mobile-bottom-nav { display: none; }
-    }
-    .modal-bg {
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shifokor Profili - ShifoCRM</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Yangi zamonaviy ranglar palitrasi
+                    colors: {
+                        primary: '#10B981', // Emerald 500 (Asosiy rang)
+                        secondary: '#059669', // Emerald 600
+                        accent: '#3B82F6', // Blue 500
+                        gray: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            800: '#1F2937',
+                            900: '#111827',
+                        }
+                    },
+                    borderRadius: {
+                        'none': '0px', 'sm': '4px', DEFAULT: '8px',
+                        'md': '12px', 'lg': '16px', 'xl': '24px', // Katta yumaloqlik
+                        '2xl': '32px', '3xl': '40px', 'full': '9999px',
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Sidebar mobil rejimda yopiq turishi uchun */
+        #sidebar {
+            transition: transform 0.3s ease-out;
+            transform: translateX(-100%);
+            position: fixed; /* Mobil rejimda ustida turishi uchun */
+        }
+        #sidebar.active {
+            transform: translateX(0);
+        }
+        @media (min-width: 1024px) {
+            #sidebar {
+                transform: translateX(0);
+                position: relative;
+            }
+        }
+        .modal-bg {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        .desktop-sidebar { display: none; }
+        .mobile-bottom-nav { display: flex; }
+        @media (min-width: 1024px) {
+            .desktop-sidebar { display: flex; }
+            .mobile-bottom-nav { display: none; }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-50 flex min-h-screen font-sans">
+<body class="bg-gray-50 flex min-h-screen">
 
-  <!-- 🩺 Sidebar -->
-  <aside id="sidebar" class="desktop-sidebar w-64 bg-white shadow-xl flex flex-col h-screen fixed lg:relative z-40">
-    <div class="p-6 border-b border-gray-200 flex items-center gap-3">
-      <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white">
-        <i class="ri-hospital-line text-xl"></i>
-      </div>
-      <div>
-        <h1 class="font-semibold text-green-700 text-lg">ShifoCRM</h1>
-        <span class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
-      </div>
+    <aside id="sidebar" class="desktop-sidebar w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-800 text-lg">ShifoCRM</h1>
+                <span
+                    class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
+            </div>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+            </a>
+            <a href="./profil.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
+                <i class="ri-user-settings-line"></i> <span>Profil</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Chiqish
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col">
+        <header
+            class="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-20">
+            <div class="flex items-center gap-3">
+                <button id="openSidebar" class="lg:hidden text-primary hover:text-secondary transition">
+                    <i class="ri-menu-line text-2xl"></i>
+                </button>
+                <h1 class="text-xl font-bold flex items-center gap-2 text-gray-800">
+                    <i class="ri-user-settings-line text-2xl text-primary"></i> Shifokor profili
+                </h1>
+            </div>
+            <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm">
+                <div id="profileAvatar"
+                    class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">D</div>
+                <span id="profileName" class="font-medium text-gray-800 hidden sm:block">---</span>
+            </div>
+        </header>
+
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+            <div class="max-w-4xl mx-auto space-y-8">
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 text-primary">
+                            <i class="ri-user-3-line text-2xl"></i> Shaxsiy ma’lumotlar
+                        </h2>
+                        <button id="editBtn"
+                            class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-secondary flex items-center gap-2 font-medium shadow-md transition">
+                            <i class="ri-edit-line"></i> Tahrirlash
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 text-gray-800 text-lg">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">👨‍⚕️ F.I.O</span>
+                            <span id="fullname" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">📧 Login</span>
+                            <span id="username" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">🔑 Parol</span>
+                            <span id="password" class="text-xl font-bold text-gray-800">•••••••</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">📱 Telefon</span>
+                            <span id="phone" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 text-primary">
+                            <i class="ri-notification-2-line text-2xl"></i> Eslatmalar
+                        </h2>
+                        <button id="addReminderBtn"
+                            class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-secondary flex items-center gap-2 font-medium shadow-md transition">
+                            <i class="ri-add-line"></i> Yangi
+                        </button>
+                    </div>
+                    <ul id="reminderList" class="space-y-4 text-gray-700"></ul>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="logout()"
+                        class="bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 flex items-center gap-2 font-medium shadow-md transition">
+                        <i class="ri-logout-box-line"></i> Chiqish
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
-    <nav class="flex-1 p-4 space-y-2">
-      <a href="./patients.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-600 hover:text-white transition">
-        <i class="ri-user-heart-line"></i> Bemorlar
-      </a>
-      <a href="./dental_chart.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-600 hover:text-white transition">
-        <i class="ri-tooth-line"></i> Dental Chart
-      </a>
-      <a href="./profil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-green-100 text-green-700 font-medium">
-        <i class="ri-user-settings-line"></i> Profil
-      </a>
+
+    <div id="editModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl animate-[fadeIn_0.25s_ease-out]">
+            <h3 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2 text-primary"><i
+                    class="ri-edit-line"></i>
+                Ma’lumotlarni tahrirlash</h3>
+            <form id="editForm" class="space-y-4">
+                <input id="editFullname" type="text" placeholder="F.I.O"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="editUsername" type="text" placeholder="Login"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="editPassword" type="password" placeholder="Parol"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="editPhone" type="text" placeholder="Telefon raqam"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" id="cancelEdit"
+                        class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium transition">Bekor</button>
+                    <button type="submit"
+                        class="px-5 py-2.5 bg-primary text-white hover:bg-secondary rounded-xl font-medium shadow-md transition">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="reminderModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl animate-[fadeIn_0.25s_ease-out]">
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2 text-primary">
+                <i class="ri-notification-3-line"></i> Yangi eslatma
+            </h3>
+            <form id="reminderForm" class="space-y-4">
+                <input id="reminderText" type="text" placeholder="Eslatma matni..."
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="reminderDate" type="datetime-local"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" id="cancelReminder"
+                        class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium transition">Bekor</button>
+                    <button type="submit"
+                        class="px-5 py-2.5 bg-primary text-white hover:bg-secondary rounded-xl font-medium shadow-md transition">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100">
+        <ul class="flex justify-around items-center h-16 w-full">
+            <li><a href="./patients.html" class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
+                        class="ri-user-heart-line text-2xl"></i><span class="text-xs font-medium">Bemorlar</span></a></li>
+            <li><a href="./dental_chart.html"
+                    class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
+                        class="ri-tooth-line text-2xl"></i><span class="text-xs font-medium">Chart</span></a></li>
+            <li><a href="./profil.html" class="flex flex-col items-center text-primary p-2 rounded-lg"><i
+                        class="ri-user-settings-line text-2xl"></i><span class="text-xs font-semibold">Profil</span></a></li>
+        </ul>
     </nav>
-    <div class="p-4 border-t border-gray-200">
-      <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50">
-        <i class="ri-logout-box-line"></i> Chiqish
-      </a>
-    </div>
-  </aside>
 
-  <!-- 🔹 Asosiy qism -->
-  <div class="flex-1 flex flex-col">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-20">
-      <div class="flex items-center gap-3">
-        <button id="openSidebar" class="lg:hidden text-green-700">
-          <i class="ri-menu-line text-2xl"></i>
-        </button>
-        <h1 class="text-xl font-semibold flex items-center gap-2 text-green-700">
-          <i class="ri-user-heart-line text-2xl"></i> Shifokor profili
-        </h1>
-      </div>
-      <div class="flex items-center gap-2 bg-green-50 border border-green-100 px-3 py-1 rounded-full">
-        <div id="profileAvatar" class="w-9 h-9 bg-green-600 rounded-full text-white flex items-center justify-center font-semibold">D</div>
-        <span id="profileName" class="font-medium text-green-700">---</span>
-      </div>
-    </header>
+    <script>
+        const API_DOCTORS = "https://shifo-crm-7.onrender.com/doctors";
+        const API_REMINDERS = "https://shifo-crm-7.onrender.com/reminders";
+        const doctor = JSON.parse(localStorage.getItem("doctor"));
+        if (!doctor) window.location.href = "register.html";
 
-    <!-- Main -->
-    <main class="flex-1 p-6 overflow-y-auto">
-      <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg">
-        <div class="flex justify-between items-center mb-5">
-          <h2 class="text-2xl font-semibold text-green-700 flex items-center gap-2">
-            <i class="ri-user-3-line"></i> Shaxsiy ma’lumotlar
-          </h2>
-          <button id="editBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2">
-            <i class="ri-edit-line"></i> Tahrirlash
-          </button>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
-          <p><b>👨‍⚕️ F.I.O:</b> <span id="fullname">-</span></p>
-          <p><b>📧 Login:</b> <span id="username">-</span></p>
-          <p><b>🔑 Parol:</b> <span id="password">-</span></p>
-          <p><b>📱 Telefon:</b> <span id="phone">-</span></p>
-        </div>
-      </div>
+        const fullnameEl = document.getElementById("fullname");
+        const usernameEl = document.getElementById("username");
+        const passwordEl = document.getElementById("password");
+        const phoneEl = document.getElementById("phone");
+        const profileNameEl = document.getElementById("profileName");
+        const profileAvatarEl = document.getElementById("profileAvatar");
 
-      <!-- 🔔 Eslatmalar -->
-      <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg mt-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-semibold text-green-700 flex items-center gap-2">
-            <i class="ri-notification-2-line"></i> Eslatmalar
-          </h2>
-          <button id="addReminderBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2">
-            <i class="ri-add-line"></i> Yangi
-          </button>
-        </div>
-        <ul id="reminderList" class="space-y-3 text-gray-700"></ul>
-      </div>
+        // === Profil ma'lumotlarini chiqarish ===
+        function renderProfile() {
+            fullnameEl.textContent = doctor.fullname;
+            usernameEl.textContent = doctor.username;
+            passwordEl.textContent = "•••••••";
+            phoneEl.textContent = doctor.phone || "-";
+            profileNameEl.textContent = doctor.fullname;
+            profileAvatarEl.textContent = doctor.fullname.charAt(0).toUpperCase();
+        }
+        renderProfile();
 
-      <div class="mt-8 flex justify-end">
-        <button onclick="logout()" class="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600 flex items-center gap-2">
-          <i class="ri-logout-box-line"></i> Chiqish
-        </button>
-      </div>
-    </main>
-  </div>
+        // === Logout ===
+        function logout() {
+            localStorage.removeItem("doctor");
+            window.location.href = "register.html";
+        }
+        
+        // === Sidebar funksiyalari ===
+        const sidebar = document.getElementById("sidebar");
+        const openSidebar = document.getElementById("openSidebar");
+        openSidebar?.addEventListener("click", () => sidebar.classList.toggle("active"));
+        // Mobil rejimda boshqa joyga bosilganda yopish
+        document.body.addEventListener("click", (e) => {
+             if (window.innerWidth < 1024 && sidebar.classList.contains("active") && !sidebar.contains(e.target) && e.target !== openSidebar && !openSidebar.contains(e.target)) {
+                 sidebar.classList.remove("active");
+             }
+        });
 
-  <!-- ✏️ Edit Modal -->
-  <div id="editModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
-      <h3 class="text-xl font-semibold text-green-700 mb-4 flex items-center gap-2"><i class="ri-edit-line"></i> Ma’lumotlarni tahrirlash</h3>
-      <form id="editForm" class="space-y-3">
-        <input id="editFullname" type="text" placeholder="F.I.O" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <input id="editUsername" type="text" placeholder="Login" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <input id="editPassword" type="password" placeholder="Parol" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <input id="editPhone" type="text" placeholder="Telefon raqam" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <div class="flex justify-end gap-3 pt-2">
-          <button type="button" id="cancelEdit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg">Bekor</button>
-          <button type="submit" class="px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg">Saqlash</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- 🔔 Reminder Modal -->
-  <div id="reminderModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
-      <h3 id="modalTitle" class="text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">
-        <i class="ri-notification-3-line"></i> Yangi eslatma
-      </h3>
-      <form id="reminderForm" class="space-y-3">
-        <input id="reminderText" type="text" placeholder="Eslatma matni..." class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <input id="reminderDate" type="datetime-local" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" />
-        <div class="flex justify-end gap-3 pt-2">
-          <button type="button" id="cancelReminder" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg">Bekor</button>
-          <button type="submit" class="px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg">Saqlash</button>
-        </div>
-      </form>
-    </div>
-  </div>
+        // === Profilni tahrirlash funksiyalari ===
+        const editModal = document.getElementById("editModal");
+        document.getElementById("editBtn").onclick = () => {
+            document.getElementById("editFullname").value = doctor.fullname;
+            document.getElementById("editUsername").value = doctor.username;
+            document.getElementById("editPassword").value = doctor.password;
+            document.getElementById("editPhone").value = doctor.phone || "";
+            editModal.classList.remove("hidden");
+        };
+        document.getElementById("cancelEdit").onclick = () => editModal.classList.add("hidden");
 
-  <!-- 📱 Mobile bottom nav -->
-  <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-50 hidden">
-    <ul class="flex justify-around items-center h-16">
-      <li><a href="./patients.html" class="flex flex-col items-center text-gray-400 hover:text-green-700 transition"><i class="ri-user-heart-line text-2xl"></i><span class="text-xs">Bemorlar</span></a></li>
-      <li><a href="./dental_chart.html" class="flex flex-col items-center text-gray-400 hover:text-green-700 transition"><i class="ri-tooth-line text-2xl"></i><span class="text-xs">Chart</span></a></li>
-      <li><a href="./profil.html" class="flex flex-col items-center text-green-700"><i class="ri-user-settings-line text-2xl"></i><span class="text-xs">Profil</span></a></li>
-    </ul>
-  </nav>
+        document.getElementById("editForm").onsubmit = async (e) => {
+            e.preventDefault();
+            const updated = {
+                ...doctor,
+                fullname: editFullname.value,
+                username: editUsername.value,
+                password: editPassword.value,
+                phone: editPhone.value
+            };
+            await fetch(`${API_DOCTORS}/${doctor.id}`, {
+                method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updated)
+            });
+            localStorage.setItem("doctor", JSON.stringify(updated));
+            alert("✅ Ma’lumotlar saqlandi!");
+            editModal.classList.add("hidden");
+            location.reload();
+        };
 
-  <!-- ⚙️ Script -->
-  <script>
-    const API_DOCTORS = "https://shifo-crm-7.onrender.com/doctors";
-    const API_REMINDERS = "https://shifo-crm-7.onrender.com/reminders";
-    const doctor = JSON.parse(localStorage.getItem("doctor"));
-    if (!doctor) window.location.href = "register.html";
 
-    const fullnameEl = document.getElementById("fullname");
-    const usernameEl = document.getElementById("username");
-    const passwordEl = document.getElementById("password");
-    const phoneEl = document.getElementById("phone");
-    const profileNameEl = document.getElementById("profileName");
-    const profileAvatarEl = document.getElementById("profileAvatar");
+        // === Eslatmalar (Reminders) funksiyalari ===
+        const reminderModal = document.getElementById("reminderModal");
+        const reminderForm = document.getElementById("reminderForm");
+        const reminderList = document.getElementById("reminderList");
+        let reminders = [], editId = null;
 
-    function renderProfile() {
-      fullnameEl.textContent = doctor.fullname;
-      usernameEl.textContent = doctor.username;
-      passwordEl.textContent = "•••••••";
-      phoneEl.textContent = doctor.phone || "-";
-      profileNameEl.textContent = doctor.fullname;
-      profileAvatarEl.textContent = doctor.fullname.charAt(0).toUpperCase();
-    }
-    renderProfile();
+        async function loadReminders() {
+            const res = await fetch(`${API_REMINDERS}?doctorId=${doctor.id}`);
+            reminders = await res.json();
+            renderReminders();
+        }
 
-    // Logout
-    function logout() {
-      localStorage.removeItem("doctor");
-      window.location.href = "register.html";
-    }
+        // --- YANGILANGAN RENDER FUNKSIYASI ---
+        function renderReminders() {
+            reminderList.innerHTML = reminders.length ? "" : `<p class="text-gray-500 italic p-4">Eslatmalar yo‘q.</p>`;
+            reminders.forEach(r => {
+                const date = new Date(r.date);
+                const now = new Date();
+                const isExpired = date < now; // Eslatma muddati o'tganmi
 
-    // Edit profile
-    const editModal = document.getElementById("editModal");
-    document.getElementById("editBtn").onclick = () => {
-      document.getElementById("editFullname").value = doctor.fullname;
-      document.getElementById("editUsername").value = doctor.username;
-      document.getElementById("editPassword").value = doctor.password;
-      document.getElementById("editPhone").value = doctor.phone || "";
-      editModal.classList.remove("hidden");
-    };
-    document.getElementById("cancelEdit").onclick = () => editModal.classList.add("hidden");
+                const li = document.createElement("li");
+                li.className = `p-4 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm ${
+                    isExpired ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200 hover:bg-gray-50'
+                } transition`;
 
-    document.getElementById("editForm").onsubmit = async (e) => {
-      e.preventDefault();
-      const updated = {
-        ...doctor,
-        fullname: editFullname.value,
-        username: editUsername.value,
-        password: editPassword.value,
-        phone: editPhone.value
-      };
-      await fetch(`${API_DOCTORS}/${doctor.id}`, {
-        method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updated)
-      });
-      localStorage.setItem("doctor", JSON.stringify(updated));
-      alert("✅ Ma’lumotlar saqlandi!");
-      editModal.classList.add("hidden");
-      location.reload();
-    };
+                li.innerHTML = `
+                    <div class="mb-2 sm:mb-0">
+                        <p class="font-bold text-gray-800">${r.text}</p>
+                        <p class="text-sm ${isExpired ? 'text-red-600' : 'text-gray-500'} flex items-center gap-1 mt-0.5">
+                            <i class="ri-time-line"></i> ${date.toLocaleString('uz-UZ', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            ${isExpired ? '<span class="text-xs font-semibold ml-2">(O‘tib ketgan)</span>' : ''}
+                        </p>
+                    </div>
+                    <div class="flex gap-3 mt-2 sm:mt-0">
+                        <button onclick="editReminder('${r.id}')"
+                            class="text-primary hover:text-secondary p-2 rounded-full hover:bg-gray-100 transition" title="Tahrirlash">
+                            <i class="ri-edit-2-line"></i>
+                        </button>
+                        <button onclick="deleteReminder('${r.id}')"
+                            class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-gray-100 transition" title="O‘chirish">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>`;
+                reminderList.appendChild(li);
+            });
+        }
+        // --- YANGILANGAN RENDER FUNKSIYASI YAKUNI ---
 
-    // Sidebar toggle (mobile)
-    const sidebar = document.getElementById("sidebar");
-    document.getElementById("openSidebar").onclick = () => sidebar.classList.toggle("hidden");
 
-    // Reminders
-    const reminderModal = document.getElementById("reminderModal");
-    const reminderForm = document.getElementById("reminderForm");
-    const reminderList = document.getElementById("reminderList");
-    let reminders = [], editId = null;
+        addReminderBtn.onclick = () => {
+            editId = null;
+            document.getElementById("modalTitle").textContent = "Yangi eslatma";
+            reminderForm.reset();
+            reminderModal.classList.remove("hidden");
+        };
+        cancelReminder.onclick = () => reminderModal.classList.add("hidden");
 
-    async function loadReminders() {
-      const res = await fetch(`${API_REMINDERS}?doctorId=${doctor.id}`);
-      reminders = await res.json();
-      renderReminders();
-    }
+        reminderForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const data = { text: reminderText.value, date: reminderDate.value, doctorId: doctor.id };
+            if (editId) await fetch(`${API_REMINDERS}/${editId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: editId }) });
+            else await fetch(API_REMINDERS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: "r" + Date.now() }) });
+            reminderModal.classList.add("hidden");
+            await loadReminders();
+        };
 
-    function renderReminders() {
-      reminderList.innerHTML = reminders.length ? "" : `<p class="text-gray-500 italic">Eslatmalar yo‘q.</p>`;
-      reminders.forEach(r => {
-        const li = document.createElement("li");
-        li.className = "p-4 border rounded-xl flex justify-between hover:bg-gray-50";
-        li.innerHTML = `
-          <div>
-            <p class="font-medium">${r.text}</p>
-            <p class="text-sm text-gray-500"><i class="ri-time-line"></i> ${new Date(r.date).toLocaleString()}</p>
-          </div>
-          <div class="flex gap-3">
-            <button onclick="editReminder('${r.id}')" class="text-green-600"><i class="ri-edit-2-line"></i></button>
-            <button onclick="deleteReminder('${r.id}')" class="text-red-500"><i class="ri-delete-bin-line"></i></button>
-          </div>`;
-        reminderList.appendChild(li);
-      });
-    }
+        window.editReminder = async (id) => {
+            const rem = reminders.find(r => r.id === id);
+            if (!rem) return;
+            editId = id;
+            document.getElementById("modalTitle").textContent = "Eslatmani tahrirlash";
+            reminderText.value = rem.text;
+            reminderDate.value = rem.date.substring(0, 16); // format to datetime-local
+            reminderModal.classList.remove("hidden");
+        };
 
-    addReminderBtn.onclick = () => {
-      editId = null;
-      reminderForm.reset();
-      reminderModal.classList.remove("hidden");
-    };
-    cancelReminder.onclick = () => reminderModal.classList.add("hidden");
+        window.deleteReminder = async (id) => {
+            if (confirm("🗑️ Eslatmani o‘chirishni xohlaysizmi?")) {
+                await fetch(`${API_REMINDERS}/${id}`, { method: "DELETE" });
+                await loadReminders();
+            }
+        };
 
-    reminderForm.onsubmit = async (e) => {
-      e.preventDefault();
-      const data = { text: reminderText.value, date: reminderDate.value, doctorId: doctor.id };
-      if (editId) await fetch(`${API_REMINDERS}/${editId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: editId }) });
-      else await fetch(API_REMINDERS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: "r" + Date.now() }) });
-      reminderModal.classList.add("hidden");
-      await loadReminders();
-    };
-
-    window.editReminder = async (id) => {
-      const rem = reminders.find(r => r.id === id);
-      if (!rem) return;
-      editId = id;
-      reminderText.value = rem.text;
-      reminderDate.value = rem.date;
-      reminderModal.classList.remove("hidden");
-    };
-
-    window.deleteReminder = async (id) => {
-      if (confirm("🗑️ Eslatmani o‘chirishni xohlaysizmi?")) {
-        await fetch(`${API_REMINDERS}/${id}`, { method: "DELETE" });
-        await loadReminders();
-      }
-    };
-
-    loadReminders();
-  </script>
+        loadReminders();
+    </script>
 </body>
+
 </html>

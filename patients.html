@@ -49,7 +49,17 @@
             transform: translateY(0);
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
 
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
         @media (max-width: 1023px) {
             .desktop-sidebar {
@@ -167,20 +177,33 @@
     </aside>
 
     <main class="flex-1  lg: main-content">
-        <header class="bg-white shadow p-4 flex justify-between items-center">
-            <!-- Hamburger tugma (faqat mobil) -->
-            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-green-600">
+        <header class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+            
+            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-primary transition">
                 <i class="ri-menu-line text-2xl"></i>
             </button>
+            
+            <div class="hidden sm:block">
+                </div>
 
-            <!-- O‘ng tarafdagi profil tugmasi -->
-            <a href="./profil.html" class="ml-auto">
-                <button
-                    class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow transition">
-                    <i class="ri-account-circle-line text-lg"></i>
-                    <span>Profil</span>
-                </button>
-            </a>
+            <div id="profileContainer" class="ml-auto">
+                <a href="./profil.html" class="block">
+                    <button
+                        class="flex items-center gap-3 bg-white text-gray-800 p-2 pr-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition shadow-custom">
+                        
+                        <div id="doctorAvatar" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+                            </div>
+                        
+                        <div class="flex-col items-start hidden sm:flex text-left">
+                            <span id="doctorName" class="font-semibold text-sm text-gray-800 truncate max-w-[120px]">
+                                </span>
+                            <span class="text-xs text-gray-500">Shifokor</span>
+                        </div>
+                        
+                        <i class="ri-arrow-down-s-line text-xl text-gray-500 hidden sm:block"></i>
+                    </button>
+                </a>
+            </div>
         </header>
 
         <div class="bg-white p-4 md:p-6  shadow-md">
@@ -313,7 +336,7 @@
                     class="text-gray-500 hover:text-gray-800 transition font-bold text-2xl leading-none">×</button>
             </div>
 
-            <form id="addPatientForm" class="space-y-6 bg-white p-6 rounded-2xl shadow-lg border">
+            <form id="addPatientForm" class="space-y-6">
                 <div class="space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Shaxsiy ma’lumotlar</h3>
 
@@ -323,10 +346,21 @@
                             class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Yoshi</label>
-                        <input type="number" name="age" placeholder="Masalan: 32" required min="1" max="120"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Jins</label>
+                            <select name="gender" required
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                <option value="">Tanlang</option>
+                                <option value="Erkak">Erkak</option>
+                                <option value="Ayol">Ayol</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Tug'ilgan sana</label>
+                            <input type="date" name="birthDate" required
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                        </div>
                     </div>
 
                     <div>
@@ -334,11 +368,12 @@
                         <input type="text" name="phone" placeholder="+998 90 123 45 67" required
                             class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                     </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Yashash joyi</label>
-                    <input type="text" name="address" placeholder="Masalan: Toshkent shahri, Chilonzor" required
-                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Yashash joyi</label>
+                        <input type="text" name="address" placeholder="Masalan: Toshkent shahri, Chilonzor" required
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                    </div>
                 </div>
 
 
@@ -375,61 +410,54 @@
 
                 </div>
 
-                <!-- Tugmalar -->
                 <div class="flex justify-end gap-2 pt-4">
-                    <input type="text" placeholder="">
                     <button type="submit"
                         class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition disabled:opacity-50">
                         Saqlash
                     </button>
                 </div>
             </form>
-
         </div>
     </div>
 
 
 
+    <!-- Bemor tafsilotlari MODAL -->
     <div id="viewPatientModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-        <div
-            class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh] transform transition-all duration-300 scale-95 hover:scale-100">
+        class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
 
-            <!-- Header -->
-            <div
-                class="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-5 rounded-t-2xl flex justify-between items-center">
-                <h3 class="text-lg sm:text-xl font-semibold flex items-center gap-2">
+        <div
+            class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 animate-[fadeIn_0.25s_ease-out]">
+
+            <div class="bg-primary text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold flex items-center gap-2">
                     <i class="ri-user-heart-line text-2xl"></i>
                     Bemor tafsilotlari
                 </h3>
-                <button onclick="closeModal(viewPatientModal)" class="text-white hover:text-gray-200 transition">
+                <button onclick="closeModal(viewPatientModal)" class="p-2 rounded-full hover:bg-white/20 transition">
                     <i class="ri-close-line text-2xl"></i>
                 </button>
             </div>
 
-            <!-- Content -->
-            <div id="patientDetails" class="p-6 space-y-3 text-gray-700">
-                <!-- Dinamik bemor ma’lumotlari JS orqali qo‘yiladi -->
-                <!-- Masalan:
-      <p><span class="font-medium">Ism:</span> Aliyev Jamshid</p>
-      <p><span class="font-medium">Yosh:</span> 25</p>
-      <p><span class="font-medium">Telefon:</span> +998 90 123 45 67</p>
-      <p><span class="font-medium">Oxirgi tashrif:</span> 2025-09-20</p>
-      -->
+            <div id="patientDetails" class="p-6 space-y-6 overflow-y-auto max-h-[80vh]">
             </div>
 
-            <!-- Footer -->
-            <div class="flex justify-end gap-3 p-4 border-t border-gray-100">
+            <div class="flex justify-between sm:justify-end gap-3 p-5 bg-gray-50 border-t">
                 <button onclick="closeModal(viewPatientModal)"
-                    class="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                    class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition">
                     Bekor qilish
                 </button>
-                <button class="px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white shadow transition">
+
+                <button id="editPatientBtn"
+                    class="px-5 py-2.5 rounded-xl bg-secondary text-white font-medium shadow-lg hover:opacity-90 transition">
                     ✏️ Tahrirlash
                 </button>
             </div>
         </div>
     </div>
+
+
+
 
     <div id="toastContainer" class="fixed top-4 right-4 space-y-3 z-50"></div>
 

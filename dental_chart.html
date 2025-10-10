@@ -4,204 +4,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShifoCRM – Dental Chart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <title>Dental Chart - ShifoCRM</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: "#2E7D32", secondary: "#4CAF50" }
+                    colors: {
+                        primary: '#10B981', // Emerald 500
+                        secondary: '#059669', // Emerald 600
+                        accent: '#3B82F6', // Blue 500
+                        gray: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            800: '#1F2937',
+                            900: '#111827',
+                        }
+                    },
+                    borderRadius: {
+                        'none': '0px', 'sm': '4px', DEFAULT: '8px',
+                        'md': '12px', 'lg': '16px', 'xl': '24px', // Katta yumaloqlik
+                        '2xl': '32px', '3xl': '40px', 'full': '9999px',
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    }
                 }
             }
         }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sidebar uchun responsiv stil */
+        #sidebar {
+            transition: transform 0.3s ease-out;
+            transform: translateX(-100%);
+            position: fixed;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 1024px) {
+            #sidebar {
+                transform: translateX(0);
+                position: relative;
+            }
+        }
+
+        .modal-bg {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside id="sidebar"
-            class="w-64 bg-white shadow-lg flex flex-col h-screen fixed lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                        <i class="ri-hospital-line text-white text-xl"></i>
-                    </div>
-                    <a href="/" class="flex flex-col">
-                        <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
-                        <div
-                            class="demo-badge text-white text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 w-fit">
-                            DEMO
-                        </div>
-                    </a>
-                </div>
-                <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-red-600">
-                    <i class="ri-close-line text-2xl"></i>
-                </button>
+<body class="bg-gray-50 min-h-screen flex">
+    <aside id="sidebar"
+        class="w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
             </div>
-
-            <nav class="flex-1 p-4">
-                <ul class="space-y-2">
-                    <li>
-                        <a href="./patients.html"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                            <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./dental_chart.html"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                            <i class="ri-tooth-line"></i> <span>Dental Chart</span>
-                        </a>
-                    </li>
-                    <li>
-                        <button
-                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                            <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                            <i class="ri-calendar-line"></i><span>Kalendar</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                            <i class="ri-notification-line"></i><span>Eslatmalar</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                            <i class="ri-bar-chart-line"></i><span>Statistika</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="p-4 border-t border-gray-200">
-                <a href="./register.html"
-                    class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition">
-                    <i class="ri-logout-box-line"></i><span>Demo rejimdan chiqish</span>
-                </a>
+            <div>
+                <h1 class="font-bold text-gray-800 text-lg">ShifoCRM</h1>
+                <span
+                    class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
             </div>
-        </aside>
-
-
-        <div class="flex-1">
-            <header class="bg-white shadow p-4 flex justify-between items-center">
-                <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-green-600">
-                    <i class="ri-menu-line text-2xl"></i>
-                </button>
-                <a href="./profil.html" class="ml-auto">
-                    <button class="group flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 
-                             text-white px-5 py-2.5 rounded-xl shadow-lg hover:shadow-xl 
-                             hover:from-emerald-600 hover:to-green-500 
-                             transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">
-                        <i
-                            class="ri-account-circle-line text-xl group-hover:rotate-12 transition-transform duration-300"></i>
-                        <span class="font-medium tracking-wide">Profil</span>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-xl font-bold uppercase">
-                                <span id="profileAvatar">D</span>
-                            </div>
-                            <span id="profileName" class="font-medium"></span>
-                        </div>
-                    </button>
-                </a>
-
-            </header>
-
-            <main class="p-4 sm:p-6">
-                <div class="bg-white shadow-md rounded-2xl p-5 mb-6 border border-gray-100">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="ri-search-line text-green-600"></i> Bemorni qidirish
-                    </h2>
-                    <div class="relative">
-                        <input type="text" id="patientSearch" placeholder="Ism yoki familiya kiriting..."
-                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" />
-                        <ul id="searchResults"
-                            class="absolute z-20 bg-white border border-gray-200 w-full rounded-lg mt-1 shadow-lg hidden max-h-60 overflow-y-auto text-sm">
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Patient + Dental Chart -->
-                <div id="chartContainer" class="hidden">
-                    <!-- Patient Card -->
-                    <div id="patientCard"
-                        class="bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg rounded-2xl p-6 mb-6">
-                        <!-- Dinamik bemor ma’lumotlari JS bilan qo‘yiladi -->
-                    </div>
-
-                    <!-- Dental Chart -->
-                    <div class="bg-white shadow-md rounded-2xl p-5 sm:p-6 border border-gray-100">
-                        <h2 class="text-xl font-semibold mb-5 text-center sm:text-left flex items-center gap-2">
-                            <i class="ri-tooth-line text-green-600"></i> Tishlar jadvali
-                        </h2>
-
-                        <!-- Upper Jaw -->
-                        <div id="upperJaw"
-                            class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 mb-8 text-xs sm:text-sm">
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="border-t border-gray-200 my-4"></div>
-
-                        <!-- Lower Jaw -->
-                        <div id="lowerJaw"
-                            class="grid grid-cols-8 sm:flex sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm"></div>
-
-                        <!-- Legend -->
-                        <div class="mt-8 flex flex-wrap gap-4 text-sm justify-center sm:justify-start">
-                            <span class="flex items-center gap-2">
-                                <div class="w-5 h-5 rounded-full bg-green-500 shadow-sm"></div> Sog‘lom
-                            </span>
-                            <span class="flex items-center gap-2">
-                                <div class="w-5 h-5 rounded-full bg-yellow-500 shadow-sm"></div> Kariyes
-                            </span>
-                            <span class="flex items-center gap-2">
-                                <div class="w-5 h-5 rounded-full bg-blue-500 shadow-sm"></div> Plomba
-                            </span>
-                            <span class="flex items-center gap-2">
-                                <div class="w-5 h-5 rounded-full bg-red-500 shadow-sm"></div> Olib tashlangan
-                            </span>
-                        </div>
-
-                        <!-- Save Button -->
-                        <div class="mt-8 flex justify-center sm:justify-end">
-                            <button id="saveChartBtn"
-                                class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl shadow-md hover:shadow-lg hover:scale-105 transform transition">
-                                💾 Saqlash
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
         </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-line"></i><span>Kalendar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-notification-line"></i><span>Eslatmalar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-bar-chart-line"></i><span>Statistika</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
+            </a>
+        </div>
+    </aside>
+
+
+    <div class="flex-1 flex flex-col">
+        <header
+            class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-primary transition">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+            <h1 class="text-xl font-bold flex items-center gap-2 text-gray-800 ml-3 lg:ml-0">
+                <i class="ri-tooth-line text-2xl text-primary"></i> Dental Chart
+            </h1>
+
+            <a href="./profil.html" class="ml-auto">
+                <div
+                    class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm hover:bg-gray-200 transition">
+                    <div id="profileAvatar"
+                        class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">D</div>
+                    <span id="profileName" class="font-medium text-gray-800 hidden sm:block">---</span>
+                </div>
+            </a>
+        </header>
+
+        <main class="p-4 md:p-8">
+            <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6 mb-8 border border-gray-100">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
+                    <i class="ri-search-line text-primary"></i> Bemorni qidirish
+                </h2>
+                <div class="relative">
+                    <input type="text" id="patientSearch" placeholder="Ism yoki familiya kiriting..."
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition shadow-sm" />
+                    <ul id="searchResults"
+                        class="absolute z-20 bg-white border border-gray-200 w-full rounded-xl mt-1 shadow-xl hidden max-h-60 overflow-y-auto text-sm">
+                    </ul>
+                </div>
+            </div>
+
+            <div id="chartContainer" class="hidden max-w-4xl mx-auto">
+                
+                <div id="patientCard"
+                    class="bg-gradient-to-r from-primary to-secondary text-white shadow-2xl rounded-2xl p-6 mb-8 transform transition duration-500 hover:scale-[1.01]">
+                    </div>
+
+                <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                        <i class="ri-tooth-line text-primary text-2xl"></i> Tishlar jadvali (Dental Chart)
+                    </h2>
+
+                    <div class="grid grid-cols-16 text-center overflow-x-auto pb-4">
+                        <div class="min-w-[500px] flex justify-between space-x-2">
+                             <div id="upperJawRight" class="flex-1 flex justify-end gap-2 text-center text-xs"></div>
+                             <div id="upperJawLeft" class="flex-1 flex justify-start gap-2 text-center text-xs"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t-4 border-dashed border-gray-200 my-6 max-w-lg mx-auto"></div>
+                    
+                    <div class="grid grid-cols-16 text-center overflow-x-auto pt-4">
+                        <div class="min-w-[500px] flex justify-between space-x-2">
+                             <div id="lowerJawRight" class="flex-1 flex justify-end gap-2 text-center text-xs"></div>
+                             <div id="lowerJawLeft" class="flex-1 flex justify-start gap-2 text-center text-xs"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-8 flex flex-wrap gap-x-6 gap-y-4 text-sm justify-center sm:justify-start pt-6 border-t border-gray-100">
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-lg bg-primary shadow-sm"></div> Sog‘lom
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-lg bg-yellow-500 shadow-sm"></div> Kariyes
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-lg bg-blue-500 shadow-sm"></div> Plomba
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-lg bg-red-500 shadow-sm"></div> Olib tashlangan
+                        </span>
+                    </div>
+
+                    <div class="mt-8 flex justify-end">
+                        <button id="saveChartBtn"
+                            class="px-6 py-3 bg-primary text-white rounded-xl shadow-lg hover:bg-secondary hover:scale-[1.02] transform transition font-medium flex items-center gap-2">
+                            <i class="ri-save-line"></i> Saqlash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Modal -->
-    <div id="toothModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-40 z-50">
-        <div class="bg-white p-6 rounded-xl w-80 shadow-lg">
-            <h3 id="modalToothNumber" class="text-lg font-semibold mb-3"></h3>
-            <label class="block mb-1">Status:</label>
-            <select id="toothStatus" class="w-full border rounded p-2 mb-3">
+    <div id="toothModal" class="fixed inset-0 hidden items-center justify-center modal-bg z-50 p-4">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl">
+            <h3 id="modalToothNumber" class="text-xl font-bold mb-4 text-primary flex items-center gap-2">
+                <i class="ri-edit-line"></i> Tish #
+            </h3>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Status:</label>
+            <select id="toothStatus"
+                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 mb-4 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm">
                 <option value="healthy">Sog‘lom</option>
                 <option value="cariyes">Kariyes</option>
                 <option value="filled">Plomba</option>
                 <option value="missing">Olib tashlangan</option>
             </select>
-            <label class="block mb-1">Izoh:</label>
-            <textarea id="toothNote" rows="3" class="w-full border rounded p-2 mb-3"></textarea>
-            <div class="flex justify-end gap-2">
-                <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded">Bekor</button>
-                <button id="saveToothBtn" class="px-4 py-2 bg-primary text-white rounded">Saqlash</button>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Izoh:</label>
+            <textarea id="toothNote" rows="3" placeholder="Izoh..."
+                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 mb-6 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm"></textarea>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal()"
+                    class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium transition">Bekor</button>
+                <button id="saveToothBtn"
+                    class="px-5 py-2.5 bg-primary text-white hover:bg-secondary rounded-xl font-medium shadow-md transition">Saqlash</button>
             </div>
         </div>
     </div>
@@ -212,16 +236,17 @@
 
         const sidebar = document.getElementById("sidebar");
         const openSidebar = document.getElementById("openSidebar");
-        const closeSidebar = document.getElementById("closeSidebar");
-
         const searchInput = document.getElementById("patientSearch");
         const searchResults = document.getElementById("searchResults");
         const chartContainer = document.getElementById("chartContainer");
         const patientCard = document.getElementById("patientCard");
-        const upperJaw = document.getElementById("upperJaw");
-        const lowerJaw = document.getElementById("lowerJaw");
+        // Yuqori va Pastki jag' divlari (dizaynni moslash uchun yangi IDlar)
+        const upperJawRight = document.getElementById("upperJawRight");
+        const upperJawLeft = document.getElementById("upperJawLeft");
+        const lowerJawRight = document.getElementById("lowerJawRight");
+        const lowerJawLeft = document.getElementById("lowerJawLeft");
+        
         const saveChartBtn = document.getElementById("saveChartBtn");
-
         const toothModal = document.getElementById("toothModal");
         const modalToothNumber = document.getElementById("modalToothNumber");
         const toothStatus = document.getElementById("toothStatus");
@@ -231,24 +256,29 @@
         const profileAvatarEl = document.getElementById("profileAvatar");
 
         
-        let doctor = JSON.parse(localStorage.getItem("doctor")) || { id: 1, fullname: "Test Doctor" };
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        if (!doctor) window.location.href = "register.html";
+
         let patientsData = [];
         let currentPatient = null;
         let currentTeeth = [];
         let selectedTooth = null;
 
-        // Sidebar toggle
-        openSidebar?.addEventListener("click", () => sidebar.classList.remove("-translate-x-full"));
-        closeSidebar?.addEventListener("click", () => sidebar.classList.add("-translate-x-full"));
+        // === Init Profil ===
+        profileNameEl.textContent = doctor.fullname;
+        profileAvatarEl.textContent = doctor.fullname.charAt(0).toUpperCase();
 
-        // Bemorlarni olish
+        // === Sidebar toggle ===
+        openSidebar?.addEventListener("click", () => sidebar.classList.toggle("active"));
+
+        // === Bemorlarni olish ===
         async function loadPatients() {
             const res = await fetch(API_PATIENTS);
             const all = await res.json();
             patientsData = all.filter(p => String(p.doctorId) === String(doctor.id));
         }
 
-        // Search
+        // === Search ===
         searchInput.addEventListener("input", () => {
             const query = searchInput.value.toLowerCase();
             searchResults.innerHTML = "";
@@ -264,7 +294,7 @@
             } else {
                 filtered.forEach(patient => {
                     const li = document.createElement("li");
-                    li.className = "px-4 py-2 hover:bg-green-100 cursor-pointer text-sm";
+                    li.className = "px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-100 last:border-b-0";
                     li.innerText = patient.name;
                     li.onclick = () => selectPatient(patient);
                     searchResults.appendChild(li);
@@ -272,28 +302,36 @@
             }
             searchResults.classList.remove("hidden");
         });
+        
+        // Bemorni tanlash uchun qidiruv joyidan tashqariga bosilganda yopish
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add("hidden");
+            }
+        });
 
-        // Bemor tanlash
+
+        // === Bemor tanlash ===
         function selectPatient(patient) {
             currentPatient = patient;
             searchInput.value = patient.name;
             searchResults.classList.add("hidden");
 
             patientCard.innerHTML = `
-        <h2 class="text-xl font-semibold mb-4">${patient.name}</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-          <p><span class="font-medium">Yosh:</span> ${patient.age || "—"}</p>
-          <p><span class="font-medium">Telefon:</span> ${patient.phone || "—"}</p>
-          <p><span class="font-medium">Oxirgi tashrif:</span> ${patient.lastVisit || "—"}</p>
-          <p><span class="font-medium">Status:</span> ${patient.status || "—"}</p>
-        </div>
-      `;
+                <h2 class="text-2xl font-bold mb-4">${patient.name}</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <p><i class="ri-cake-line mr-1"></i> <span class="font-medium">Yosh:</span> ${patient.age || "—"}</p>
+                    <p><i class="ri-phone-line mr-1"></i> <span class="font-medium">Telefon:</span> ${patient.phone || "—"}</p>
+                    <p><i class="ri-calendar-check-line mr-1"></i> <span class="font-medium">Oxirgi tashrif:</span> ${patient.lastVisit || "—"}</p>
+                    <p><i class="ri-user-star-line mr-1"></i> <span class="font-medium">Status:</span> ${patient.status || "—"}</p>
+                </div>
+            `;
 
             chartContainer.classList.remove("hidden");
             loadDentalChart(patient.id);
         }
 
-        // Dental chart yuklash
+        // === Dental chart yuklash ===
         async function loadDentalChart(patientId) {
             const res = await fetch(`${API_CHARTS}?patientId=${patientId}&doctorId=${doctor.id}`);
             const data = await res.json();
@@ -301,33 +339,44 @@
             renderTeeth();
         }
 
-        // Tishlarni render qilish
-        function renderTeeth() {
-            upperJaw.innerHTML = "";
-            lowerJaw.innerHTML = "";
-            for (let i = 1; i <= 32; i++) {
-                const tooth = currentTeeth.find(t => Number(t.id) === i);
-                const div = document.createElement("div");
-                div.className = `w-8 h-8 flex items-center justify-center text-xs rounded cursor-pointer ${tooth ? getStatusClass(tooth.status) : "bg-green-500 text-white"}`;
-                div.innerText = i;
-                div.onclick = () => openModal(i, tooth);
-                if (i <= 16) upperJaw.appendChild(div); else lowerJaw.appendChild(div);
-            }
-        }
-
+        // === Tish statusi bo'yicha rangni belgilash ===
         function getStatusClass(status) {
             switch (status) {
-                case "cariyes": return "bg-yellow-500 text-white";
-                case "filled": return "bg-blue-500 text-white";
-                case "missing": return "bg-red-500 text-white";
-                default: return "bg-green-500 text-white";
+                case "cariyes": return "bg-yellow-500 text-gray-800 shadow-md";
+                case "filled": return "bg-blue-500 text-white shadow-md";
+                case "missing": return "bg-red-500 text-white shadow-md";
+                default: return "bg-primary text-white shadow-md";
             }
         }
 
-        // Modal boshqaruvi
+        // === Tishlarni render qilish (Yangi joylashuv bo'yicha) ===
+        function renderTeeth() {
+            upperJawRight.innerHTML = "";
+            upperJawLeft.innerHTML = "";
+            lowerJawRight.innerHTML = "";
+            lowerJawLeft.innerHTML = "";
+            
+            // Tish raqamlarini to'g'ri tartibda hosil qilish (18-11, 21-28, 48-41, 31-38)
+            const upperTeethOrder = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
+            const lowerTeethOrder = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
+
+            upperTeethOrder.forEach(i => createToothElement(i, i <= 18 && i >= 11 ? upperJawRight : upperJawLeft));
+            lowerTeethOrder.forEach(i => createToothElement(i, i <= 48 && i >= 41 ? lowerJawRight : lowerJawLeft));
+
+            function createToothElement(i, parent) {
+                 const tooth = currentTeeth.find(t => Number(t.id) === i);
+                 const div = document.createElement("div");
+                 div.className = `w-8 h-8 md:w-10 md:h-10 flex flex-col items-center justify-center text-xs rounded-lg cursor-pointer font-bold border border-gray-200 transition hover:scale-105 ${tooth ? getStatusClass(tooth.status) : "bg-primary text-white"}`;
+                 div.innerHTML = `<span class="text-[10px] text-gray-200">${Math.floor(i / 10)}</span><span class="text-sm">${i % 10}</span>`;
+                 div.onclick = () => openModal(i, tooth);
+                 parent.appendChild(div);
+            }
+        }
+
+        // === Modal boshqaruvi ===
         function openModal(toothNumber, toothData) {
             selectedTooth = toothNumber;
-            modalToothNumber.innerText = "Tish #" + toothNumber;
+            modalToothNumber.innerHTML = `<i class="ri-edit-line"></i> Tish #${toothNumber}`;
             toothStatus.value = toothData ? toothData.status : "healthy";
             toothNote.value = toothData ? toothData.note : "";
             toothModal.classList.remove("hidden");
@@ -340,44 +389,66 @@
             const status = toothStatus.value;
             const note = toothNote.value;
             const existing = currentTeeth.find(t => Number(t.id) === selectedTooth);
+            
+            const newToothData = { id: String(selectedTooth), status, note };
+            
             if (existing) {
-                existing.status = status;
-                existing.note = note;
+                // Yangilash
+                Object.assign(existing, newToothData);
             } else {
-                currentTeeth.push({ id: String(selectedTooth), status, note });
+                // Qo'shish
+                currentTeeth.push(newToothData);
             }
+            
+            // Agar status 'healthy' va note bo'sh bo'lsa, ro'yxatdan o'chirish
+            if (status === 'healthy' && !note.trim()) {
+                currentTeeth = currentTeeth.filter(t => Number(t.id) !== selectedTooth);
+            }
+
             closeModal();
             renderTeeth();
         };
 
-        // Saqlash
+        // === Saqlash ===
         saveChartBtn.onclick = async () => {
-            if (!currentPatient) return;
+            if (!currentPatient) return alert("❌ Iltimos, bemorni tanlang.");
+            
+            // Faqat o'zgartirilgan (sog'lom bo'lmagan yoki notga ega bo'lgan) tishlarni saqlaymiz
+            const teethToSave = currentTeeth.filter(t => t.status !== 'healthy' || t.note.trim());
+            
             const payload = {
                 patientId: currentPatient.id,
                 doctorId: doctor.id,
                 visitDate: new Date().toISOString().split("T")[0],
-                teeth: currentTeeth
+                teeth: teethToSave
             };
+            
             const res = await fetch(`${API_CHARTS}?patientId=${currentPatient.id}&doctorId=${doctor.id}`);
             const data = await res.json();
-            if (data.length > 0) {
-                await fetch(`${API_CHARTS}/${data[0].id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ ...data[0], ...payload })
-                });
-            } else {
-                await fetch(API_CHARTS, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: "dc" + Date.now(), ...payload })
-                });
+            
+            try {
+                if (data.length > 0) {
+                    // Update
+                    await fetch(`${API_CHARTS}/${data[0].id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ...data[0], ...payload })
+                    });
+                } else {
+                    // New entry
+                    await fetch(API_CHARTS, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: "dc" + Date.now(), ...payload })
+                    });
+                }
+                alert("✅ Dental chart muvaffaqiyatli saqlandi!");
+            } catch (error) {
+                 alert("❌ Saqlashda xatolik yuz berdi.");
             }
-            alert("✅ Dental chart saqlandi");
         };
 
-        // Init
+        // === Init ===
         (async function init() { await loadPatients(); })();
     </script>
 </body>
