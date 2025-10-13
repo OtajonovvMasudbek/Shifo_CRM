@@ -71,6 +71,23 @@
             }
         }
 
+        #sidebar {
+            transition: transform 0.3s ease-out;
+            transform: translateX(-100%);
+            position: fixed;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 1024px) {
+            #sidebar {
+                transform: translateX(0);
+                position: relative;
+            }
+        }
+
         @media (min-width: 1024px) {
             .mobile-bottom-nav {
                 display: none;
@@ -108,106 +125,89 @@
 <body class="bg-gray-50 font-sans flex lg:flex-row flex-col">
 
     <aside id="sidebar"
-        class="w-64 bg-white shadow-lg flex flex-col h-screen fixed lg:relative z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                    <i class="ri-hospital-line text-white text-xl"></i>
-                </div>
-                <a href="/" class="flex flex-col">
-                    <h1 class="font-['Pacifico'] text-xl text-primary">ShifoCRM</h1>
-                    <div
-                        class="demo-badge text-white text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 w-fit">
-                        DEMO
-                    </div>
-                </a>
+        class="w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
             </div>
-            <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-red-600">
-                <i class="ri-close-line text-2xl"></i>
-            </button>
+            <div>
+                <h1 class="font-bold text-gray-800 text-lg">ShifoCRM</h1>
+                <span
+                    class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
+            </div>
         </div>
 
-        <nav class="flex-1 p-4">
-            <ul class="space-y-2">
-                <li>
-                    <a href="./patients.html"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                        <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../dental_chart.html"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white transition">
-                        <i class="ri-tooth-line"></i> <span>Dental Chart</span>
-                    </a>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-calendar-line"></i><span>Kalendar</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-notification-line"></i><span>Eslatmalar</span>
-                    </button>
-                </li>
-                <li>
-                    <button
-                        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        <i class="ri-bar-chart-line"></i><span>Statistika</span>
-                    </button>
-                </li>
-            </ul>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-line"></i><span>Kalendar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-notification-line"></i><span>Eslatmalar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-bar-chart-line"></i><span>Statistika</span>
+            </a>
         </nav>
 
-        <div class="p-4 border-t border-gray-200">
-            <a href="./index.html"
-                class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-600 hover:bg-red-50 transition">
-                <i class="ri-logout-box-line"></i><span>Demo rejimdan chiqish</span>
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
             </a>
         </div>
     </aside>
 
-    <main class="flex-1  lg: main-content">
-        <header class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-            
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+
+    <main class="flex-1 lg:main-content">
+        <header
+            class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+
             <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-primary transition">
                 <i class="ri-menu-line text-2xl"></i>
             </button>
-            
+
             <div class="hidden sm:block">
-                </div>
+            </div>
 
             <div id="profileContainer" class="ml-auto">
                 <a href="./profil.html" class="block">
                     <button
                         class="flex items-center gap-3 bg-white text-gray-800 p-2 pr-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition shadow-custom">
-                        
-                        <div id="doctorAvatar" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
-                            </div>
-                        
+
+                        <div id="doctorAvatar"
+                            class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+                        </div>
+
                         <div class="flex-col items-start hidden sm:flex text-left">
                             <span id="doctorName" class="font-semibold text-sm text-gray-800 truncate max-w-[120px]">
-                                </span>
+                            </span>
                             <span class="text-xs text-gray-500">Shifokor</span>
                         </div>
-                        
+
                         <i class="ri-arrow-down-s-line text-xl text-gray-500 hidden sm:block"></i>
                     </button>
                 </a>
             </div>
         </header>
 
-        <div class="bg-white p-4 md:p-6  shadow-md">
-            <h1 class="text-xl md:text-2xl  font-semibold mb-6">Bemorlar ro'yxati</h1>
+        <div class="bg-white p-4 md:p-6 shadow-md">
+            <h1 class="text-xl md:text-2xl font-semibold mb-6">Bemorlar ro'yxati</h1>
 
             <div class="flex sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
                 <!-- Qidiruv -->
@@ -269,58 +269,24 @@
                         </tr>
                     </thead>
                     <tbody id="patientsTableBody" class="text-sm"></tbody>
-                    <div id="patientModal"
-                        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                        <div class="relative bg-white rounded-2xl shadow-lg p-6 w-96">
-                            <button onclick="closePatientModal()"
-                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
-                                <i class="ri-close-circle-line text-2xl"></i>
-                            </button>
-
-                            <h2 class="text-xl font-semibold mb-4 text-center">Bemor ma'lumotlari</h2>
-                            <div id="modalContent" class="space-y-2">
-                            </div>
-                        </div>
-                    </div>
-
-
-
                 </table>
             </div>
 
         </div>
     </main>
 
+    <!-- Modals -->
+    <div id="patientModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="relative bg-white rounded-2xl shadow-lg p-6 w-96">
+            <button onclick="closePatientModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+                <i class="ri-close-circle-line text-2xl"></i>
+            </button>
 
-    <div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold"> Mening Profilim</h3>
-                <button onclick="closeModal(profileModal)" class="text-gray-500 hover:text-gray-700">
-                    <i class="ri-close-line text-2xl"></i>
-                </button>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-                <div>
-                    <h2 id="modalName" class="font-semibold text-gray-800">-</h2>
-                    <p id="modalRole" class="text-sm text-gray-500">-</p>
-                    <p id="modalEmail" class="text-sm text-gray-500">-</p>
-                </div>
-            </div>
-            <div class="flex justify-end gap-2">
-                <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                    onclick="closeModal(profileModal)">Yopish</button>
-                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Tahrirlash</button>
+            <h2 class="text-xl font-semibold mb-4 text-center">Bemor ma'lumotlari</h2>
+            <div id="modalContent" class="space-y-2">
             </div>
         </div>
-    </div>
-
-
-    <div class="overflow-x-auto rounded-lg">
-        <table class="w-full border-collapse border border-gray-200">
-
-            <tbody id="patientsTableBody"></tbody>
-        </table>
     </div>
 
 
@@ -421,14 +387,11 @@
     </div>
 
 
-
     <!-- Bemor tafsilotlari MODAL -->
     <div id="viewPatientModal"
         class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-
         <div
             class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 animate-[fadeIn_0.25s_ease-out]">
-
             <div class="bg-primary text-white px-6 py-4 flex justify-between items-center">
                 <h3 class="text-xl font-bold flex items-center gap-2">
                     <i class="ri-user-heart-line text-2xl"></i>
@@ -438,10 +401,8 @@
                     <i class="ri-close-line text-2xl"></i>
                 </button>
             </div>
-
             <div id="patientDetails" class="p-6 space-y-6 overflow-y-auto max-h-[80vh]">
             </div>
-
             <div class="flex justify-between sm:justify-end gap-3 p-5 bg-gray-50 border-t">
                 <button onclick="closeModal(viewPatientModal)"
                     class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition">
@@ -456,15 +417,9 @@
         </div>
     </div>
 
-
-
-
     <div id="toastContainer" class="fixed top-4 right-4 space-y-3 z-50"></div>
 
-
-    <script src="/patients.js">
-
-    </script>
+    <script src="patients.js"></script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@ const API_URL = "https://shifo-crm-7.onrender.com/patients";
 const sidebar = document.getElementById("sidebar");
 const openSidebar = document.getElementById("openSidebar");
 const closeSidebar = document.getElementById("closeSidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 const tableBody = document.getElementById("patientsTableBody");
 const addPatientBtn = document.getElementById("addPatientBtn");
 const addPatientModal = document.getElementById("addPatientModal");
@@ -30,17 +31,41 @@ function showToast(message, type = "info") {
     }`;
   toast.innerHTML = `<i class="ri-information-line text-xl"></i><span>${message}</span>`;
   toastContainer.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => toast.remove(), 4000);
 }
 
 function openModal(modal) {
   modal.classList.add("active");
   modal.classList.remove("hidden");
 }
+
 function closeModal(modal) {
   modal.classList.remove("active");
   modal.classList.add("hidden");
 }
+
+// === Sidebar boshqaruvi ===
+if (openSidebar) {
+  openSidebar.addEventListener("click", () => {
+    sidebar.classList.add("active");
+    sidebarOverlay.classList.remove("hidden");
+  });
+}
+
+if (closeSidebar) {
+  closeSidebar.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    sidebarOverlay.classList.add("hidden");
+  });
+}
+
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    sidebarOverlay.classList.add("hidden");
+  });
+}
+
 
 function getAge(birthDate) {
   if (!birthDate) return "—";
@@ -81,12 +106,15 @@ async function loadPatients(query = "") {
     renderPatients(filtered);
   } catch (err) {
     console.error("loadPatients error:", err);
-    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q</td></tr>`;
+    if(tableBody) {
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q</td></tr>`;
+    }
   }
 }
 
 // === Jadvalni chiqarish ===
 function renderPatients(patients) {
+  if (!tableBody) return;
   tableBody.innerHTML = "";
 
   if (!patients || patients.length === 0) {
@@ -158,10 +186,8 @@ if (addPatientForm) {
     const fd = new FormData(addPatientForm);
     const newPatient = Object.fromEntries(fd.entries());
 
-    // Raqamlarni o'zgartirish
     newPatient.price = Number(newPatient.price) || 0;
 
-    // Doctor ID qo'shish
     const doctor = JSON.parse(localStorage.getItem("doctor") || "null");
     if (doctor && doctor.id) {
       newPatient.doctorId = doctor.id;
@@ -184,15 +210,14 @@ if (addPatientForm) {
   };
 }
 
-// === ✅ Bemor tafsilotlari modali (ko‘rish + tahrirlash) - YANGI DIZAYN ===
-// === ✅ Bemor tafsilotlari modali (ko‘rish + tahrirlash) - ZAMONAVIY DIZAYN ===
+
 function openPatientDetails(id) {
   const patient = patientsData.find((p) => String(p.id) === String(id));
   if (!patient) return showToast("Bemor topilmadi", "error");
 
   const age = getAge(patient.birthDate);
   const statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-semibold ${patient.status === "Faol"
-    ? "bg-primary/10 text-primary" // Yangilangan ranglar
+    ? "bg-primary/10 text-primary"
     : patient.status === "Kutilmoqda"
       ? "bg-yellow-100 text-yellow-700"
       : "bg-gray-200 text-gray-600"
@@ -246,13 +271,11 @@ function openPatientDetails(id) {
         </div>
     </div>
   `;
-  // ... qolgan kodlar (openModal va editBtn onclick) o'zgarishsiz qoladi.
   openModal(viewPatientModal);
   const editBtn = document.getElementById("editPatientBtn");
   editBtn.onclick = () => openEditPatientForm(patient);
 }
 
-// Yangi yordamchi funksiya: Ma'lumot elementini chiroyli chiqarish uchun
 function renderDetailItem(key, value, label, iconClass, iconColor) {
   return `
         <div class="flex flex-col">
@@ -264,7 +287,6 @@ function renderDetailItem(key, value, label, iconClass, iconColor) {
     `;
 }
 
-// === 🧩 Tahrirlash rejimi - YANGILANGAN ===
 function openEditPatientForm(patient) {
   patientDetails.innerHTML = `
     <form id="editPatientForm" class="space-y-4">
@@ -285,10 +307,8 @@ function openEditPatientForm(patient) {
           <label class="block text-sm font-medium text-gray-600 mb-1">Jins</label>
           <select name="gender"
             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-            <option value="Erkak" ${patient.gender === "Erkak" ? "selected" : ""
-    }>Erkak</option>
-            <option value="Ayol" ${patient.gender === "Ayol" ? "selected" : ""
-    }>Ayol</option>
+            <option value="Erkak" ${patient.gender === "Erkak" ? "selected" : ""}>Erkak</option>
+            <option value="Ayol" ${patient.gender === "Ayol" ? "selected" : ""}>Ayol</option>
           </select>
         </div>
 
@@ -314,12 +334,9 @@ function openEditPatientForm(patient) {
           <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
           <select name="status"
             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-            <option value="Faol" ${patient.status === "Faol" ? "selected" : ""
-    }>Faol</option>
-            <option value="Kutilmoqda" ${patient.status === "Kutilmoqda" ? "selected" : ""
-    }>Kutilmoqda</option>
-            <option value="Yakunlangan" ${patient.status === "Yakunlangan" ? "selected" : ""
-    }>Yakunlangan</option>
+            <option value="Faol" ${patient.status === "Faol" ? "selected" : ""}>Faol</option>
+            <option value="Kutilmoqda" ${patient.status === "Kutilmoqda" ? "selected" : ""}>Kutilmoqda</option>
+            <option value="Yakunlangan" ${patient.status === "Yakunlangan" ? "selected" : ""}>Yakunlangan</option>
           </select>
         </div>
 
@@ -333,8 +350,7 @@ function openEditPatientForm(patient) {
       <div>
         <label class="block text-sm font-medium text-gray-600 mb-1">Izoh</label>
         <textarea name="description" rows="3"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">${patient.description || ""
-    }</textarea>
+          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">${patient.description || ""}</textarea>
       </div>
 
       <div class="flex justify-end gap-3 pt-3">
@@ -357,7 +373,6 @@ function openEditPatientForm(patient) {
     const updated = Object.fromEntries(fd.entries());
 
     updated.price = Number(updated.price) || 0;
-    // Bemor ID o'zgarmasligini ta'minlash
     updated.doctorId = patient.doctorId;
 
     try {
@@ -368,14 +383,13 @@ function openEditPatientForm(patient) {
       });
       showToast("✅ Ma’lumotlar yangilandi", "success");
       await loadPatients();
-      openPatientDetails(patient.id); // Yangilangan ma'lumot bilan modalni qayta ochish
+      openPatientDetails(patient.id);
     } catch (err) {
       console.error(err);
       showToast("❌ Xatolik yuz berdi", "error");
     }
   };
 }
-
 
 // === Qidiruv ===
 if (searchInput) {
@@ -389,25 +403,28 @@ window.onclick = function (event) {
 };
 
 // === Boshlang‘ich yuklash ===
-loadPatients();
-if (addPatientBtn) addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
-if (cancelAddPatient) cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
-// === 🧩 Shifokor ma’lumotini headerga chiqarish ===
+function initializePage() {
+    renderDoctorInfo();
+    loadPatients();
+    if (addPatientBtn) addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
+    if (cancelAddPatient) cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
+}
+
+// === Shifokor ma’lumotini headerga chiqarish ===
 function renderDoctorInfo() {
   const doctor = JSON.parse(localStorage.getItem("doctor") || "null");
   const doctorNameElement = document.getElementById("doctorName");
   const doctorAvatarElement = document.getElementById("doctorAvatar");
 
   if (doctor && doctor.name) {
-    // Ism-sharifni chiqarish
     doctorNameElement.textContent = doctor.name;
-
-    // Avatar uchun birinchi harfni chiqarish
     doctorAvatarElement.textContent = doctor.name.charAt(0).toUpperCase();
-
   } else {
-    // Agar ma'lumot topilmasa, default qiymat
     doctorNameElement.textContent = "Profil";
     doctorAvatarElement.textContent = "P";
   }
 }
+
+// Sahifani ishga tushirish
+document.addEventListener("DOMContentLoaded", initializePage);
+

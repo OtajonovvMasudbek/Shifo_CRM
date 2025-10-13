@@ -24,7 +24,7 @@
                     },
                     borderRadius: {
                         'none': '0px', 'sm': '4px', DEFAULT: '8px',
-                        'md': '12px', 'lg': '16px', 'xl': '24px', // Katta yumaloqlik
+                        'md': '12px', 'lg': '16px', 'xl': '24px',
                         '2xl': '32px', '3xl': '40px', 'full': '9999px',
                     },
                     boxShadow: {
@@ -155,8 +155,10 @@
                 
                 <div id="patientCard"
                     class="bg-gradient-to-r from-primary to-secondary text-white shadow-2xl rounded-2xl p-6 mb-8 transform transition duration-500 hover:scale-[1.01]">
-                    </div>
+                    <!-- Patient details here -->
+                </div>
 
+                <!-- DENTAL CHART SECTION -->
                 <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
                         <i class="ri-tooth-line text-primary text-2xl"></i> Tishlar jadvali (Dental Chart)
@@ -194,12 +196,68 @@
                         </span>
                     </div>
 
-                    <div class="mt-8 flex justify-end">
-                        <button id="saveChartBtn"
-                            class="px-6 py-3 bg-primary text-white rounded-xl shadow-lg hover:bg-secondary hover:scale-[1.02] transform transition font-medium flex items-center gap-2">
-                            <i class="ri-save-line"></i> Saqlash
-                        </button>
+                    
+                </div>
+                <!-- END DENTAL CHART SECTION -->
+
+                <!-- SERVICES AND TREATMENT PLAN SECTION -->
+                <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                        <i class="ri-money-dollar-circle-line text-accent text-2xl"></i> Xizmatlar va Davolash Rejasi
+                    </h2>
+
+                    <!-- Add Service Form -->
+                    <div class="mb-6 p-4 border border-blue-100 bg-blue-50 rounded-xl">
+                        <div class="md:flex gap-4 items-end">
+                            <div class="flex-1 mb-4 md:mb-0">
+                                <label for="serviceSelect" class="block mb-2 text-sm font-medium text-gray-700">Xizmat turi:</label>
+                                <select id="serviceSelect" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm"></select>
+                            </div>
+                            <div class="mb-4 md:mb-0">
+                                <label for="serviceQuantity" class="block mb-2 text-sm font-medium text-gray-700">Soni:</label>
+                                <input type="number" id="serviceQuantity" value="1" min="1"
+                                    class="w-20 border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm text-center">
+                            </div>
+                            <button id="addServiceBtn"
+                                class="w-full md:w-auto px-5 py-2.5 bg-accent text-white rounded-xl shadow-md hover:bg-blue-600 font-medium transition flex items-center justify-center gap-2">
+                                <i class="ri-add-line"></i> Qo'shish
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- Services Table -->
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Xizmat nomi</th>
+                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Soni</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Narxi</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Jami</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody" class="bg-white divide-y divide-gray-200">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500 italic">Davolash rejasiga xizmatlar qo'shilmagan.</td></tr>
+                            </tbody>
+                            <tfoot class="bg-gray-50 border-t-2 border-primary">
+                                <tr>
+                                    <td colspan="4" class="px-4 py-3 text-right text-lg font-bold text-gray-800">Jami xizmatlar narxi:</td>
+                                    <td id="totalCost" class="px-4 py-3 text-right text-lg font-bold text-primary">0 UZS</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- END SERVICES SECTION -->
+
+                <div class="mt-8 flex justify-end">
+                    <button id="saveChartBtn"
+                        class="px-6 py-3 bg-primary text-white rounded-xl shadow-lg hover:bg-secondary hover:scale-[1.02] transform transition font-medium flex items-center gap-2">
+                        <i class="ri-save-line"></i> Saqlash
+                    </button>
                 </div>
             </div>
         </main>
@@ -234,13 +292,25 @@
         const API_PATIENTS = "https://shifo-crm-7.onrender.com/patients";
         const API_CHARTS = "https://shifo-crm-7.onrender.com/dentalCharts";
 
+        // Hardcoded Service Data (UZS - O'zbekiston So'mi)
+        const DENTAL_SERVICES = [
+            { id: "S1", name: "Tishni tozalash (professional)", price: 350000 },
+            { id: "S2", name: "Oddiy plomba qo'yish", price: 200000 },
+            { id: "S3", name: "Kompleks plomba (uch yuzali)", price: 450000 },
+            { id: "S4", name: "Tishni olib tashlash (oddiy)", price: 150000 },
+            { id: "S5", name: "Murakkab olib tashlash", price: 400000 },
+            { id: "S6", name: "Kanalni davolash (Endodontiya)", price: 600000 },
+            { id: "S7", name: "Koronka qo'yish (Metal-keramika)", price: 1200000 },
+            { id: "S8", name: "Ortodontik konsultatsiya", price: 50000 },
+        ];
+
+
         const sidebar = document.getElementById("sidebar");
         const openSidebar = document.getElementById("openSidebar");
         const searchInput = document.getElementById("patientSearch");
         const searchResults = document.getElementById("searchResults");
         const chartContainer = document.getElementById("chartContainer");
         const patientCard = document.getElementById("patientCard");
-        // Yuqori va Pastki jag' divlari (dizaynni moslash uchun yangi IDlar)
         const upperJawRight = document.getElementById("upperJawRight");
         const upperJawLeft = document.getElementById("upperJawLeft");
         const lowerJawRight = document.getElementById("lowerJawRight");
@@ -254,15 +324,45 @@
         const saveToothBtn = document.getElementById("saveToothBtn");
         const profileNameEl = document.getElementById("profileName");
         const profileAvatarEl = document.getElementById("profileAvatar");
+        const mainContainer = document.querySelector("main"); // Message uchun asosiy container
 
-        
+        // New DOM elements for services
+        const serviceSelect = document.getElementById("serviceSelect");
+        const serviceQuantity = document.getElementById("serviceQuantity");
+        const addServiceBtn = document.getElementById("addServiceBtn");
+        const servicesTableBody = document.getElementById("servicesTableBody");
+        const totalCostEl = document.getElementById("totalCost");
+
+
         let doctor = JSON.parse(localStorage.getItem("doctor"));
         if (!doctor) window.location.href = "register.html";
 
         let patientsData = [];
         let currentPatient = null;
         let currentTeeth = [];
+        let currentServices = []; // Yangi holat
         let selectedTooth = null;
+
+
+        // === Asosiy yordamchi funksiyalar ===
+
+        // Xabar chiqarish (alert() o'rniga)
+        function showMessage(message, type = 'success') {
+            const container = document.createElement('div');
+            container.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl text-white font-medium transition-all transform duration-300 ${type === 'success' ? 'bg-primary' : 'bg-red-500'}`;
+            container.textContent = message;
+            mainContainer.appendChild(container);
+
+            setTimeout(() => {
+                container.classList.add('opacity-0', 'translate-x-full');
+                container.addEventListener('transitionend', () => container.remove());
+            }, 3000);
+        }
+
+        // Valyuta formatlash
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(amount).replace(/\sUZS/g, '');
+        }
 
         // === Init Profil ===
         profileNameEl.textContent = doctor.fullname;
@@ -331,12 +431,14 @@
             loadDentalChart(patient.id);
         }
 
-        // === Dental chart yuklash ===
+        // === Dental chart va services yuklash ===
         async function loadDentalChart(patientId) {
             const res = await fetch(`${API_CHARTS}?patientId=${patientId}&doctorId=${doctor.id}`);
             const data = await res.json();
             currentTeeth = data[0]?.teeth || [];
+            currentServices = data[0]?.services || []; // Xizmatlarni yuklash
             renderTeeth();
+            renderServices(); // Xizmatlarni render qilish
         }
 
         // === Tish statusi bo'yicha rangni belgilash ===
@@ -349,7 +451,7 @@
             }
         }
 
-        // === Tishlarni render qilish (Yangi joylashuv bo'yicha) ===
+        // === Tishlarni render qilish ===
         function renderTeeth() {
             upperJawRight.innerHTML = "";
             upperJawLeft.innerHTML = "";
@@ -360,18 +462,102 @@
             const upperTeethOrder = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
             const lowerTeethOrder = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
 
-            upperTeethOrder.forEach(i => createToothElement(i, i <= 18 && i >= 11 ? upperJawRight : upperJawLeft));
-            lowerTeethOrder.forEach(i => createToothElement(i, i <= 48 && i >= 41 ? lowerJawRight : lowerJawLeft));
+            upperTeethOrder.forEach(i => createToothElement(i, i >= 11 && i <= 18 ? upperJawRight : upperJawLeft));
+            lowerTeethOrder.forEach(i => createToothElement(i, i >= 41 && i <= 48 ? lowerJawRight : lowerJawLeft));
 
             function createToothElement(i, parent) {
-                 const tooth = currentTeeth.find(t => Number(t.id) === i);
-                 const div = document.createElement("div");
-                 div.className = `w-8 h-8 md:w-10 md:h-10 flex flex-col items-center justify-center text-xs rounded-lg cursor-pointer font-bold border border-gray-200 transition hover:scale-105 ${tooth ? getStatusClass(tooth.status) : "bg-primary text-white"}`;
-                 div.innerHTML = `<span class="text-[10px] text-gray-200">${Math.floor(i / 10)}</span><span class="text-sm">${i % 10}</span>`;
-                 div.onclick = () => openModal(i, tooth);
-                 parent.appendChild(div);
+                const tooth = currentTeeth.find(t => Number(t.id) === i);
+                const div = document.createElement("div");
+                div.className = `w-8 h-8 md:w-10 md:h-10 flex flex-col items-center justify-center text-xs rounded-lg cursor-pointer font-bold border border-gray-200 transition hover:scale-105 ${tooth ? getStatusClass(tooth.status) : "bg-primary text-white"}`;
+                div.innerHTML = `<span class="text-[10px] text-gray-200">${Math.floor(i / 10)}</span><span class="text-sm">${i % 10}</span>`;
+                div.onclick = () => openModal(i, tooth);
+                parent.appendChild(div);
             }
         }
+
+        // === Services functions ===
+        function renderServices() {
+            servicesTableBody.innerHTML = '';
+            let total = 0;
+
+            if (currentServices.length === 0) {
+                servicesTableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500 italic">Davolash rejasiga xizmatlar qo'shilmagan.</td></tr>`;
+            }
+
+            currentServices.forEach((service, index) => {
+                const serviceData = DENTAL_SERVICES.find(s => s.id === service.serviceId);
+                if (!serviceData) return;
+
+                const subtotal = serviceData.price * service.quantity;
+                total += subtotal;
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-4 py-3 text-sm font-medium text-gray-500">${index + 1}</td>
+                    <td class="px-4 py-3 text-sm text-gray-800">${serviceData.name}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-700">${service.quantity}</td>
+                    <td class="px-4 py-3 text-right text-sm text-gray-700">${formatCurrency(serviceData.price)} UZS</td>
+                    <td class="px-4 py-3 text-right text-sm font-semibold text-gray-800">${formatCurrency(subtotal)} UZS</td>
+                    <td class="px-4 py-3 text-right">
+                        <button onclick="removeService(${index})" class="text-red-500 hover:text-red-700 transition">
+                            <i class="ri-delete-bin-line text-lg"></i>
+                        </button>
+                    </td>
+                `;
+                servicesTableBody.appendChild(row);
+            });
+
+            totalCostEl.textContent = `${formatCurrency(total)} UZS`;
+        }
+
+        function addService() {
+            const serviceId = serviceSelect.value;
+            const quantity = parseInt(serviceQuantity.value);
+
+            if (!currentPatient) {
+                return showMessage("❌ Iltimos, avval bemorni tanlang.", "error");
+            }
+            if (!serviceId) {
+                return showMessage("❌ Xizmat turini tanlang.", "error");
+            }
+            if (quantity < 1 || isNaN(quantity)) {
+                return showMessage("❌ Miqdor 1 dan kam bo'lishi mumkin emas.", "error");
+            }
+
+            // Check if the service already exists and update quantity
+            const existing = currentServices.find(s => s.serviceId === serviceId);
+
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                currentServices.push({ serviceId, quantity });
+            }
+            
+            // Reset inputs
+            serviceQuantity.value = 1;
+
+            renderServices();
+            showMessage("✅ Xizmat davolash rejasiga qo'shildi.");
+        }
+        
+        function removeService(index) {
+            if (index >= 0 && index < currentServices.length) {
+                currentServices.splice(index, 1);
+                renderServices();
+                showMessage("🗑️ Xizmat davolash rejasidan olib tashlandi.");
+            }
+        }
+        window.removeService = removeService; // Globalga ochish
+
+        // Xizmatlarni dropdownga yuklash
+        function populateServiceSelect() {
+            serviceSelect.innerHTML = DENTAL_SERVICES.map(s => 
+                `<option value="${s.id}">${s.name} (${formatCurrency(s.price)} UZS)</option>`
+            ).join('');
+        }
+        addServiceBtn.addEventListener('click', addService);
+
 
         // === Modal boshqaruvi ===
         function openModal(toothNumber, toothData) {
@@ -411,7 +597,7 @@
 
         // === Saqlash ===
         saveChartBtn.onclick = async () => {
-            if (!currentPatient) return alert("❌ Iltimos, bemorni tanlang.");
+            if (!currentPatient) return showMessage("❌ Iltimos, bemorni tanlang.", "error");
             
             // Faqat o'zgartirilgan (sog'lom bo'lmagan yoki notga ega bo'lgan) tishlarni saqlaymiz
             const teethToSave = currentTeeth.filter(t => t.status !== 'healthy' || t.note.trim());
@@ -420,7 +606,8 @@
                 patientId: currentPatient.id,
                 doctorId: doctor.id,
                 visitDate: new Date().toISOString().split("T")[0],
-                teeth: teethToSave
+                teeth: teethToSave,
+                services: currentServices // Xizmatlarni payloadga qo'shish
             };
             
             const res = await fetch(`${API_CHARTS}?patientId=${currentPatient.id}&doctorId=${doctor.id}`);
@@ -442,14 +629,18 @@
                         body: JSON.stringify({ id: "dc" + Date.now(), ...payload })
                     });
                 }
-                alert("✅ Dental chart muvaffaqiyatli saqlandi!");
+                showMessage("✅ Dental chart va davolash rejasidagi o'zgarishlar muvaffaqiyatli saqlandi.");
             } catch (error) {
-                 alert("❌ Saqlashda xatolik yuz berdi.");
+                console.error("Saqlashda xatolik:", error);
+                showMessage("❌ Saqlashda xatolik yuz berdi.", "error");
             }
         };
 
         // === Init ===
-        (async function init() { await loadPatients(); })();
+        (async function init() { 
+            await loadPatients(); 
+            populateServiceSelect(); 
+        })();
     </script>
 </body>
 
