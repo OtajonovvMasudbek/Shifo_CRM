@@ -15,6 +15,10 @@ const searchInput = document.getElementById("searchInput");
 const viewPatientModal = document.getElementById("viewPatientModal");
 const patientDetails = document.getElementById("patientDetails");
 const toastContainer = document.getElementById("toastContainer");
+const profileNameEl = document.getElementById("profileName");
+const profileAvatarEl = document.getElementById("profileAvatar");
+
+
 
 let patientsData = [];
 let sortKey = null;
@@ -106,8 +110,8 @@ async function loadPatients(query = "") {
     renderPatients(filtered);
   } catch (err) {
     console.error("loadPatients error:", err);
-    if(tableBody) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q</td></tr>`;
+    if (tableBody) {
+      tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">❌ Server bilan aloqa yo'q</td></tr>`;
     }
   }
 }
@@ -404,10 +408,10 @@ window.onclick = function (event) {
 
 // === Boshlang‘ich yuklash ===
 function initializePage() {
-    renderDoctorInfo();
-    loadPatients();
-    if (addPatientBtn) addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
-    if (cancelAddPatient) cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
+  renderDoctorInfo();
+  loadPatients();
+  if (addPatientBtn) addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
+  if (cancelAddPatient) cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
 }
 
 // === Shifokor ma’lumotini headerga chiqarish ===
@@ -419,10 +423,7 @@ function renderDoctorInfo() {
   if (doctor && doctor.name) {
     doctorNameElement.textContent = doctor.name;
     doctorAvatarElement.textContent = doctor.name.charAt(0).toUpperCase();
-  } else {
-    doctorNameElement.textContent = "Profil";
-    doctorAvatarElement.textContent = "P";
-  }
+  } 
 }
 
 // Sahifani ishga tushirish
