@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalendar - ShifoCRM</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16A34A',
+                        secondary: '#14853A',
+                        accent: '#3B82F6',
+                        danger: '#EF4444',
+                        gray: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+
+        .primary-bg {
+            background-color: #16A34A;
+        }
+
+        /* Kalendar Grid uchun stillar */
+        #calendarGrid div {
+            padding: 10px 5px;
+            min-height: 100px;
+            border: 1px solid #E5E7EB;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        #calendarGrid div:hover {
+            background-color: #F9FAFB;
+        }
+
+        /* Qabul ma'lumotlari uchun badge */
+        .appointment-badge {
+            display: block;
+            margin-top: 5px;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            /* rounded-full */
+            width: fit-content;
+        }
+
+        /* Juma va Dam olish kunlari (yakshanba) uchun stil */
+        .weekend {
+            background-color: #FEF2F2;
+            /* Red 50 */
+        }
+
+        .current-day {
+            outline: 3px solid #3B82F6;
+            /* Accent */
+            outline-offset: -3px;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex">
+    <aside id="sidebar"
+        class="hidden lg:flex w-64 bg-white shadow-2xl flex-col lg:h-screen lg:sticky top-0 z-40">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 primary-bg rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-800 text-[22px]">ShifoCRM</h1>
+                <span
+                    class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
+            </div>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+            </a>
+            <a href="./admission.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
+                <i class="ri-calendar-line"></i><span>Kalendar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-notification-line"></i><span>Eslatmalar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-bar-chart-line"></i><span>Statistika</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 min-w-0 p-4 md:p-8">
+        <header class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="ri-calendar-line text-primary"></i> Qabullar Kalendari
+            </h1>
+        </header>
+
+        <div class="bg-white shadow-xl rounded-xl p-4 lg:p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <div class="flex items-center gap-3">
+                    <button id="prevMonth"
+                        class="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition">
+                        <i class="ri-arrow-left-s-line text-xl"></i>
+                    </button>
+                    <h2 id="currentMonthYear" class="text-2xl font-semibold text-gray-800 w-40 text-center">---</h2>
+                    <button id="nextMonth"
+                        class="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition">
+                        <i class="ri-arrow-right-s-line text-xl"></i>
+                    </button>
+                    <button id="todayButton"
+                        class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">Bugun</button>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <select id="doctorFilter"
+                        class="w-full sm:w-52 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-primary focus:border-primary transition bg-white">
+                        <option value="all">Barcha Qabullarim</option>
+                    </select>
+
+                    <a href="./admission.html"
+                        class="w-full sm:w-auto px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-secondary transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="ri-add-line"></i> Yangi Qabul
+                    </a>
+                </div>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg overflow-hidden">
+                <div id="weekDays" class="grid grid-cols-7 text-center font-bold text-gray-600 bg-gray-50 border-b">
+                    <div class="p-2">Dush</div>
+                    <div class="p-2">Ses</div>
+                    <div class="p-2">Chor</div>
+                    <div class="p-2">Pay</div>
+                    <div class="p-2">Jum</div>
+                    <div class="p-2 text-red-600">Shan</div>
+                    <div class="p-2 text-red-600">Yak</div>
+                </div>
+
+                <div id="calendarGrid" class="grid grid-cols-7">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="detailsModal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all duration-300 scale-95"
+            onclick="event.stopPropagation()">
+            <div class="bg-accent text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <i class="ri-calendar-check-line text-2xl"></i>
+                    <span id="modalDateTitle">2025-yil 15-oktabr</span> Kunidagi Qabullar
+                </h3>
+                <button onclick="closeModal()" class="p-2 rounded-full hover:bg-white/20 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            <div id="modalAppointmentsList" class="p-6 space-y-4 overflow-y-auto max-h-[80vh]">
+                <p class="text-gray-500">Qabul topilmadi.</p>
+            </div>
+            <div class="p-4 bg-gray-50 border-t flex justify-end">
+                <button onclick="window.location.href='./admission.html'"
+                    class="px-5 py-2.5 rounded-xl bg-primary text-white font-medium shadow-md hover:bg-secondary transition flex items-center gap-2">
+                    <i class="ri-add-line"></i> Yangi Qabul Qo'shish
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const currentMonthYearEl = document.getElementById('currentMonthYear');
+            const doctorFilter = document.getElementById('doctorFilter');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const todayButton = document.getElementById('todayButton');
+            const detailsModal = document.getElementById('detailsModal');
+            const modalDateTitle = document.getElementById('modalDateTitle');
+            const modalAppointmentsList = document.getElementById('modalAppointmentsList');
+
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+            const todayDateString = formatDate(new Date());
+
+            const monthNames = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
+            
+            let loggedInDoctorId = null; 
+            let allAppointments = []; // Barcha qabullar
+
+            // ==========================================================
+            // Tizimga kirgan shifokor/foydalanuvchi ma'lumotlarini olish
+            // ==========================================================
+            function getLoggedInDoctorId() {
+                try {
+                    const doctorData = localStorage.getItem('doctor');
+                    if (doctorData) {
+                        const doctor = JSON.parse(doctorData);
+                        return doctor.id || null;
+                    }
+                } catch (e) {
+                    console.error("LocalStorage'dan doctor ID'sini olishda xato:", e);
+                }
+                return null;
+            }
+
+            // ==========================================================
+            // API va LOCAL STORAGE Logikasi (DB.json o'rniga tashqi API ishlatildi)
+            // ==========================================================
+            async function getDB() {
+                let db = JSON.parse(localStorage.getItem('shifoCRM_db'));
+                
+                // Agar real API'dan yuklash kerak bo'lsa (yoki local storage bo'sh bo'lsa)
+                if (!db || !db.doctors || !db.appointments || db.appointments.length === 0) {
+                    try {
+                        // Foydalanuvchi ko'rsatgan domen (patients qismi olib tashlandi, chunki bu root hisoblanadi)
+                        const BASE_URL = 'https://shifo-crm-7.onrender.com';
+                        
+                        // Barcha kerakli resurslarni parallel ravishda yuklab olish (JSON Server standartiga binoan)
+                        const [doctorsRes, patientsRes, appointmentsRes] = await Promise.all([
+                            fetch(`${BASE_URL}/doctors`),
+                            fetch(`${BASE_URL}/patients`),
+                            fetch(`${BASE_URL}/appointments`)
+                        ]);
+                        
+                        // Har bir so'rov muvaffaqiyatli bo'lganini tekshirish
+                        if (!doctorsRes.ok || !patientsRes.ok || !appointmentsRes.ok) {
+                            throw new Error(`API ma'lumotlarini yuklashda xato yuz berdi. Status: Doctors=${doctorsRes.status}, Patients=${patientsRes.status}, Appointments=${appointmentsRes.status}`);
+                        }
+
+                        const doctors = await doctorsRes.json();
+                        const patients = await patientsRes.json();
+                        const appointments = await appointmentsRes.json();
+
+                        // Dastur kutayotgan DB formatini yaratish
+                        db = { doctors, patients, appointments };
+
+                        if (!db.appointments) db.appointments = [];
+                        
+                        // Yuklangan ma'lumotlarni local storagega saqlash
+                        localStorage.setItem('shifoCRM_db', JSON.stringify(db));
+
+                    } catch (error) {
+                        console.error("API'dan DB yuklashda xato, default bo'sh ma'lumotlar ishlatiladi:", error);
+                        // Agar yuklashda xato bo'lsa, xatolikni oldini olish uchun bo'sh massivlar qaytariladi
+                        db = { doctors: [], appointments: [], patients: [] };
+                    }
+                }
+                return db;
+            }
+
+            // Yordamchi funksiyalar
+            function formatDate(date) {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const dd = String(date.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            }
+
+            function formatDisplayDate(dateString) {
+                const parts = dateString.split('-');
+                const date = new Date(parts[0], parts[1] - 1, parts[2]);
+                return `${date.getDate()}-${monthNames[date.getMonth()]} ${date.getFullYear()} yil`;
+            }
+
+            // ==========================================================
+            // 1. Shifokorlarni yuklash (Filtr uchun)
+            // ==========================================================
+            async function loadDoctorsForFilter(db) {
+                const availableDoctors = new Map();
+                
+                // Faqat tizimga kirgan shifokorning qabul qilingan bemorlarini filtrlash
+                const filteredAppointments = db.appointments.filter(app => 
+                    app.doctorId === loggedInDoctorId || app.createdByDoctorId === loggedInDoctorId
+                );
+                
+                // Filtrlangan qabullar bo'yicha shifokorlar ro'yxatini yaratish
+                filteredAppointments.forEach(app => {
+                    if (app.doctorId !== 'unknown_system_user') {
+                        const doctor = db.doctors.find(d => d.id === app.doctorId);
+                        if (doctor && !availableDoctors.has(doctor.id)) {
+                             availableDoctors.set(doctor.id, doctor);
+                        }
+                    }
+                });
+
+                // Filtr elementini tozalash va to'ldirish
+                doctorFilter.innerHTML = `<option value="all">Barcha Qabullarim</option>`;
+                
+                availableDoctors.forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor.id;
+                    option.textContent = `Dr. ${doctor.name} (${doctor.specialty || 'Noma\'lum'})`;
+                    doctorFilter.appendChild(option);
+                });
+                
+                // Filtrlash o'zgarganda kalendarni qayta chizish
+                doctorFilter.addEventListener('change', () => renderCalendar(currentMonth, currentYear));
+            }
+
+
+            // ==========================================================
+            // 2. Kalendarni chizish funksiyasi (Asosiy Filtrlash)
+            // ==========================================================
+            async function renderCalendar(month, year) {
+                currentMonthYearEl.textContent = `${monthNames[month]} ${year}`;
+                calendarGrid.innerHTML = ''; 
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0=Yak, 1=Dush, ...
+                const startDayIndex = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1; // 0=Dush, 6=Yak
+
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const selectedDoctorId = doctorFilter.value; // Filtrdan olingan shifokor ID
+                const db = await getDB();
+                
+                // Tizimga kirgan shifokorga tegishli barcha qabullarni olish (AllAppointments)
+                const relevantAppointments = allAppointments.filter(app => 
+                    app.doctorId === loggedInDoctorId || app.createdByDoctorId === loggedInDoctorId
+                );
+
+                // 1. Bo'sh kunlarni (o'tgan oydan) qo'shish
+                for (let i = 0; i < startDayIndex; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = "bg-gray-50 text-gray-400";
+                    calendarGrid.appendChild(emptyDay);
+                }
+
+                // 2. Har bir kun uchun tugma yaratish
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateString = formatDate(date);
+                    const dayOfWeek = date.getDay(); // 0=Yak, 6=Shan
+
+                    const dayElement = document.createElement('div');
+                    dayElement.className = "flex flex-col items-start p-2 text-gray-900 text-sm border-r border-b border-gray-200 transition relative";
+
+                    if (dayOfWeek === 6 || dayOfWeek === 0) { // Shanba yoki Yakshanba
+                        dayElement.classList.add('weekend');
+                    }
+                    if (dateString === todayDateString) {
+                         dayElement.classList.add('current-day');
+                    }
+
+                    dayElement.innerHTML = `<span class="font-bold text-lg">${day}</span>`;
+                    dayElement.dataset.date = dateString;
+                    
+                    // 3. Qabullarni filtrlash: Faqat shu kun, Faqat 'Scheduled', Filtrda tanlangan shifokor
+                    const dailyScheduledAppointments = relevantAppointments.filter(app => 
+                        app.date === dateString && app.status === 'Scheduled' && 
+                        (selectedDoctorId === 'all' || app.doctorId === selectedDoctorId)
+                    );
+                    
+                    // Qoralama qabullarni faqat shu kun uchun hisoblash
+                    const dailyDraftAppointments = relevantAppointments.filter(app => 
+                        app.date === dateString && app.status === 'Draft'
+                    );
+
+
+                    if (dailyScheduledAppointments.length > 0) {
+                        const scheduledCount = dailyScheduledAppointments.length;
+                        
+                        // Asosiy qabullar sonini ko'rsatish
+                        dayElement.innerHTML += `<span class="appointment-badge bg-primary/90 text-white">${scheduledCount} Qabul</span>`;
+                        
+                        // Detallar modalini ochish
+                        dayElement.addEventListener('click', () => openDayDetails(dateString, db, selectedDoctorId));
+                    }
+                    
+                    if (dailyDraftAppointments.length > 0) {
+                        const draftCount = dailyDraftAppointments.length;
+                        // Qoralama sonini qo'shish
+                        dayElement.innerHTML += `<span class="appointment-badge bg-gray-500 text-white mt-1">${draftCount} Draft</span>`;
+                        
+                        // Agar Scheduled qabul bo'lmasa, Draft qabulni ko'rish uchun modal ochish
+                        if(dailyScheduledAppointments.length === 0) {
+                             dayElement.addEventListener('click', () => openDayDetails(dateString, db, selectedDoctorId));
+                        }
+                    }
+
+                    if (dailyScheduledAppointments.length === 0 && dailyDraftAppointments.length === 0) {
+                         // Bo'sh kunlar uchun ham modal ochish (yangi qabul qo'shish)
+                         dayElement.addEventListener('click', () => openDayDetails(dateString, db, selectedDoctorId));
+                    }
+
+                    calendarGrid.appendChild(dayElement);
+                }
+            }
+
+
+            // ==========================================================
+            // 3. Navigatsiya Event Handlerlari
+            // ==========================================================
+            prevMonthBtn.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                renderCalendar(currentMonth, currentYear);
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                renderCalendar(currentMonth, currentYear);
+            });
+
+            todayButton.addEventListener('click', () => {
+                const today = new Date();
+                currentMonth = today.getMonth();
+                currentYear = today.getFullYear();
+                renderCalendar(currentMonth, currentYear);
+            });
+
+            // ==========================================================
+            // 4. Tafsilotlar Modali
+            // ==========================================================
+            async function openDayDetails(dateString, db, selectedDoctorId) {
+                
+                // Tizimga kirgan shifokorga tegishli barcha qabullarni filtrlash
+                let filteredAppointments = allAppointments.filter(app => 
+                    app.date === dateString && 
+                    (app.doctorId === loggedInDoctorId || app.createdByDoctorId === loggedInDoctorId)
+                );
+                
+                // Agar doktor filtri tanlangan bo'lsa, uni qo'llash
+                if (selectedDoctorId !== 'all') {
+                    filteredAppointments = filteredAppointments.filter(app => app.doctorId === selectedDoctorId);
+                }
+                
+                modalDateTitle.textContent = formatDisplayDate(dateString);
+                modalAppointmentsList.innerHTML = '';
+                
+                if (filteredAppointments.length === 0) {
+                    modalAppointmentsList.innerHTML = `<p class="text-gray-500 p-4 border border-dashed rounded-lg text-center">Bu kunda sizga tegishli rejalashtirilgan yoki qoralama qabul mavjud emas.</p>`;
+                } else {
+                    filteredAppointments.sort((a, b) => {
+                         // Avval status bo'yicha (Scheduled oldin, Draft keyin), keyin vaqt bo'yicha saralash
+                        if (a.status === 'Draft' && b.status === 'Scheduled') return 1;
+                        if (a.status === 'Scheduled' && b.status === 'Draft') return -1;
+                        return a.time.localeCompare(b.time); 
+                    }); 
+
+                    filteredAppointments.forEach(app => {
+                        // Bemor FIO ni patients ro'yxatidan izlash
+                        const patient = db.patients.find(p => p.id === app.patientId);
+                        const patientName = patient ? patient.name : app.patientName || 'Noma\'lum Bemor';
+                        
+                        const doctorName = db.doctors.find(d => d.id === app.doctorId)?.name || 'Noma\'lum Doktor';
+                        
+                        let statusColor = 'bg-gray-100 text-gray-800';
+                        if (app.status === 'Scheduled') statusColor = 'bg-primary/10 text-primary border border-primary/20';
+                        if (app.status === 'Draft') statusColor = 'bg-red-100 text-red-600 border border-red-200';
+                        
+                        const item = document.createElement('div');
+                        item.className = `p-4 rounded-lg shadow-sm ${statusColor} transition hover:shadow-md`;
+                        item.innerHTML = `
+                            <div class="flex justify-between items-start border-b pb-2 mb-2 border-dashed">
+                                <span class="text-lg font-bold">${app.time || 'Vaqt belgilanmagan'}</span>
+                                <span class="text-sm font-semibold">${app.appointmentType || 'Noma\'lum tur'}</span>
+                            </div>
+                            <p class="text-sm text-gray-700"><strong>Bemor:</strong> ${patientName}</p>
+                            <p class="text-sm text-gray-700"><strong>Shifokor:</strong> ${doctorName}</p>
+                            <p class="text-xs mt-1 text-gray-600">
+                                <strong>Status:</strong> <span class="font-medium">${app.status === 'Scheduled' ? 'Tasdiqlangan' : 'Qoralama (Draft)'}</span>
+                            </p>
+                        `;
+                        modalAppointmentsList.appendChild(item);
+                    });
+                }
+                
+                detailsModal.classList.remove('hidden');
+                detailsModal.classList.add('flex');
+            }
+            
+            function closeModal() {
+                detailsModal.classList.add('hidden');
+                detailsModal.classList.remove('flex');
+            }
+            window.closeModal = closeModal; // HTML da ishlashi uchun global qilish
+
+
+            // ==========================================================
+            // 5. Loyihani ishga tushirish
+            // ==========================================================
+            async function initialize() {
+                loggedInDoctorId = getLoggedInDoctorId();
+                if (!loggedInDoctorId) {
+                    console.warn("Tizimga kirgan doctor ID si topilmadi. Faqat umumiy qabullar ko'rsatiladi.");
+                    // Haqiqiy loyihada bu yerda foydalanuvchini login sahifasiga yo'naltirish kerak.
+                }
+                
+                const db = await getDB();
+                allAppointments = db.appointments; // Barcha qabullarni global saqlash
+
+                await loadDoctorsForFilter(db); 
+                renderCalendar(currentMonth, currentYear); 
+            }
+
+            initialize();
+        });
+    </script>
+</body>
+
+</html>

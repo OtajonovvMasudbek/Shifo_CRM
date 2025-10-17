@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uchrashuvni Rejalashtirish - Onlayn Qabul</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16A34A',
+                        secondary: '#14853A',
+                        accent: '#3B82F6',
+                        danger: '#EF4444',
+                        gray: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+
+        .calendar-day.selected,
+        .time-slot.selected {
+            background-color: #3B82F6 !important;
+            color: white !important;
+            border-color: #3B82F6 !important;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+        }
+
+        .primary-bg {
+            background-color: #16A34A;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex">
+    <aside id="sidebar" class="hidden lg:flex w-64 bg-white shadow-2xl flex-col lg:h-screen lg:sticky top-0 z-40">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 primary-bg rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-800 text-[22px]">ShifoCRM</h1>
+                <span
+                    class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+            </a>
+            <a href="./admission.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
+                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+            </a>
+            <a href="./calendar.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-line"></i><span>Kalendar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-notification-line"></i><span>Eslatmalar</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-bar-chart-line"></i><span>Statistika</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+        <header
+            class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-20 shadow-sm">
+            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-primary transition">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+            <h1 class="text-xl font-bold flex items-center gap-2 text-gray-800 ml-3 lg:ml-0">
+                <i class="ri-calendar-check-line text-2xl text-primary"></i> Yangi qabulni rejalashtirish
+            </h1>
+
+            <a href="./profil.html" class="ml-auto">
+                <div
+                    class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm hover:bg-gray-200 transition">
+                    <div id="profileAvatar"
+                        class="w-9 h-9 primary-bg rounded-full text-white flex items-center justify-center font-bold text-sm">
+                        D</div>
+                    <span id="profileName" class="font-medium text-gray-800 hidden sm:block">---</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="max-w-4xl mx-auto p-4 md:p-8">
+            <div class="bg-white shadow-xl rounded-xl p-6 lg:p-8 space-y-8">
+
+                <section>
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2 flex items-center gap-2">
+                        <i class="ri-user-line text-secondary"></i> Bemor va Xizmat
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="patientName" class="block text-sm font-medium text-gray-700 mb-2">Bemor F.I.SH.
+                                (Majburiy)</label>
+                            <input type="text" id="patientName" placeholder="Ism, Familiya, Otasining ismi"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary transition"
+                                required>
+                        </div>
+
+                        <div class="relative">
+                            <label for="patientPhone" class="block text-sm font-medium text-gray-700 mb-2">Telefon
+                                raqami
+                                (Majburiy)</label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm pointer-events-none">+998</span>
+                                <input type="tel" id="patientPhone" placeholder="XX YYY YY YY"
+                                    class="w-full border border-gray-300 rounded-lg pl-16 pr-4 py-2.5 text-sm focus:ring-primary focus:border-primary transition"
+                                    required maxlength="9">
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label for="doctorSelect" class="block text-sm font-medium text-gray-700 mb-2">Shifokor /
+                                Mutaxassisni tanlang (Majburiy)</label>
+                            <select id="doctorSelect"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary transition bg-white"
+                                required>
+                                <option value="" disabled selected>Shifokorni yuklash...</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label for="appointmentType" class="block text-sm font-medium text-gray-700 mb-2">Uchrashuv
+                                turi
+                                (Majburiy)</label>
+                            <select id="appointmentType"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary transition bg-white"
+                                required>
+                                <option value="Consultation">Konsultatsiya</option>
+                                <option value="Treatment">Davolash</option>
+                                <option value="Emergency">Shoshilinch qabul</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2 flex items-center gap-2">
+                        <i class="ri-time-line text-primary"></i> Sana va Vaqtni tanlash
+                    </h2>
+
+                    <div class="mb-6">
+                        <label class="block text-base font-medium text-gray-800 mb-3">Sana:</label>
+                        <div class="overflow-x-auto pb-2">
+                            <div id="calendarContainer" class="flex space-x-3 min-w-[500px]">
+                                <p class="text-gray-500">Kalendar yuklanmoqda...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-base font-medium text-gray-800 mb-3">Bo'sh vaqtlar:</label>
+                        <div id="timeSlotsContainer" class="flex flex-wrap gap-3">
+                            <p class="text-gray-500">Shifokor va sanani tanlang.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2 flex items-center gap-2">
+                        <i class="ri-chat-1-line text-accent"></i> Qo'shimcha Izoh
+                    </h2>
+                    <textarea id="notes" rows="3" placeholder="Shoshilinch sabab, maxsus talablar va hokazo..."
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-accent focus:border-accent transition"></textarea>
+                </section>
+
+
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t">
+                    <button id="draftButton"
+                        class="order-2 sm:order-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition shadow-sm flex items-center justify-center gap-2"
+                        type="button">
+                        <i class="ri-draft-line"></i> Qoralama (Draft)
+                    </button>
+                    <button id="saveButton"
+                        class="order-1 sm:order-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-secondary transition shadow-lg flex items-center justify-center gap-2"
+                        type="submit">
+                        <i class="ri-save-line"></i> Saqlash va Tasdiqlash
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // API manzilini aniqlash
+            const API_BASE_URL = 'https://shifo-crm-7.onrender.com';
+
+            // DOM elementlari
+            const doctorSelect = document.getElementById('doctorSelect');
+            const patientName = document.getElementById('patientName');
+            const patientPhone = document.getElementById('patientPhone');
+            const appointmentType = document.getElementById('appointmentType');
+            const calendarContainer = document.getElementById('calendarContainer');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const saveButton = document.getElementById('saveButton');
+            const draftButton = document.getElementById('draftButton');
+            const notes = document.getElementById('notes');
+
+            const profileAvatar = document.getElementById('profileAvatar');
+            const profileNameEl = document.getElementById('profileName');
+
+            // Global o'zgaruvchilar
+            let selectedDate = null;
+            let selectedTime = null;
+            let currentDoctors = [];
+            let currentAppointments = [];
+            let currentPatients = [];
+            let loggedInDoctorId = null; 
+            let loggedInDoctorName = null; 
+
+            // ==========================================================
+            // Tizimga kirgan shifokor/foydalanuvchi ma'lumotlarini olish
+            // ==========================================================
+            function getLoggedInDoctorInfo() {
+                try {
+                    // LocalStorage'da "doctor" kalitidagi ma'lumotni o'qiymiz
+                    const doctorData = localStorage.getItem('doctor'); 
+                    
+                    if (!doctorData) {
+                        console.warn("Local storage'da 'doctor' topilmadi.");
+                        return { id: null, name: 'Noma\'lum' };
+                    }
+                    
+                    const doctor = JSON.parse(doctorData);
+                    
+                    // ID va Imni qaytaramiz
+                    return {
+                        id: doctor.id || null, 
+                        name: doctor.fullname || doctor.username || 'Demo Foydalanuvchi'
+                    };
+                    
+                } catch (e) {
+                    console.error("LocalStorage'dan doctor ma'lumotini olishda xato:", e);
+                    return { id: null, name: 'Xato' };
+                }
+            }
+    
+            // Profil ma'lumotini yuklash
+            function loadProfileInfo() {
+                const info = getLoggedInDoctorInfo();
+                loggedInDoctorId = info.id; // Tizimga kirgan foydalanuvchi IDsi
+                loggedInDoctorName = info.name;
+                
+                // Avatar va Ismni yangilash
+                const nameParts = info.name.split(' ');
+                let initials = '';
+                if (nameParts.length >= 2) {
+                    initials = nameParts[0][0] + nameParts[1][0];
+                } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+                    initials = nameParts[0][0];
+                } else {
+                    initials = 'D'; 
+                }
+                if(profileAvatar) profileAvatar.textContent = initials.toUpperCase();
+                if(profileNameEl) profileNameEl.textContent = info.name;
+            }
+    
+    
+            // ==========================================================
+            // API Funksiyalari
+            // ==========================================================
+    
+            // Ma'lumotlarni API dan yuklash
+            async function fetchData(endpoint) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${endpoint}`);
+                    if (!response.ok) {
+                        throw new Error(`API dan ma'lumot olishda xato: ${response.statusText}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Xato (${endpoint}):`, error);
+                    return [];
+                }
+            }
+    
+            // Loyiha uchun barcha ma'lumotlarni yuklash
+            async function loadAllData() {
+                const [doctors, appointments, patients] = await Promise.all([
+                    fetchData('doctors'),
+                    fetchData('appointments'),
+                    fetchData('patients')
+                ]);
+                currentDoctors = doctors;
+                currentAppointments = appointments;
+                currentPatients = patients;
+            }
+    
+            // POST so'rovi (Yangi ma'lumot saqlash)
+            async function postData(endpoint, data) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Ma'lumotni saqlashda xato: ${response.statusText} - ${errorText.substring(0, 100)}`);
+                    }
+                    return await response.json(); 
+                } catch (error) {
+                    console.error(`Xato (POST /${endpoint}):`, error);
+                    alert(`Saqlashda jiddiy xato yuz berdi: ${error.message}`);
+                    return null;
+                }
+            }
+    
+            
+            // ==========================================================
+            // Yordamchi Funksiyalar
+            // ==========================================================
+            function generateTimeSlots(startHour, endHour, intervalMinutes = 30) {
+                const slots = [];
+                let currentTime = new Date();
+                currentTime.setHours(startHour, 0, 0, 0); 
+                const endTime = new Date();
+                endTime.setHours(endHour, 0, 0, 0);
+    
+                while (currentTime < endTime) {
+                    slots.push(currentTime.toTimeString().substring(0, 5));
+                    currentTime.setTime(currentTime.getTime() + intervalMinutes * 60 * 1000);
+                }
+                return slots;
+            }
+    
+            function formatDate(date) {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const dd = String(date.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            }
+    
+            function getDayName(date) {
+                const days = ['Yak', 'Dush', 'Ses', 'Chor', 'Pay', 'Jum', 'Shan'];
+                return days[date.getDay()];
+            }
+    
+            // ==========================================================
+            // Saqlash (Asosiy mantiq)
+            // ==========================================================
+            async function saveAppointment(status) {
+                 // Form validatsiyasi
+                if (!patientName.value || patientPhone.value.length !== 9 || !doctorSelect.value || !appointmentType.value) {
+                    alert('Iltimos, barcha majburiy maydonlarni to\'ldiring (Telefon raqami 9 ta raqam bo\'lishi kerak).');
+                    return false;
+                }
+                if (status === 'Scheduled' && (!selectedDate || !selectedTime)) {
+                    alert('Iltimos, uchrashuv sanasi va vaqtini tanlang!');
+                    return false;
+                }
+                
+                // ... Yuklash holati ...
+                saveButton.disabled = true;
+                draftButton.disabled = true;
+                saveButton.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Saqlanmoqda...';
+                draftButton.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Saqlanmoqda...';
+    
+                
+                const fullPhone = '+998' + patientPhone.value;
+                let patient = currentPatients.find(p => p.phone === fullPhone);
+                let patientId;
+                
+                try {
+                    // A. Bemor topish/yaratish
+                    if (patient) {
+                        patientId = patient.id;
+                    } else {
+                        // YANGI BEMOR YARATISH: doctorId localStorage'dan olingan ID ga teng
+                        const newPatientData = {
+                            name: patientName.value,
+                            phone: fullPhone,
+                            status: 'Kutilmoqda',
+                            created_at: new Date().toISOString().substring(0, 10),
+                            doctorId: loggedInDoctorId || 'unknown_system_user', // LocalStorage'dan olingan doctorId saqlanmoqda
+                        };
+                        const savedPatient = await postData('patients', newPatientData); // API ga POST
+                        if (!savedPatient) throw new Error("Bemor ma'lumotlari saqlanmadi.");
+                        
+                        patientId = savedPatient.id;
+                        currentPatients.push(savedPatient); 
+                    }
+    
+                    // B. Qabulni saqlash
+                    const selectedDoctorText = doctorSelect.options[doctorSelect.selectedIndex].text;
+                    
+                    const appointmentDetails = {
+                        patientId: patientId,
+                        patientName: patientName.value,
+                        patientPhone: fullPhone,
+                        doctorId: doctorSelect.value, 
+                        doctorName: selectedDoctorText.substring(4, selectedDoctorText.lastIndexOf('(') - 1), 
+                        appointmentType: appointmentType.value,
+                        date: selectedDate,
+                        time: selectedTime,
+                        reason: notes.value,
+                        status: status, 
+                        createdAt: new Date().toISOString(),
+                        createdByDoctorId: loggedInDoctorId || 'unknown_system_user' 
+                    };
+                    
+                    const savedAppointment = await postData('appointments', appointmentDetails);
+                    if (!savedAppointment) throw new Error("Qabul ma'lumotlari saqlanmadi.");
+    
+                    currentAppointments.push(savedAppointment); 
+    
+                    // ... Muvaffaqiyatli xabar va formani tozalash ...
+                    alert(`✅ Uchrashuv muvaffaqiyatli saqlandi! Bemor ID: ${patientId}. (Status: ${status === 'Scheduled' ? 'Tasdiqlangan' : 'Qoralama (Draft)'})`);
+                    
+                    document.getElementById('patientName').value = '';
+                    document.getElementById('patientPhone').value = '';
+                    notes.value = '';
+    
+                    if (status === 'Scheduled') {
+                        loadTimeSlots(appointmentDetails.doctorId, appointmentDetails.date);
+                    }
+    
+                } catch (error) {
+                    console.error("Saqlash jarayonida xato:", error);
+                    alert(`Ma'lumot saqlashda xato yuz berdi. Iltimos, tekshirib ko'ring. Xato: ${error.message}`);
+                } finally {
+                    // Tugmalarni tiklash
+                    saveButton.disabled = false;
+                    draftButton.disabled = false;
+                    saveButton.innerHTML = '<i class="ri-save-line"></i> Saqlash va Tasdiqlash';
+                    draftButton.innerHTML = '<i class="ri-draft-line"></i> Qoralama (Draft)';
+                }
+                
+                return true;
+            }
+
+            // ... (Boshqa funksiyalar: loadDoctors, renderCalendar, loadTimeSlots, event handlers) ...
+            
+            // ==========================================================
+            // 1. Shifokorlarni yuklash (API dan)
+            // ==========================================================
+            async function loadDoctors() {
+                doctorSelect.innerHTML = '<option value="" disabled selected>Shifokorni tanlang</option>';
+                currentDoctors.forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor.id;
+                    const specialty = doctor.specialty || 'Mutaxassislik yo\'q';
+                    option.textContent = `Dr. ${doctor.name || doctor.fullname} (${specialty})`;
+                    doctorSelect.appendChild(option);
+                });
+                
+                if(currentDoctors.length > 0) {
+                    doctorSelect.value = currentDoctors[0].id;
+                }
+            }
+    
+            // ==========================================================
+            // 2. Sana kalendarini yaratish
+            // ==========================================================
+            function renderCalendar() {
+                calendarContainer.innerHTML = '';
+                const today = new Date();
+    
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() + i);
+    
+                    const dateString = formatDate(date);
+                    const dayName = getDayName(date);
+    
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = "calendar-day flex-shrink-0 w-20 p-3 text-center bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 transition";
+                    dayDiv.dataset.date = dateString;
+                    dayDiv.innerHTML = `<p class="font-bold text-lg">${date.getDate()}</p><p class="text-xs text-gray-600">${dayName}</p>`;
+                    
+                    if (i === 0) {
+                        dayDiv.classList.add('selected');
+                        selectedDate = dateString;
+                    }
+    
+                    dayDiv.addEventListener('click', handleDateSelect);
+                    calendarContainer.appendChild(dayDiv);
+                }
+            }
+            
+            // ==========================================================
+            // 3. Vaqt slotlarini dinamik yuklash
+            // ==========================================================
+            function loadTimeSlots(doctorId, date) {
+                timeSlotsContainer.innerHTML = '';
+                if (!doctorId || !date) {
+                    timeSlotsContainer.innerHTML = `<p class='text-gray-500'>${doctorId ? "Sanani tanlang" : "Shifokorni tanlang"} vaqtlar ko'rsatiladi.</p>`;
+                    selectedTime = null;
+                    return;
+                }
+                
+                timeSlotsContainer.innerHTML = '<p class="text-primary"><i class="ri-loader-4-line ri-spin"></i> Bo\'sh vaqtlar hisoblanmoqda...</p>';
+                
+                const doctor = currentDoctors.find(d => d.id === doctorId);
+                
+                let startHour = 9; 
+                let endHour = 17;  
+                
+                if (doctor && doctor.schedule && doctor.schedule.start && doctor.schedule.end) {
+                    startHour = doctor.schedule.start;
+                    endHour = doctor.schedule.end;
+                } 
+    
+                const allSlots = generateTimeSlots(startHour, endHour, 30);
+                
+                const bookedAppointments = currentAppointments.filter(
+                    app => app.doctorId === doctorId && app.date === date && app.status !== 'Draft'
+                );
+                
+                const bookedTimes = bookedAppointments.map(app => app.time);
+                
+                const availableSlots = allSlots.filter(time => !bookedTimes.includes(time));
+                
+                timeSlotsContainer.innerHTML = '';
+                
+                if (availableSlots.length === 0) {
+                       timeSlotsContainer.innerHTML = '<p class="text-danger"><i class="ri-close-circle-line"></i> Ushbu kunda bo\'sh vaqtlar mavjud emas.</p>';
+                       selectedTime = null;
+                       return;
+                }
+    
+                availableSlots.forEach((time) => {
+                    const slot = document.createElement('div');
+                    slot.className = "time-slot px-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-100 transition";
+                    slot.dataset.time = time;
+                    slot.textContent = time;
+    
+                    slot.addEventListener('click', handleTimeSelect);
+                    timeSlotsContainer.appendChild(slot);
+                });
+                
+                const firstSlot = timeSlotsContainer.querySelector('.time-slot');
+                if (firstSlot) {
+                    firstSlot.classList.add('selected');
+                    selectedTime = firstSlot.dataset.time;
+                }
+            }
+    
+    
+            // ==========================================================
+            // 4. Event Handlerlar (Tanlash)
+            // ==========================================================
+            function handleDateSelect() {
+                document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedDate = this.dataset.date;
+                selectedTime = null;
+                
+                const selectedDoctorId = doctorSelect.value;
+                loadTimeSlots(selectedDoctorId, selectedDate);
+            }
+    
+            function handleTimeSelect() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTime = this.dataset.time;
+            }
+    
+            // Tugmalarga event listenerlar
+            saveButton.addEventListener('click', () => saveAppointment('Scheduled'));
+            draftButton.addEventListener('click', () => saveAppointment('Draft'));
+    
+            // Telefon raqamiga mask qo'yish
+            patientPhone.addEventListener('input', function(e) {
+                this.value = this.value.replace(/\D/g, '').substring(0, 9);
+            });
+            
+            // Shifokor tanlanganda vaqt slotlarini yangilash
+            doctorSelect.addEventListener('change', function() {
+                loadTimeSlots(doctorSelect.value, selectedDate);
+            });
+
+            // ==========================================================
+            // Loyihani ishga tushirish
+            // ==========================================================
+            async function initialize() {
+                loadProfileInfo();
+                await loadAllData(); 
+                
+                loadDoctors(); 
+                renderCalendar(); 
+                
+                if (doctorSelect.value) {
+                     loadTimeSlots(doctorSelect.value, selectedDate);
+                }
+            }
+    
+            initialize();
+            
+            // Sidebar toggle logic
+            const sidebar = document.getElementById('sidebar');
+            const openSidebar = document.getElementById('openSidebar');
+            
+            if(openSidebar) {
+                openSidebar.addEventListener('click', () => {
+                    sidebar.classList.toggle('hidden');
+                    sidebar.classList.toggle('flex');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
