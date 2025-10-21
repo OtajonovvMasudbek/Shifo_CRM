@@ -245,6 +245,45 @@
       "description": ",hjgyuilhkj",
       "address": "Sobirtepa qishlog'i",
       "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "0a27",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2025-10-22",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-23",
+      "status": "Yakunlangan",
+      "price": 123123123,
+      "description": "qweqwe",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "baec",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2025-10-16",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-15",
+      "status": "Yakunlangan",
+      "price": 12345,
+      "description": "jytrdfkyuglhj",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "ec97",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2025-10-15",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-08",
+      "status": "Yakunlangan",
+      "price": 31234124,
+      "description": "adasd",
+      "doctorId": "mg9rt4ro"
     }
   ],
   "doctors": [
@@ -318,11 +357,6 @@
       "password": "12"
     }
   ],
-
-  
-   
-  
-  
   "clinics": [
     {
       "id": "10001",

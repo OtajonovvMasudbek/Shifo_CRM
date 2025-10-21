@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <div id="chartContainer" class="max-w-6xl mx-auto">
+            <div id="chartContainer" class="mx-auto">
                 <div id="patientCard"
                     class="bg-white shadow-xl rounded-2xl p-6 mb-8 border border-gray-100 grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1 border-r border-gray-100 lg:pr-6">
@@ -252,31 +252,33 @@
                     </div>
 
                 </div>
-                <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
-                        <i class="ri-tooth-line text-primary text-2xl"></i> Tishlar jadvali (Odontogramma)
+                <div class="bg-white shadow-lg rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-100">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3 justify-center sm:justify-start">
+                      <i class="ri-tooth-line text-primary text-2xl"></i>
+                      Tishlar jadvali (Odontogramma)
                     </h2>
-                    
+                  
+                    <!-- Yuqori jag‘ -->
                     <div class="overflow-x-auto pb-4">
-                        <div class="min-w-[400px] flex justify-between space-x-4 mx-auto max-w-lg">
-                            <div id="upperJawRight" class="flex-1 flex justify-end gap-3 text-center text-xs"></div>
-                            <div id="upperJawLeft" class="flex-1 flex justify-start gap-3 text-center text-xs"></div>
-                        </div>
+                      <div class="min-w-[340px] flex flex-col sm:flex-row sm:justify-between sm:space-x-4 mx-auto max-w-lg items-center">
+                        <div id="upperJawRight" class="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3 text-center text-xs sm:text-sm"></div>
+                        <div id="upperJawLeft" class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-center text-xs sm:text-sm mt-2 sm:mt-0"></div>
+                      </div>
                     </div>
-                    
-                    <div class="border-t-4 border-double border-gray-300 my-8 max-w-lg mx-auto"></div>
-                    
+                  
+                    <div class="border-t-4 border-double border-gray-300 my-6 sm:my-8 max-w-lg mx-auto"></div>
+                  
+                    <!-- Pastki jag‘ -->
                     <div class="overflow-x-auto pt-4">
-                        <div class="min-w-[400px] flex justify-between space-x-4 mx-auto max-w-lg">
-                            <div id="lowerJawRight" class="flex-1 flex justify-end gap-3 text-center text-xs"></div>
-                            <div id="lowerJawLeft" class="flex-1 flex justify-start gap-3 text-center text-xs"></div>
-                        </div>
+                      <div class="min-w-[340px] flex flex-col sm:flex-row sm:justify-between sm:space-x-4 mx-auto max-w-lg items-center">
+                        <div id="lowerJawRight" class="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3 text-center text-xs sm:text-sm"></div>
+                        <div id="lowerJawLeft" class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-center text-xs sm:text-sm mt-2 sm:mt-0"></div>
+                      </div>
                     </div>
-                    
-                    <div
-                        class="mt-8 flex flex-wrap gap-x-6 gap-y-4 text-sm justify-center sm:justify-start pt-6 border-t border-gray-100">
-                        </div>
-                </div>
+                  
+                    <div class="mt-8 flex flex-wrap gap-x-4 gap-y-3 text-sm justify-center sm:justify-start pt-6 border-t border-gray-100"></div>
+                  </div>
+                  
                 <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
                         <i class="ri-money-dollar-circle-line text-accent text-2xl"></i> Xizmatlar va Davolash Rejasi

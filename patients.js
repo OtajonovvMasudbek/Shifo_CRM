@@ -1,7 +1,7 @@
 // ✅ ShifoCRM bemorlar bo‘limi (patients.js)
 
 // === Asosiy sozlamalar ===
-const API_URL = "https://shifo-crm-7.onrender.com/patients";
+const API_URL = "http://localhost:5001/patients";
 const sidebar = document.getElementById("sidebar");
 const openSidebar = document.getElementById("openSidebar");
 const closeSidebar = document.getElementById("closeSidebar");
