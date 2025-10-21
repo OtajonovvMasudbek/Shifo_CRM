@@ -413,7 +413,7 @@
                             name: patientName.value,
                             phone: fullPhone,
                             status: 'Kutilmoqda',
-                            created_at: new Date().toISOString().substring(0, 10),
+                            lastVisit: new Date().toISOString().substring(0, 10),
                             doctorId: loggedInDoctorId || 'unknown_system_user', // LocalStorage'dan olingan doctorId saqlanmoqda
                         };
                         const savedPatient = await postData('patients', newPatientData); // API ga POST
