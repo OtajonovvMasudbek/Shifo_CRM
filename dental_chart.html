@@ -11,11 +11,14 @@
             theme: {
                 extend: {
                     colors: {
-                        // ASLIDAN O'ZGARTIRILGAN QISMLAR
+                        // YANGILANGAN RANG PALITRASI
                         primary: '#16A34A', // Green 600
                         secondary: '#14853A', // Green 700 (Kontrast uchun)
                         accent: '#3B82F6', // Blue 500
                         danger: '#EF4444', // Red 500
+                        'fill-color': '#1D4ED8', // Blue 700 (Plomba uchun)
+                        'decay-color': '#D97706', // Amber 600 (Kariyes uchun)
+                        'missing-color': '#EF4444', // Red 500 (Olib tashlangan)
                         gray: {
                             50: '#F9FAFB',
                             100: '#F3F4F6',
@@ -24,63 +27,16 @@
                             900: '#111827',
                         }
                     },
+                    boxShadow: {
+                        'custom-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+                    }
                 }
             }
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <style>
-        /* Sidebar uchun responsiv stil */
-        #sidebar {
-            transition: transform 0.3s ease-out;
-            transform: translateX(-100%);
-            position: fixed;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        #sidebar.active {
-            transform: translateX(0);
-        }
-
-        @media (min-width: 1024px) {
-            #sidebar {
-                transform: translateX(0);
-                position: relative;
-                height: auto;
-            }
-        }
-
-        .modal-bg {
-            /* Modal foni va xiralashtirish */
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            position: fixed;
-        }
-
-        /* Tishlar jadvali uchun qo'shimcha stil */
-        .tooth-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .tooth-number-top {
-            font-size: 10px;
-            color: #4B5563;
-            /* gray-600 */
-            margin-bottom: 2px;
-            font-weight: 500;
-        }
-
-        /* Jami narxni ajratish uchun maxsus stil */
-        .total-cost-footer {
-            background-color: #E0F2F1;
-            /* Teal 50 */
-        }
-    </style>
+    <link rel="stylesheet" href="./dental_chart.css">
 </head>
 
 <body class="bg-gray-50 min-h-screen flex antialiased">
@@ -127,7 +83,7 @@
         </nav>
 
         <div class="p-4 border-t border-gray-100">
-            <a href="./register.html"
+            <a href="/index.html"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
                 <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
             </a>
@@ -157,14 +113,14 @@
             </a>
         </header>
 
-        <main class="p-4 md:p-8">
-            <div class="max-w-6xl mx-auto flex justify-between items-center mb-6">
+        <main class="p-4 md:p-8 max-h-[510px]  overflow-y-auto">
+            <div class=" mx-auto flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                 <h2 class="text-2xl font-bold text-gray-800">
                     <span id="currentPatientNameTitle">Bemor tanlanmagan</span>
                 </h2>
-                <div class="relative">
+                <div class="relative w-full md:w-auto">
                     <button id="toggleSearchBtn"
-                        class="px-4 py-2 bg-accent text-white rounded-xl shadow-md hover:bg-blue-600 font-medium transition flex items-center gap-2 text-sm">
+                        class="w-full md:w-auto px-4 py-2 bg-accent text-white rounded-xl shadow-md hover:bg-blue-600 font-medium transition flex items-center justify-center gap-2 text-sm">
                         <i class="ri-search-line"></i> Bemor tanlash / Qidirish
                     </button>
                     <div id="searchBox" class="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl z-30 p-4 hidden">
@@ -178,193 +134,210 @@
             </div>
 
             <div id="chartContainer" class="mx-auto">
+                
                 <div id="patientCard"
-                    class="bg-white shadow-xl rounded-2xl p-6 mb-8 border border-gray-100 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    class="bg-white shadow-custom-lg rounded-2xl p-6 mb-8 border border-gray-100 grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="lg:col-span-1 border-r border-gray-100 lg:pr-6">
                         <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="ri-user-line text-primary"></i> Bemor ma'lumotlari
+                            <i class="ri-user-line text-primary"></i> Asosiy ma'lumotlar
                         </h3>
                         <div class="space-y-3 text-sm text-gray-600">
-                            <p>
-                                <span class="font-medium text-gray-700 block">F.I.SH.:</span>
-                                <span id="cardName" class="text-base font-semibold text-gray-900">---</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">Tug'ilgan sana:</span>
-                                <span id="cardDOB">---</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">Jinsi:</span>
-                                <span id="cardGender">---</span>
-                            </p>
+                            <p><span class="font-medium text-gray-700 block">F.I.SH.:</span><span id="cardName" class="text-base font-semibold text-gray-900">---</span></p>
+                            <p><span class="font-medium text-gray-700 block">Tug'ilgan sana:</span><span id="cardDOB">---</span></p>
+                            <p><span class="font-medium text-gray-700 block">Jinsi:</span><span id="cardGender">---</span></p>
                         </div>
                     </div>
                     <div class="lg:col-span-1 border-r border-gray-100 lg:pr-6">
                         <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="ri-contacts-line text-primary"></i> Kontakt va Manzil
+                            <i class="ri-contacts-line text-primary"></i> Aloqa
                         </h3>
                         <div class="space-y-3 text-sm text-gray-600">
-                            <p>
-                                <span class="font-medium text-gray-700 block">Telefon raqami:</span>
-                                <span id="cardPhone" class="text-base font-semibold text-accent">---</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">Manzil:</span>
-                                <span id="cardAddress">---</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">ID Raqami:</span>
-                                <span id="cardID">---</span>
-                            </p>
+                            <p><span class="font-medium text-gray-700 block">Telefon raqami:</span><span id="cardPhone" class="text-base font-semibold text-accent">---</span></p>
+                            <p><span class="font-medium text-gray-700 block">Manzil:</span><span id="cardAddress">---</span></p>
+                            <p><span class="font-medium text-gray-700 block">ID Raqami:</span><span id="cardID">---</span></p>
                         </div>
                     </div>
-                    <div class="lg:col-span-1">
+                    <div class="lg:col-span-1 border-r border-gray-100 lg:pr-6">
                         <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="ri-stethoscope-line text-primary"></i> Tashrif ma'lumotlari
+                            <i class="ri-stethoscope-line text-primary"></i> Tashriflar
                         </h3>
                         <div class="space-y-3 text-sm text-gray-600">
-                            <p>
-                                <span class="font-medium text-gray-700 block">Status:</span>
-                                <span id="cardStatus"
-                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Faol</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">Oxirgi tashrif:</span>
-                                <span id="cardLastVisit">---</span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700 block">Keyingi tashrif:</span>
-                                <span id="cardNextVisit">---</span>
-                            </p>
+                            <p><span class="font-medium text-gray-700 block">Status:</span><span id="cardStatus" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Faol</span></p>
+                            <p><span class="font-medium text-gray-700 block">Oxirgi tashrif:</span><span id="cardLastVisit">---</span></p>
+                            <p><span class="font-medium text-gray-700 block">Keyingi tashrif:</span><span id="cardNextVisit">---</span></p>
                         </div>
                     </div>
-
-                    <div class="lg:col-span-3 pt-4 border-t border-gray-100">
+                     <div class="lg:col-span-1">
                         <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
                             <i class="ri-heart-pulse-line text-primary"></i> Tibbiy ma'lumotlar / Anamnez
-                            <button id="editAnamnez" class="text-blue-500 hover:text-blue-700 text-sm font-medium ml-auto">
+                            <button id="editAnamnez" class="text-accent hover:text-blue-700 text-sm font-medium ml-auto">
                                 <i class="ri-edit-line"></i> Tahrirlash
                             </button>
                         </h3>
-                        <p id="cardAllergy" class="text-sm text-gray-700 italic">
-                            Allergiya va kasalliklar haqida ma'lumot yo'q.
-                        </p>
+                        <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <p id="cardAllergy" class="text-sm text-gray-700 italic">
+                                Allergiya va kasalliklar haqida ma'lumot yo'q.
+                            </p>
+                        </div>
                     </div>
-
                 </div>
-                <div class="bg-white shadow-lg rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-100">
-                    <h2 class="text-xl sm:text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3 justify-center sm:justify-start">
-                      <i class="ri-tooth-line text-primary text-2xl"></i>
-                      Tishlar jadvali (Odontogramma)
+                
+                <div class="bg-white shadow-custom-lg rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-100">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-8 text-gray-800 flex items-center gap-3 justify-center sm:justify-start">
+                      <i class="ri-tooth-line text-primary text-2xl"></i> Tishlar jadvali (Odontogramma)
                     </h2>
                   
-                    <!-- Yuqori jag‘ -->
                     <div class="overflow-x-auto pb-4">
-                      <div class="min-w-[340px] flex flex-col sm:flex-row sm:justify-between sm:space-x-4 mx-auto max-w-lg items-center">
-                        <div id="upperJawRight" class="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3 text-center text-xs sm:text-sm"></div>
-                        <div id="upperJawLeft" class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-center text-xs sm:text-sm mt-2 sm:mt-0"></div>
+                      <div class="min-w-[400px] flex justify-between mx-auto max-w-xl">
+                        <div id="upperJawRight" class="flex justify-end gap-3 text-center"></div>
+                        <div id="upperJawLeft" class="flex justify-start gap-3 text-center"></div>
                       </div>
                     </div>
                   
-                    <div class="border-t-4 border-double border-gray-300 my-6 sm:my-8 max-w-lg mx-auto"></div>
+                    <div class="border-t-4 border-double border-gray-300 my-6 sm:my-8 max-w-xl mx-auto"></div>
                   
-                    <!-- Pastki jag‘ -->
                     <div class="overflow-x-auto pt-4">
-                      <div class="min-w-[340px] flex flex-col sm:flex-row sm:justify-between sm:space-x-4 mx-auto max-w-lg items-center">
-                        <div id="lowerJawRight" class="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3 text-center text-xs sm:text-sm"></div>
-                        <div id="lowerJawLeft" class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-center text-xs sm:text-sm mt-2 sm:mt-0"></div>
+                      <div class="min-w-[400px] flex justify-between mx-auto max-w-xl">
+                        <div id="lowerJawRight" class="flex justify-end gap-3 text-center"></div>
+                        <div id="lowerJawLeft" class="flex justify-start gap-3 text-center"></div>
                       </div>
                     </div>
                   
-                    <div class="mt-8 flex flex-wrap gap-x-4 gap-y-3 text-sm justify-center sm:justify-start pt-6 border-t border-gray-100"></div>
-                  </div>
+                    <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm justify-center sm:justify-start pt-6 border-t border-gray-100">
+                        <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full status-healthy border-gray-400"></div> Sog‘lom</div>
+                        <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full status-cariyes border-gray-400"></div> Kariyes</div>
+                        <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full status-filled border-gray-400"></div> Plomba</div>
+                        <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full status-missing border-gray-400"></div> Olib tashlangan</div>
+                        <div class="flex items-center gap-2"><i class="ri-information-fill text-yellow-600"></i> Izoh mavjud</div>
+                    </div>
+                </div>
                   
-                <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
+                <div class="bg-white shadow-custom-lg rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
+                    
                     <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
-                        <i class="ri-money-dollar-circle-line text-accent text-2xl"></i> Xizmatlar va Davolash Rejasi
+                        <i class="ri-pulse-line text-primary text-2xl"></i> Davolash Rejasi va Faktura
                     </h2>
 
-                    <div class="mb-6 p-4 border border-blue-100 bg-blue-50 rounded-xl">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                            <div class="md:col-span-2">
-                                <label for="serviceSelect" class="block mb-2 text-sm font-medium text-gray-700">Xizmat
-                                    turi:</label>
-                                <select id="serviceSelect"
-                                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm"></select>
+                    <div class="flex border-b border-gray-200 mb-6">
+                        <button id="tabServices" onclick="switchTab('services')" 
+                            class="tab-button active px-6 py-3 font-semibold text-sm transition text-gray-800 border-b-2 border-primary">
+                            <i class="ri-money-dollar-circle-line mr-1"></i> Faktura / Amaldagi Xizmatlar
+                        </button>
+                        <button id="tabPlan" onclick="switchTab('plan')" 
+                            class="tab-button px-6 py-3 font-medium text-sm transition text-gray-500 hover:text-gray-800 border-b-2 border-transparent hover:border-gray-300">
+                            <i class="ri-list-check-2-line mr-1"></i> Keyingi Muolajalar Rejasi
+                        </button>
+                    </div>
+
+                    <div id="tabContentServices" class="tab-content active">
+                        
+                        <div class="mb-6 p-4 border border-blue-100 bg-blue-50 rounded-xl">
+                            <h3 class="font-semibold text-gray-700 mb-4">Fakturaga xizmat qo'shish:</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                                <div class="md:col-span-2">
+                                    <label for="serviceSelect" class="block mb-2 text-sm font-medium text-gray-700">Xizmat turi:</label>
+                                    <select id="serviceSelect"
+                                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm"></select>
+                                </div>
+                                <div>
+                                    <label for="serviceQuantity"
+                                        class="block mb-2 text-sm font-medium text-gray-700">Soni:</label>
+                                    <input type="number" id="serviceQuantity" value="1" min="1"
+                                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm text-center">
+                                </div>
+                                <div>
+                                    <button id="addServiceBtn"
+                                        class="w-full px-4 py-2.5 bg-accent text-white rounded-xl shadow-md hover:bg-blue-600 font-medium transition flex items-center justify-center gap-2 text-sm">
+                                        <i class="ri-add-line"></i> Qo'shish
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                <label for="serviceQuantity"
-                                    class="block mb-2 text-sm font-medium text-gray-700">Soni:</label>
-                                <input type="number" id="serviceQuantity" value="1" min="1"
-                                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-accent focus:border-accent outline-none text-sm text-center">
-                            </div>
-                            <div>
-                                <button id="addServiceBtn"
-                                    class="w-full px-4 py-2.5 bg-accent text-white rounded-xl shadow-md hover:bg-blue-600 font-medium transition flex items-center justify-center gap-2 text-sm">
-                                    <i class="ri-add-line"></i> Qo'shish
-                                </button>
-                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-xl services-table-wrapper shadow-sm">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="min-w-[40px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                                        <th class="min-w-[150px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Xizmat nomi</th>
+                                        <th class="min-w-[70px] px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Soni</th>
+                                        <th class="min-w-[100px] px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Narxi</th>
+                                        <th class="min-w-[120px] px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Jami</th>
+                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[40px]"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="servicesTableBody" class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="6" class="p-4 text-center text-gray-500 italic">Davolash rejasiga
+                                            xizmatlar qo'shilmagan.</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="bg-gray-100 border-t-2 border-primary">
+                                    <tr>
+                                        <td colspan="4" class="px-4 py-3 text-right text-lg font-bold text-gray-800">Jami
+                                            xizmatlar narxi:</td>
+                                        <td id="totalCost"
+                                            class="px-4 py-3 text-right text-xl font-extrabold text-primary">0 UZS
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
 
+                    <div id="tabContentPlan" class="tab-content hidden">
+                        
+                        <div class="mb-6 p-4 border border-green-100 bg-green-50 rounded-xl">
+                            <h3 class="font-semibold text-gray-700 mb-4">Keyingi muolajani rejaga qo'shish:</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                                <div class="md:col-span-3">
+                                    <label for="planServiceSelect" class="block mb-2 text-sm font-medium text-gray-700">Keyingi rejadagi xizmat:</label>
+                                    <select id="planServiceSelect"
+                                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm">
+                                        <option value="">Xizmatni tanlang</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button id="addPlanServiceBtn"
+                                        class="w-full px-4 py-2.5 bg-primary text-white rounded-xl shadow-md hover:bg-secondary font-medium transition flex items-center justify-center gap-2 text-sm">
+                                        <i class="ri-add-line"></i> Rejaga Qo'shish
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-                        <div class="bg-white shadow-lg rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
-                            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm"> 
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th
-                                                class="min-w-[40px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                #</th>
-                                            <th
-                                                class="min-w-[150px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Xizmat nomi</th>
-                                            <th
-                                                class="min-w-[70px] px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Soni</th>
-                                            <th
-                                                class="min-w-[100px] px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Narxi</th>
-                                            <th
-                                                class="min-w-[120px] px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Jami</th>
-                                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[40px]">
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="servicesTableBody" class="bg-white divide-y divide-gray-200">
-                                        <tr>
-                                            <td colspan="6" class="p-4 text-center text-gray-500 italic">Davolash rejasiga
-                                                xizmatlar qo'shilmagan.</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="bg-gray-50 border-t-2 border-primary">
-                                        <tr>
-                                            <td colspan="4" class="px-4 py-3 text-right text-lg font-bold text-gray-800">Jami
-                                                xizmatlar narxi:</td>
-                                            <td id="totalCost"
-                                                class="px-4 py-3 text-right text-xl font-extrabold text-primary">0 UZS
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            </div>
+                        <div class="overflow-x-auto rounded-xl services-table-wrapper shadow-sm">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="min-w-[40px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                                        <th class="min-w-[200px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Xizmat nomi (Reja)</th>
+                                        <th class="min-w-[70px] px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Soni</th>
+                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Harakat</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="treatmentPlanTableBody" class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="4" class="p-4 text-center text-gray-500 italic">Rejalashtirilgan
+                                            muolajalar mavjud emas.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-8 flex justify-end gap-4">
+                    <button id="saveDraftBtn"
+                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl shadow-md hover:bg-gray-300 transform transition font-medium flex items-center gap-2">
+                        <i class="ri-save-line"></i> Qoralama Saqlash
+                    </button>
                     <button id="finishTreatmentBtn"
                         class="px-6 py-3 bg-danger text-white rounded-xl shadow-lg hover:bg-red-600 hover:scale-[1.02] transform transition font-medium flex items-center gap-2">
                         <i class="ri-stop-circle-line"></i> Davolashni Yakunlash
                     </button>
-                    <button id="saveChartBtn"
-                        class="px-6 py-3 bg-primary text-white rounded-xl shadow-lg hover:bg-secondary hover:scale-[1.02] transform transition font-medium flex items-center gap-2">
-                        <i class="ri-save-line"></i> Saqlash
-                    </button>
                 </div>
-                </div>
+            </div>
         </main>
     </div>
 
@@ -412,512 +385,8 @@
             </div>
         </div>
     </div>
-    <script>
-        const API_PATIENTS = "https://shifo-crm-7.onrender.com/patients";
-        const API_CHARTS = "https://shifo-crm-7.onrender.com/dentalCharts";
 
-        // Hardcoded Service Data (UZS - O'zbekiston So'mi)
-        const DENTAL_SERVICES = [
-            { id: "S1", name: "Tishni tozalash (professional)", price: 350000 },
-            { id: "S2", name: "Oddiy plomba qo'yish", price: 200000 },
-            { id: "S3", name: "Kompleks plomba (uch yuzali)", price: 450000 },
-            { id: "S4", name: "Tishni olib tashlash (oddiy)", price: 150000 },
-            { id: "S5", name: "Murakkab olib tashlash", price: 400000 },
-            { id: "S6", name: "Kanalni davolash (Endodontiya)", price: 600000 },
-            { id: "S7", name: "Koronka qo'yish (Metal-keramika)", price: 1200000 },
-            { id: "S8", name: "Ortodontik konsultatsiya", price: 50000 },
-        ];
-
-
-        const sidebar = document.getElementById("sidebar");
-        const openSidebar = document.getElementById("openSidebar");
-        const sidebarOverlay = document.getElementById("sidebarOverlay");
-        const searchInput = document.getElementById("patientSearch");
-        const searchResults = document.getElementById("searchResults");
-        const chartContainer = document.getElementById("chartContainer");
-        const patientCard = document.getElementById("patientCard");
-        const upperJawRight = document.getElementById("upperJawRight");
-        const upperJawLeft = document.getElementById("upperJawLeft");
-        const lowerJawRight = document.getElementById("lowerJawRight");
-        const lowerJawLeft = document.getElementById("lowerJawLeft");
-
-        const saveChartBtn = document.getElementById("saveChartBtn");
-        const toothModal = document.getElementById("toothModal");
-        const modalToothNumber = document.getElementById("modalToothNumber");
-        const toothStatus = document.getElementById("toothStatus");
-        const toothNote = document.getElementById("toothNote");
-        const saveToothBtn = document.getElementById("saveToothBtn");
-        const profileNameEl = document.getElementById("profileName");
-        const profileAvatarEl = document.getElementById("profileAvatar");
-        const notificationContainer = document.getElementById("notificationContainer");
-
-        // Services elements
-        const serviceSelect = document.getElementById("serviceSelect");
-        const serviceQuantity = document.getElementById("serviceQuantity");
-        const addServiceBtn = document.getElementById("addServiceBtn");
-        const servicesTableBody = document.getElementById("servicesTableBody");
-        const totalCostEl = document.getElementById("totalCost");
-
-        // YANGI elementlar
-        const toggleSearchBtn = document.getElementById("toggleSearchBtn");
-        const searchBox = document.getElementById("searchBox");
-        const currentPatientNameTitle = document.getElementById("currentPatientNameTitle");
-        const finishTreatmentBtn = document.getElementById("finishTreatmentBtn");
-        const editAnamnezBtn = document.getElementById("editAnamnez");
-        const anamnezModal = document.getElementById("anamnezModal");
-        const anamnezTextarea = document.getElementById("anamnezTextarea");
-        const saveAnamnezBtn = document.getElementById("saveAnamnezBtn");
-
-        // Bemor kartasi detallari
-        const cardName = document.getElementById("cardName");
-        const cardDOB = document.getElementById("cardDOB");
-        const cardGender = document.getElementById("cardGender");
-        const cardPhone = document.getElementById("cardPhone");
-        const cardAddress = document.getElementById("cardAddress");
-        const cardID = document.getElementById("cardID");
-        const cardStatus = document.getElementById("cardStatus");
-        const cardLastVisit = document.getElementById("cardLastVisit");
-        const cardNextVisit = document.getElementById("cardNextVisit");
-        const cardAllergy = document.getElementById("cardAllergy");
-
-
-        let doctor = JSON.parse(localStorage.getItem("doctor"));
-        if (!doctor) window.location.href = "register.html";
-
-        let patientsData = [];
-        let currentPatient = null;
-        let currentChartId = null; // Saqlash/Yangilash uchun chart ID
-        let currentTeeth = [];
-        let currentServices = [];
-        let currentAnamnez = ""; // Yangi Anamnez holati
-        let selectedTooth = null;
-
-        // === Asosiy yordamchi funksiyalar ===
-        function showMessage(message, type = 'success') {
-            const container = document.createElement('div');
-            container.className = `p-4 rounded-xl shadow-2xl text-white font-medium transition-all transform duration-300 pointer-events-auto ${type === 'success' ? 'bg-primary' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`;
-            container.innerHTML = `<div class="flex items-center gap-2"><i class="ri-information-line text-xl"></i><span>${message}</span></div>`;
-
-            notificationContainer.appendChild(container);
-
-            setTimeout(() => {
-                container.classList.add('opacity-0', 'translate-x-full');
-                container.addEventListener('transitionend', () => container.remove());
-            }, 3000);
-        }
-
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS', maximumFractionDigits: 0 }).format(amount).replace(/\sUZS/g, '');
-        }
-
-        function formatDate(isoString) {
-            if (!isoString) return "—";
-            try {
-                return new Date(isoString).toLocaleDateString('uz-UZ', { year: 'numeric', month: 'numeric', day: 'numeric' });
-            } catch (e) {
-                return isoString;
-            }
-        }
-
-        // === Init Profil ===
-        profileNameEl.textContent = doctor.fullname;
-        profileAvatarEl.textContent = doctor.fullname.charAt(0).toUpperCase();
-
-        // === Sidebar toggle (O'zgartirilmadi) ===
-        openSidebar?.addEventListener("click", () => {
-            sidebar.classList.add("active");
-            sidebarOverlay.classList.remove("hidden");
-        });
-        sidebarOverlay?.addEventListener("click", () => {
-            sidebar.classList.remove("active");
-            sidebarOverlay.classList.add("hidden");
-        });
-
-
-        // === Bemorlarni olish ===
-        async function loadPatients() {
-            try {
-                const res = await fetch(API_PATIENTS);
-                const all = await res.json();
-                // Faqat shu doktor bemorlarini yuklash (Simulatsiya uchun faqat bitta patientId ishlatilishi mumkin)
-                patientsData = all.filter(p => String(p.doctorId) === String(doctor.id));
-
-                // Dastlabki yuklashda oxirgi bemorni tanlash (Simulatsiya)
-                if (patientsData.length > 0) {
-                    // Eng oxirgi qo'shilgan bemorni olamiz
-                    const lastPatient = patientsData[patientsData.length - 1];
-                    selectPatient(lastPatient);
-                } else {
-                    currentPatientNameTitle.textContent = "Bemor tanlanmagan";
-                    chartContainer.style.display = 'none';
-                }
-
-            } catch (err) {
-                console.error("Bemorlarni yuklashda xatolik:", err);
-                showMessage("Bemorlar ro'yxatini yuklashda xato.", "error");
-            }
-        }
-
-        // === Search va Toggle ===
-        toggleSearchBtn.addEventListener("click", () => {
-            searchBox.classList.toggle("hidden");
-        });
-
-        // Bemor tanlash uchun qidiruv joyidan tashqariga bosilganda yopish
-        document.addEventListener('click', (e) => {
-            if (!toggleSearchBtn.contains(e.target) && !searchBox.contains(e.target) && !searchResults.contains(e.target)) {
-                searchBox.classList.add("hidden");
-            }
-        });
-
-        searchInput.addEventListener("input", () => {
-            const query = searchInput.value.toLowerCase();
-            searchResults.innerHTML = "";
-
-            if (!query) {
-                searchResults.innerHTML = ""; // Bo'sh bo'lsa natijalarni yashirish
-                return;
-            }
-
-            const filtered = patientsData.filter(p => (p.name || "").toLowerCase().includes(query) || (p.phone || "").includes(query));
-            if (filtered.length === 0) {
-                searchResults.innerHTML = `<li class="px-4 py-2 text-gray-500">Topilmadi</li>`;
-            } else {
-                filtered.forEach(patient => {
-                    const li = document.createElement("li");
-                    li.className = "px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-100 last:border-b-0";
-                    li.innerHTML = `<strong>${patient.name}</strong> <span class="text-gray-500 ml-2">${patient.phone || ''}</span>`;
-                    li.onclick = () => selectPatient(patient);
-                    searchResults.appendChild(li);
-                });
-            }
-        });
-
-
-        function selectPatient(patient) {
-            currentPatient = patient;
-            searchInput.value = patient.name;
-            searchBox.classList.add("hidden");
-            currentPatientNameTitle.textContent = patient.name;
-            chartContainer.style.display = 'block';
-
-            cardName.textContent = patient.name || "---";
-            cardDOB.textContent = formatDate(patient.birthDate) || "---";
-            cardGender.textContent = patient.gender || "—";
-            cardPhone.textContent = patient.phone || "---";
-            cardAddress.textContent = patient.address || "---";
-            cardID.textContent = patient.passportID || "---"; 
-
-            const statusClass = patient.status === 'Faol' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-            cardStatus.innerHTML = `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${statusClass}">${patient.status || 'Faol'}</span>`;
-
-            cardLastVisit.textContent = formatDate(patient.lastVisit) || "—";
-            cardNextVisit.textContent = formatDate(patient.nextVisit) || "—";
-
-            loadDentalChart(patient.id);
-        }
-
-        // === Dental chart va services yuklash ===
-        async function loadDentalChart(patientId) {
-            try {
-                const res = await fetch(`${API_CHARTS}?patientId=${patientId}&doctorId=${doctor.id}`);
-                const data = await res.json();
-
-                if (data.length > 0) {
-                    const chart = data[0];
-                    currentChartId = chart.id;
-                    currentTeeth = chart.teeth || [];
-                    currentServices = chart.services || [];
-                    currentAnamnez = chart.anamnez || ""; // Anamnezni yuklash
-                } else {
-                    // Yangi chart yaratish uchun
-                    currentChartId = null;
-                    currentTeeth = [];
-                    currentServices = [];
-                    currentAnamnez = "";
-                }
-
-                renderAnamnez(); // Anamnezni render qilish
-                renderTeeth();
-                renderServices();
-            } catch (err) {
-                console.error("Chartni yuklashda xatolik:", err);
-                showMessage("Dental Chart ma'lumotlarini yuklashda xato.", "error");
-            }
-        }
-
-        // === Tish statusi bo'yicha rangni belgilash ===
-        function getStatusClass(status) {
-            switch (status) {
-                case "cariyes": return "bg-yellow-500 text-gray-800 shadow-md";
-                case "filled": return "bg-blue-500 text-white shadow-md";
-                case "missing": return "bg-red-500 text-white shadow-md";
-                default: return "bg-primary text-white shadow-md";
-            }
-        }
-
-        function renderTeeth() {
-            upperJawRight.innerHTML = "";
-            upperJawLeft.innerHTML = "";
-            lowerJawRight.innerHTML = "";
-            lowerJawLeft.innerHTML = "";
-
-            const upperTeethOrder = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
-            const lowerTeethOrder = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
-
-            upperTeethOrder.forEach(i => createToothElement(i, i >= 11 && i <= 18 ? upperJawRight : upperJawLeft));
-            lowerTeethOrder.forEach(i => createToothElement(i, i >= 41 && i <= 48 ? lowerJawRight : lowerJawLeft));
-
-            function createToothElement(i, parent) {
-                const tooth = currentTeeth.find(t => Number(t.id) === i);
-                const wrapper = document.createElement("div");
-                wrapper.className = "tooth-wrapper";
-
-                const numberTop = document.createElement("span");
-                numberTop.className = "tooth-number-top";
-                numberTop.textContent = Math.floor(i / 10);
-                wrapper.appendChild(numberTop);
-
-                const div = document.createElement("div");
-                div.className = `w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center text-xs sm:text-sm rounded-lg cursor-pointer font-bold border border-gray-200 transition hover:scale-105 ${tooth ? getStatusClass(tooth.status) : "bg-primary text-white"}`;
-                div.innerHTML = `<span>${i % 10}</span>`;
-                div.onclick = () => openModal(i, tooth);
-                wrapper.appendChild(div);
-
-                const numberBottom = document.createElement("span");
-                numberBottom.className = "tooth-number-top mt-1";
-                numberBottom.textContent = i % 10;
-                wrapper.appendChild(numberBottom);
-
-                parent.appendChild(wrapper);
-            }
-        }
-
-        function renderServices() {
-            servicesTableBody.innerHTML = '';
-            let total = 0;
-
-            if (currentServices.length === 0) {
-                servicesTableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500 italic">Davolash rejasiga xizmatlar qo'shilmagan.</td></tr>`;
-            }
-
-            currentServices.forEach((service, index) => {
-                const serviceData = DENTAL_SERVICES.find(s => s.id === service.serviceId);
-                if (!serviceData) return;
-
-                const subtotal = serviceData.price * service.quantity;
-                total += subtotal;
-
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50';
-                row.innerHTML = `
-                    <td class="px-4 py-3 text-sm font-medium text-gray-500">${index + 1}</td>
-                    <td class="px-4 py-3 text-sm text-gray-800">${serviceData.name}</td>
-                    <td class="px-4 py-3 text-center text-sm text-gray-700">${service.quantity}</td>
-                    <td class="px-4 py-3 text-right text-sm text-gray-700">${formatCurrency(serviceData.price)} UZS</td>
-                    <td class="px-4 py-3 text-right text-sm font-semibold text-gray-800">${formatCurrency(subtotal)} UZS</td>
-                    <td class="px-4 py-3 text-right">
-                        <button onclick="removeService(${index})" class="text-red-500 hover:text-red-700 transition">
-                            <i class="ri-delete-bin-line text-lg"></i>
-                        </button>
-                    </td>
-                `;
-                servicesTableBody.appendChild(row);
-            });
-
-            totalCostEl.textContent = `${formatCurrency(total)} UZS`;
-        }
-
-        function addService() {
-            if (!currentPatient) {
-                return showMessage("❌ Iltimos, avval bemorni tanlang.", "error");
-            }
-            const serviceId = serviceSelect.value;
-            const quantity = parseInt(serviceQuantity.value);
-
-            if (!serviceId) {
-                return showMessage("❌ Xizmat turini tanlang.", "error");
-            }
-            if (quantity < 1 || isNaN(quantity)) {
-                return showMessage("❌ Miqdor 1 dan kam bo'lishi mumkin emas.", "error");
-            }
-
-            const existing = currentServices.find(s => s.serviceId === serviceId);
-
-            if (existing) {
-                existing.quantity += quantity;
-            } else {
-                currentServices.push({ serviceId, quantity });
-            }
-
-            serviceQuantity.value = 1;
-            renderServices();
-            showMessage("✅ Xizmat davolash rejasiga qo'shildi.");
-        }
-
-        function removeService(index) {
-            if (index >= 0 && index < currentServices.length) {
-                currentServices.splice(index, 1);
-                renderServices();
-                showMessage("🗑️ Xizmat davolash rejasidan olib tashlandi.");
-            }
-        }
-        window.removeService = removeService;
-
-        function populateServiceSelect() {
-            serviceSelect.innerHTML = DENTAL_SERVICES.map(s =>
-                `<option value="${s.id}">${s.name} (${formatCurrency(s.price)} UZS)</option>`
-            ).join('');
-        }
-        addServiceBtn.addEventListener('click', addService);
-
-
-        // === Modal boshqaruvi ===
-        function openModal(toothNumber, toothData) {
-            if (!currentPatient) return showMessage("❌ Iltimos, avval bemorni tanlang.", "error");
-            selectedTooth = toothNumber;
-            modalToothNumber.innerHTML = `<i class="ri-edit-line"></i> Tish #${toothNumber}`;
-            toothStatus.value = toothData ? toothData.status : "healthy";
-            toothNote.value = toothData ? toothData.note : "";
-            toothModal.classList.remove("hidden");
-            toothModal.classList.add("flex");
-        }
-        function closeModal() {
-            toothModal.classList.add("hidden");
-            toothModal.classList.remove("flex");
-        }
-        window.closeModal = closeModal;
-
-        saveToothBtn.onclick = () => {
-            const status = toothStatus.value;
-            const note = toothNote.value;
-            const existing = currentTeeth.find(t => Number(t.id) === selectedTooth);
-
-            const newToothData = { id: String(selectedTooth), status, note };
-
-            if (existing) {
-                Object.assign(existing, newToothData);
-            } else {
-                currentTeeth.push(newToothData);
-            }
-
-            // Agar status 'healthy' va note bo'sh bo'lsa, ro'yxatdan o'chirish
-            if (status === 'healthy' && !note.trim()) {
-                currentTeeth = currentTeeth.filter(t => Number(t.id) !== selectedTooth);
-            }
-
-            closeModal();
-            renderTeeth();
-            showMessage("✅ Tish statusi yangilandi.");
-        };
-
-        // === Anamnez Modali ===
-        function openAnamnezModal() {
-            if (!currentPatient) return showMessage("❌ Iltimos, avval bemorni tanlang.", "error");
-            anamnezTextarea.value = currentAnamnez;
-            anamnezModal.classList.remove("hidden");
-            anamnezModal.classList.add("flex");
-        }
-        function closeAnamnezModal() {
-            anamnezModal.classList.add("hidden");
-            anamnezModal.classList.remove("flex");
-        }
-        window.closeAnamnezModal = closeAnamnezModal;
-
-        editAnamnezBtn.addEventListener('click', openAnamnezModal);
-
-        saveAnamnezBtn.onclick = () => {
-            currentAnamnez = anamnezTextarea.value.trim();
-            renderAnamnez();
-            closeAnamnezModal();
-            showMessage("✅ Tibbiy ma'lumotlar saqlash uchun tayyorlandi.");
-        };
-
-        function renderAnamnez() {
-            if (currentAnamnez) {
-                cardAllergy.textContent = currentAnamnez;
-                cardAllergy.classList.remove('italic');
-            } else {
-                cardAllergy.textContent = "Allergiya va kasalliklar haqida ma'lumot yo'q.";
-                cardAllergy.classList.add('italic');
-            }
-        }
-
-
-        // === Yakunlash funksiyasi ===
-        finishTreatmentBtn.onclick = async () => {
-            if (!currentPatient) return showMessage("❌ Iltimos, bemorni tanlang.", "error");
-
-            if (currentServices.length > 0) {
-                // To'lov sahifasiga o'tishni simulyatsiya qilish
-                showMessage(`⏳ Davolash yakunlanmoqda. Jami to'lov: ${totalCostEl.textContent}`, "info");
-
-                // Saqlash amalini bajarish
-                await saveChart(true); // true yakunlash uchun
-
-                // Bemor statusini "Yakunlangan" ga o'zgartirish (Simulyatsiya)
-                currentPatient.status = "Yakunlangan";
-                selectPatient(currentPatient); // Kartani yangilash
-            } else {
-                showMessage("❌ Davolash rejasida xizmatlar mavjud emas.", "error");
-            }
-
-        };
-
-        // === Saqlash ===
-        async function saveChart(isFinished = false) {
-            if (!currentPatient) return showMessage("❌ Iltimos, bemorni tanlang.", "error");
-
-            const teethToSave = currentTeeth.filter(t => t.status !== 'healthy' || t.note.trim());
-
-            const payload = {
-                patientId: currentPatient.id,
-                doctorId: doctor.id,
-                visitDate: new Date().toISOString().split("T")[0],
-                teeth: teethToSave,
-                services: currentServices,
-                anamnez: currentAnamnez, // Anamnezni payloadga qo'shish
-                status: isFinished ? "Yakunlangan" : "Davom etmoqda" // Yangi status
-            };
-
-            try {
-                if (currentChartId) {
-                    // Update
-                    await fetch(`${API_CHARTS}/${currentChartId}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-                } else {
-                    // New entry
-                    const res = await fetch(API_CHARTS, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ id: "dc" + Date.now(), ...payload })
-                    });
-                    const newChart = await res.json();
-                    currentChartId = newChart.id; // Yangi chart ID ni saqlab qo'yish
-                }
-
-                if (isFinished) {
-                    showMessage("✅ Davolash muvaffaqiyatli yakunlandi va saqlandi!");
-                } else {
-                    showMessage("✅ Dental chart va davolash rejasidagi o'zgarishlar muvaffaqiyatli saqlandi.");
-                }
-
-            } catch (error) {
-                console.error("Saqlashda xatolik:", error);
-                showMessage("❌ Saqlashda xatolik yuz berdi.", "error");
-            }
-        }
-        saveChartBtn.onclick = () => saveChart(false);
-
-        // === Init ===
-        (async function init() {
-            await loadPatients();
-            populateServiceSelect();
-        })();
-    </script>
+    <script src="./dental_chart.js"></script>
 </body>
 
 </html>

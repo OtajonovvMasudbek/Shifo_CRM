@@ -1,15 +1,6 @@
 {
   "patients": [
     {
-      "id": "1",
-      "doctorId": "d1",
-      "name": "Ali Valiyev",
-      "age": 25,
-      "phone": "+998901234567",
-      "lastVisit": "2025-09-10",
-      "status": "Kutilmoqda"
-    },
-    {
       "id": "2",
       "doctorId": "d1",
       "name": "Dilshod Karimov",
@@ -120,13 +111,16 @@
       "address": "1234343412412"
     },
     {
-      "id": "1758962760400",
-      "name": "asdas",
-      "age": "12",
-      "phone": "+998 12 311 23 41",
+      "name": "Otajonov Masudbek",
+      "birthDate": "2009-02-04",
+      "gender": "Erkak",
+      "phone": "940542722",
+      "address": "Sobirtepa qishlog'i",
       "lastVisit": "2025-09-19",
       "status": "Kutilmoqda",
-      "doctorId": "meh0pjor"
+      "price": "",
+      "description": "",
+      "id": "1758962760400"
     },
     {
       "id": "1",
@@ -175,28 +169,16 @@
       "doctorId": "mf3zu00y"
     },
     {
-      "id": "1759218276944",
       "name": "asdasd",
-      "age": 33,
-      "phone": "+998 94 054 27 22",
+      "birthDate": "",
+      "gender": "Erkak",
+      "phone": "+998 94 054 27 2212312313123",
+      "address": "Sobirtepa qishlog'i",
       "lastVisit": "2025-09-18",
       "status": "Kutilmoqda",
       "price": 123,
       "description": "asdsfrqweqwrq",
-      "address": "Sobirtepa qishlog'i",
-      "doctorId": "mf5139rn"
-    },
-    {
-      "id": "1759219999159",
-      "name": "dasdsa",
-      "age": 12,
-      "phone": "+998 31 231 23 12",
-      "lastVisit": "2025-09-26",
-      "status": "Kutilmoqda",
-      "price": 233,
-      "description": "qwdasfasf",
-      "address": "yunusobot",
-      "doctorId": "mflb3lik"
+      "id": "1759218276944"
     },
     {
       "id": "1759390531378",
@@ -284,161 +266,226 @@
       "price": 31234124,
       "description": "adasd",
       "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "c529",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2025-10-16",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-22",
+      "status": "Faol",
+      "price": 9767,
+      "description": "jhbhj",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "48a0",
+      "name": ",n nb",
+      "gender": "Erkak",
+      "birthDate": "2025-10-01",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-22",
+      "status": "Yakunlangan",
+      "price": 67567,
+      "description": "nnnnn",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "1b27",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2025-10-27",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-28",
+      "status": "Kutilmoqda",
+      "price": 312312312,
+      "description": "adsdasd",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "317a",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2018-02-26",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-27",
+      "status": "Kutilmoqda",
+      "price": 123412,
+      "description": "asdfsdfds",
+      "doctorId": "mg9rt4ro"
+    },
+    {
+      "id": "5cb5",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2010-06-09",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-27",
+      "status": "Kutilmoqda",
+      "price": 123123,
+      "description": "",
+      "doctorId": "mf5139rn"
+    },
+    {
+      "id": "1b62",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2005-03-01",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-10-29",
+      "status": "Kutilmoqda",
+      "price": 123123,
+      "description": "asdasd",
+      "doctorId": "mf5139rn"
+    },
+    {
+      "id": "9f40",
+      "name": "Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2015-01-13",
+      "phone": "94 054 27 22",
+      "address": "asdaDF",
+      "lastVisit": "2025-11-03",
+      "status": "Faol",
+      "description": "AdsasfasfdADSs",
+      "price": 0,
+      "doctorId": "mf5139rn"
+    },
+    {
+      "name": "Otajonov Masudbekwerqerw",
+      "birthDate": "2016-02-03",
+      "gender": "Erkak",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-11-06",
+      "status": "Kutilmoqda",
+      "price": 0,
+      "description": "qwefasdfasdasd",
+      "id": "1cf7"
+    },
+    {
+      "name": "test",
+      "birthDate": "2004-06-09",
+      "gender": "Erkak",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-11-07",
+      "status": "Kutilmoqda",
+      "price": 0,
+      "description": "asdfasdfsasdasd",
+      "id": "8546"
+    },
+    {
+      "name": "Otajonov Masudbekddd",
+      "birthDate": "2023-01-03",
+      "gender": "Erkak",
+      "phone": "+998940542722",
+      "address": "uzbekistan tashkent city",
+      "lastVisit": "2025-09-10",
+      "status": "Faol",
+      "price": 0,
+      "description": "",
+      "id": "352e"
+    },
+    {
+      "name": "Otajonov Masudbek",
+      "birthDate": "2004-05-04",
+      "gender": "Erkak",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-11-06",
+      "status": "Kutilmoqda",
+      "price": 0,
+      "description": "bnasihdffisahdf",
+      "id": "b896"
+    },
+    {
+      "name": "Otajonov Masudbek",
+      "birthDate": "2010-06-09",
+      "gender": "Erkak",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-11-07",
+      "status": "Kutilmoqda",
+      "price": 0,
+      "description": "asdfsdasda",
+      "id": "95a0"
+    },
+    {
+      "id": "f367",
+      "name": "Otajonov Masudbek",
+      "gender": "Erkak",
+      "birthDate": "2013-06-04",
+      "phone": "+998940542722",
+      "address": "Sobirtepa qishlog'i",
+      "lastVisit": "2025-11-12",
+      "status": "Kutilmoqda",
+      "description": "",
+      "price": 0,
+      "doctorId": "mf5139rn"
     }
   ],
   "doctors": [
     {
       "id": "d1",
-      "fullname": "Dr. Olimjon Rahimov",
-      "username": "olimjon",
-      "password": "12345"
-    },
-    {
-      "id": "meh0pjor",
-      "fullname": "Otajonov Masudbek",
-      "username": "masudbek",
-      "password": "2005"
-    },
-    {
-      "id": "mf3zu00y",
-      "fullname": "qiuwerhw",
-      "username": "mas",
-      "password": "12"
-    },
-    {
-      "id": "mf510x6i",
-      "fullname": "Otajonov Masudbek",
-      "username": "masud",
-      "password": "2005"
-    },
-    {
-      "id": "mf5139rn",
-      "fullname": "Otajonov Masudbek",
-      "username": "123123",
-      "password": "123"
-    },
-    {
-      "id": "mf51ca1l",
-      "fullname": "asdasdas",
-      "username": "masd",
-      "password": "12"
-    },
-    {
-      "id": "mf522a9l",
-      "fullname": "asds",
-      "username": "mass",
-      "password": "1223"
-    },
-    {
-      "id": "mfij4z7r",
-      "fullname": "masudbek",
-      "speciality": "stamatolig",
-      "clinicId": "12345",
-      "username": "123123",
+      "login": "123",
       "password": "123",
-      "role": "doctor"
-    },
-    {
-      "id": "mflb3lik",
-      "fullname": "masudbek",
-      "username": "12",
-      "password": "12"
-    },
-    {
-      "id": "mg93o2l4",
-      "fullname": "Otajonov Masudbek",
-      "username": "m",
-      "password": "m"
-    },
-    {
-      "id": "mg9rt4ro",
-      "fullname": "Otajonov Masudbek",
-      "username": "ma",
-      "password": "12"
-    }
-  ],
-  "clinics": [
-    {
-      "id": "10001",
-      "name": "Smile Dental Clinic",
-      "address": "Toshkent, Chilonzor",
+      "name": "Dr. Aliya Sattorova",
+      "specialty": "Stomatolog",
       "phone": "+998901234567",
-      "username": "smile",
-      "password": "clinic123",
-      "services": [
-        "Implantatsiya",
-        "Ortodontiya",
-        "Plomba",
-        "Protez"
-      ],
-      "role": "clinic"
+      "email": "aliya@clinic.uz",
+      "image": "https://randomuser.me/api/portraits/women/44.jpg",
+      "bio": "Tajribali stomatolog. Sohada 10 yildan ortiq ish tajribasi mavjud.",
+      "schedule": {
+        "workDays": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "workHours": {
+          "start": "09:00",
+          "end": "18:00"
+        },
+        "holidays": [
+          "2025-11-15",
+          "2025-12-31"
+        ]
+      },
+      "sections": [
+        {
+          "id": "s1",
+          "title": "Malaka va Sertifikatlar",
+          "content": "Germaniya, Koreya va Turkiyada malaka oshirgan."
+        },
+        {
+          "id": "s2",
+          "title": "Asbob-uskunalar",
+          "content": "Zamonaviy Siemens va Vatech qurilmalari bilan ishlayman."
+        }
+      ]
     },
     {
-      "id": "10002",
-      "name": "DentCare",
-      "address": "Toshkent, Yunusobod",
-      "phone": "+998909998877",
-      "username": "dentcare",
-      "password": "clinic456",
-      "services": [
-        "Karies davolash",
-        "Tish oqartirish",
-        "Protez"
-      ],
-      "role": "clinic"
-    },
-    {
-      "id": "92032",
-      "name": "masudbek",
-      "address": "yunusobot",
-      "phone": "+998940542722",
-      "username": "1234",
-      "password": "1234",
-      "role": "clinic"
-    }
-  ],
-  "appointments": [
-    {
-      "id": "1",
-      "patient": "Zarina Abdullayeva",
-      "doctor": "Dr. Olimjon Rahimov",
-      "speciality": "Terapevt",
-      "date": "2025-01-03",
-      "time": "10:30",
-      "status": "Rejalashtirilgan"
-    },
-    {
-      "id": "2",
-      "patient": "Aziz Saidov",
-      "doctor": "Dr. Sevara Nazarova",
-      "speciality": "Kardiolog",
-      "date": "2025-01-07",
-      "time": "14:00",
-      "status": "Rejalashtirilgan"
-    }
-  ],
-  "reminders": [
-    {
-      "id": "1",
-      "title": "Zarina uchun qo'ng'iroq",
-      "description": "Tahlil natijalarini muhokama qilish",
-      "priority": "Muhim",
-      "responsible": "Dr. Olimjon Rahimov",
-      "date": "2025-01-02",
-      "time": "14:30"
+      "id": "mhsxqo2w",
+      "fullname": null,
+      "username": null,
+      "password": null
     }
   ],
   "dentalCharts": [
     {
-      "id": "dc1",
-      "patientId": 1,
-      "visitDate": "2025-09-09",
+      "patientId": "1b27",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-26",
       "teeth": [
-        {
-          "id": "11",
-          "status": "healthy",
-          "note": ""
-        },
         {
           "id": "16",
           "status": "filled",
@@ -454,12 +501,22 @@
           "status": "missing",
           "note": "umuman tish talabga javob bermaydi"
         }
-      ]
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "treatmentPlan": "36-tishni keyingi haftada pulpaning o'ldirilishi va kanalni plombalash (2-tashrif).",
+      "id": "dc1"
     },
     {
-      "id": "dc2",
-      "patientId": 2,
-      "visitDate": "2025-09-05",
+      "patientId": "2",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-26",
       "teeth": [
         {
           "id": "21",
@@ -471,7 +528,11 @@
           "status": "missing",
           "note": "Olib tashlangan"
         }
-      ]
+      ],
+      "treatmentPlan": [],
+      "isFinished": false,
+      "totalPaidAmount": 0,
+      "id": "dc2"
     },
     {
       "id": "dc1757414506795",
@@ -559,11 +620,398 @@
       ]
     },
     {
-      "id": "dc1759489417641",
       "patientId": "1759218276944",
       "doctorId": "mf5139rn",
-      "visitDate": "2025-10-03",
-      "teeth": []
+      "visitDate": "2025-10-28",
+      "teeth": [
+        {
+          "id": "41",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S3",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1759489417641"
+    },
+    {
+      "id": "dc1761463650416",
+      "patientId": "317a",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-26",
+      "teeth": [
+        {
+          "id": "11",
+          "status": "missing",
+          "note": "adsfasf"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S4",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "dc1761465099264",
+      "patientId": "c529",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-26",
+      "teeth": [
+        {
+          "id": "11",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S2",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "dc1761466517470",
+      "patientId": "0a27",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-10-26",
+      "teeth": [
+        {
+          "id": "18",
+          "status": "missing",
+          "note": "mmm"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S4",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "patientId": "5cb5",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-10-28",
+      "teeth": [
+        {
+          "id": "45",
+          "status": "missing",
+          "note": ""
+        },
+        {
+          "id": "41",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S5",
+          "quantity": 1
+        },
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1761633444643"
+    },
+    {
+      "id": "dc1761638266707",
+      "patientId": "1b62",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-10-28",
+      "teeth": [
+        {
+          "id": "44",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S2",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "patientId": "9f40",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-11-10",
+      "teeth": [
+        {
+          "id": "26",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        },
+        {
+          "serviceId": "S2",
+          "quantity": 1
+        }
+      ],
+      "plannedServices": [],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1762174222597"
+    },
+    {
+      "patientId": "352e",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-11-05",
+      "teeth": [
+        {
+          "id": "44",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        },
+        {
+          "serviceId": "S7",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1762328108912"
+    },
+    {
+      "id": "dc1762328188735",
+      "patientId": "1cf7",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-11-05",
+      "teeth": [
+        {
+          "id": "14",
+          "status": "cariyes",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "dc1762340833943",
+      "patientId": "b896",
+      "doctorId": "meh0pjor",
+      "visitDate": "2025-11-05",
+      "teeth": [
+        {
+          "id": "44",
+          "status": "filled",
+          "note": "asefdadfs"
+        },
+        {
+          "id": "15",
+          "status": "cariyes",
+          "note": "sadfasdasdfa"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "patientId": "95a0",
+      "doctorId": "meh0pjor",
+      "visitDate": "2025-11-05",
+      "teeth": [
+        {
+          "id": "14",
+          "status": "cariyes",
+          "note": "asdfasd"
+        },
+        {
+          "id": "13",
+          "status": "filled",
+          "note": ""
+        },
+        {
+          "id": "43",
+          "status": "missing",
+          "note": "asdADS"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        },
+        {
+          "serviceId": "S5",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1762340917359"
+    },
+    {
+      "id": "dc1762759298233",
+      "patientId": "f367",
+      "doctorId": "mf5139rn",
+      "visitDate": "2025-11-10",
+      "teeth": [],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        },
+        {
+          "serviceId": "S2",
+          "quantity": 1
+        }
+      ],
+      "plannedServices": [
+        {
+          "serviceId": "S3",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "id": "dc1762769438571",
+      "patientId": "ec97",
+      "doctorId": "mg9rt4ro",
+      "visitDate": "2025-11-10",
+      "teeth": [
+        {
+          "id": "12",
+          "status": "missing",
+          "note": "mmmm"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "plannedServices": [],
+      "anamnez": "",
+      "status": "Yakunlangan"
+    },
+    {
+      "patientId": "3",
+      "doctorId": "d1",
+      "visitDate": "2025-11-10",
+      "teeth": [
+        {
+          "id": "13",
+          "status": "filled",
+          "note": ""
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "S1",
+          "quantity": 1
+        }
+      ],
+      "plannedServices": [
+        {
+          "serviceId": "S2",
+          "quantity": 1
+        }
+      ],
+      "anamnez": "",
+      "status": "Yakunlangan",
+      "id": "dc1762776600833"
+    }
+  ],
+  "services_list": [
+    {
+      "id": "S1",
+      "name": "Karies davolash (bir tish)",
+      "price": 450000
+    },
+    {
+      "id": "S2",
+      "name": "Professional tozalash (bir jag')",
+      "price": 600000
+    },
+    {
+      "id": "S3",
+      "name": "Tishni sug'urish",
+      "price": 350000
+    },
+    {
+      "id": "S4",
+      "name": "Rentgen (bitta kadr)",
+      "price": 50000
+    },
+    {
+      "id": "S5",
+      "name": "Kanalni plombash",
+      "price": 200000
+    }
+  ],
+  "invoices": [],
+  "payments": [],
+  "expenses": [
+    {
+      "id": "E1",
+      "date": "2025-10-01",
+      "category": "Ijara",
+      "amount": 5000000,
+      "description": "Oktabr oyi uchun ofis ijarasi"
+    },
+    {
+      "id": "E2",
+      "date": "2025-10-15",
+      "category": "Materiallar",
+      "amount": 2500000,
+      "description": "Plomba materiallari sotib olindi"
+    },
+    {
+      "id": "E3",
+      "date": "2025-11-01",
+      "category": "Ijara",
+      "amount": 5000000,
+      "description": "Noyabr oyi uchun ijara"
     }
   ]
 }

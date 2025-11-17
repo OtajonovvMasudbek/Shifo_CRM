@@ -1,0 +1,213 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+#sidebar {
+    transition: transform 0.3s ease-out;
+    transform: translateX(-100%);
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+#sidebar.active {
+    transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+    #sidebar {
+        transform: translateX(0);
+        position: relative;
+        height: auto;
+    }
+}
+
+.modal-bg {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    position: fixed;
+}
+
+/* --- TAB STYLES --- */
+.tab-button {
+    @apply px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent transition duration-200 flex items-center gap-2;
+}
+.tab-button.active {
+    @apply text-primary border-primary;
+}
+
+/* --- ODONTOGRAMMA STYLES (ASOSIY YANGILANISH) --- */
+.tooth-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 35px; /* Tish qutisi kengligi */
+}
+
+.tooth-number {
+    font-size: 10px;
+    color: #4B5563;
+    margin-bottom: 2px;
+    font-weight: 600;
+}
+
+/* Tish yuzalarining asosiy konteyneri */
+.tooth-surfaces {
+    width: 35px;
+    height: 35px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    cursor: pointer;
+    border: 1px solid #9CA3AF; /* Gray 400 */
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.tooth-surfaces:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tishning markaziy qismi (tish raqami bilan mos emas, faqat vizual) */
+.tooth-surfaces .center {
+    grid-column: 2;
+    grid-row: 2;
+    background-color: #E5E7EB; /* Gray 200 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #1F2937; /* Gray 800 */
+}
+
+/* Umumiy status ranglari (tishning to'liq ramkasiga ta'sir qiladi) */
+.status-cariyes {
+    border-color: var(--decay-color) !important;
+}
+
+.status-filled {
+    border-color: var(--fill-color) !important;
+}
+
+.status-missing {
+    background-color: #FEE2E2;
+    border-color: var(--missing-color) !important;
+    position: relative;
+}
+
+/* Olib tashlangan (Missing) belgisi */
+.status-missing .center span {
+     /* Tish raqamini yashirish */
+    opacity: 0; 
+}
+.status-missing::after {
+     content: "X";
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     font-size: 20px;
+     font-weight: bold;
+     color: var(--missing-color);
+     z-index: 10;
+}
+
+/* Izoh ko'rsatkichi */
+.note-indicator {
+    content: "i";
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    background-color: #F59E0B; /* Amber 500 */
+    color: white;
+    border-radius: 50%;
+    font-size: 8px;
+    line-height: 12px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 20;
+}
+
+/* --- TISH YUZALARINI TAHRIRLASH MODALI --- */
+.dental-surface-editor {
+    display: grid;
+    grid-template-columns: 20px 40px 20px;
+    grid-template-rows: 20px 40px 20px;
+    gap: 2px;
+}
+
+.surface-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #D1D5DB; /* Gray 300 */
+    font-size: 10px;
+    font-weight: bold;
+    color: #4B5563;
+    transition: all 0.2s;
+    cursor: pointer;
+    padding: 0;
+}
+
+.surface-Center {
+    cursor: default;
+    background-color: #F3F4F6 !important;
+    color: #1F2937 !important;
+    border: 1px solid #9CA3AF !important;
+}
+
+/* Positioning */
+.surface-O { grid-column: 2; grid-row: 1; } /* Okluzal */
+.center-row { 
+    grid-column: 1 / 4; 
+    grid-row: 2; 
+    display: flex; 
+    justify-content: space-between; 
+    gap: 2px;
+}
+.surface-D { 
+    grid-column: 3; 
+    grid-row: 2; 
+    width: 20px; /* B, L, D, M guruhga bo'lingan */
+}
+.surface-B { width: 20px; } /* Bukkal */
+.surface-L { width: 20px; } /* Lingval */
+
+.surface-M { grid-column: 2; grid-row: 3; } /* Mezial */
+
+.surface-btn[data-status="cariyes"] {
+    background-color: var(--decay-color); 
+    color: white;
+    border-color: var(--decay-color);
+}
+.surface-btn[data-status="filled"] {
+    background-color: var(--fill-color);
+    color: white;
+    border-color: var(--fill-color);
+}
+.surface-btn[data-status="healthy"] {
+    background-color: #F9FAFB;
+    color: #4B5563;
+    border-color: #D1D5DB;
+}
+
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid #D1D5DB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    color: white;
+}
+.legend-box[class*="bg-gray"] {
+    color: #4B5563;
+}

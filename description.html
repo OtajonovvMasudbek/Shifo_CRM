@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bemor Tafsilotlari - ShifoCRM</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16A34A', 
+                        secondary: '#16A34A', 
+                        accent: '#3B82F6', 
+                        gray: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            800: '#1F2937',
+                            900: '#111827',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        .active {
+            transform: translateX(0) !important;
+        }
+
+        /* Sidebar vaqtinchalik effekt */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Mobil qurilmalar uchun modal (bottom sheet effekti) */
+        @media (max-width: 768px) {
+            #editPatientModal > div {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                border-radius: 1.5rem 1.5rem 0 0; /* Yuqori burchaklarni yumaloqlash */
+                max-height: 90vh;
+                animation: slideUp 0.3s ease-out;
+            }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans flex lg:flex-row flex-col">
+
+    <aside id="sidebar"
+        class="w-64 bg-white shadow-xl flex flex-col h-screen fixed -translate-x-full lg:translate-x-0 z-40 transition-transform duration-300 border-r border-gray-100">
+        
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
+                <i class="ri-hospital-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-800 font-sans text-[22px]">ShifoCRM</h1>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="./patients.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-primary-light hover:text-primary transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
+            </a>
+        </div>
+    </aside>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden lg:hidden"></div>
+    
+    <main class="flex-1 lg:main-content lg:ml-64">
+        
+        <header
+            class="bg-white p-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-10 shadow-custom">
+            <button id="openSidebar" class="lg:hidden text-gray-600 hover:text-primary transition">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+            <h1 id="patientNameHeader" class="text-xl font-bold flex items-center gap-2 text-gray-800 ml-3 lg:ml-0">
+                <i class="ri-user-heart-line text-2xl text-primary"> </i> Bemor Tafsilotlari
+            </h1>
+
+            <a href="./profil.html" class="ml-auto">
+                <div
+                    class="flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-xl shadow-sm hover:bg-gray-100 transition">
+                    <div id="profileAvatar"
+                        class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    <p id="doctorName" class="text-[17px] font-semibold hidden lg:block text-gray-800">Profil</p>
+                </div>
+            </a>
+        </header>
+
+        <div class="p-4 md:p-8 min-h-[80vh] bg-gray-50">
+            
+            <div class="max-w-4xl mx-auto mb-6">
+                <a href="./patients.html"
+                    class="">
+                    <i class="ri-arrow-left-line"></i> Orqaga qaytish
+                </a>
+            </div>
+
+            <div id="patientDetailsContainer" class="max-w-4xl mx-auto py-4">
+                <p class="text-center text-gray-500">Ma'lumotlar yuklanmoqda...</p>
+            </div>
+
+            <div id="loadingError" class="hidden text-center text-red-500 py-10">
+                <i class="ri-error-warning-line text-4xl"></i>
+                <p class="mt-2 text-lg">Bemor ma'lumotlari topilmadi yoki yuklashda xatolik yuz berdi.</p>
+                <a href="./patients.html" class="text-accent hover:underline mt-2 inline-block">Bemorlar ro'yxatiga
+                    qaytish</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="editPatientModal"
+    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-opacity duration-300">
+
+    <div
+        class="bg-white p-6 rounded-3xl md:rounded-3xl w-full max-w-lg shadow-2xl transform transition-all duration-300 max-h-[95vh] overflow-y-auto border border-gray-100">
+        <div class="flex justify-between items-center mb-6 border-b pb-4 border-gray-100 sticky top-0 bg-white z-10">
+            <h3 class="text-2xl font-extrabold text-gray-800 flex items-center gap-2"> 
+                <i class="ri-edit-box-line text-primary text-3xl"></i> Bemor ma'lumotlarini tahrirlash
+            </h3>
+            <button onclick="closeModal(editPatientModal)"
+                class="text-gray-500 hover:text-gray-900 transition font-bold text-3xl leading-none p-1 rounded-full hover:bg-gray-100">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+        </div>
+
+        <form id="editPatientForm" class="space-y-6">
+            
+            <fieldset class="p-4 border border-gray-200 rounded-xl bg-gray-50/50">
+                <legend class="text-sm font-bold text-primary px-2">Asosiy ma'lumotlar</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Ism Familiya <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" required 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm placeholder:text-gray-400"
+                            placeholder="To'liq ism kiritilsin">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Tug'ilgan sana</label>
+                        <input type="date" name="birthDate" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Jins</label>
+                        <select name="gender"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm bg-white">
+                            <option value="Erkak">Erkak</option>
+                            <option value="Ayol">Ayol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Telefon raqami</label>
+                        <input type="tel" name="phone" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm placeholder:text-gray-400"
+                            placeholder="+998XX YYY YY YY">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="p-4 border border-gray-200 rounded-xl bg-gray-50/50">
+                <legend class="text-sm font-bold text-accent px-2">Klinika ma'lumotlari</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Bemor holati</label>
+                        <select name="status"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm bg-white">
+                            <option value="Faol">Faol</option>
+                            <option value="Kutilmoqda">Kutilmoqda</option>
+                            <option value="Yakunlangan">Yakunlangan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Oxirgi tashrif sanasi</label>
+                        <input type="date" name="lastVisit" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">To'langan Narx (so‘m)</label>
+                        <input type="number" name="price" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm"
+                            placeholder="Faqat raqam kiriting, masalan: 450000">
+                    </div>
+                </div>
+            </fieldset>
+            
+            <fieldset class="p-4 border border-gray-200 rounded-xl bg-gray-50/50">
+                <legend class="text-sm font-bold text-indigo-600 px-2">Qo'shimcha</legend>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Manzil</label>
+                    <input type="text" name="address" 
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm placeholder:text-gray-400"
+                        placeholder="Yashash manzilini kiriting">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Izoh</label>
+                    <textarea name="description" rows="3" 
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-200 shadow-sm placeholder:text-gray-400"
+                        placeholder="Bemor haqida qo'shimcha eslatmalar..."></textarea>
+                </div>
+            </fieldset>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeModal(editPatientModal)"
+                    class="px-5 py-2.5 bg-gray-200 rounded-full hover:bg-gray-300 text-gray-700 font-medium transition shadow-md hover:shadow-lg">
+                    <i class="ri-close-line mr-1"></i> Bekor qilish
+                </button>
+                <button type="submit"
+                    class="px-5 py-2.5 bg-gradient-to-r from-primary to-emerald-500 text-white rounded-full font-medium hover:from-emerald-700 hover:to-emerald-600 transition shadow-lg shadow-primary/40 flex items-center gap-1">
+                    <i class="ri-save-line"></i> Saqlash
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div id="toastContainer" class="fixed top-4 right-4 space-y-3 z-50"></div>
+
+    <script>
+        const API_URL = "http://localhost:5001/patients";
+        const patientDetailsContainer = document.getElementById("patientDetailsContainer");
+        const editPatientModal = document.getElementById("editPatientModal");
+        const editPatientForm = document.getElementById("editPatientForm");
+        const patientNameHeader = document.getElementById('patientNameHeader');
+
+        
+        /**
+         * Tug'ilgan sana asosida yoshni hisoblash
+         */
+        function getAge(birthDate) {
+            if (!birthDate) return '—';
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+
+            return age >= 0 ? age.toString() : '—';
+        }
+
+        
+        /**
+         * Xabar oynasini (toast) chiqarish
+         */
+        function showToast(message, type = "info") {
+            const toastContainer = document.getElementById('toastContainer');
+            const colorClasses = {
+                info: 'bg-accent',
+                success: 'bg-primary',
+                error: 'bg-red-600'
+            };
+            const iconClasses = {
+                info: 'ri-information-line',
+                success: 'ri-check-line',
+                error: 'ri-close-circle-line'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast p-4 pr-10 rounded-xl shadow-2xl text-white font-medium flex items-center gap-3 ${colorClasses[type]} relative`;
+            toast.innerHTML = `
+                <i class="${iconClasses[type]} text-xl"></i>
+                <span>${message}</span>
+                <button onclick="this.closest('.toast').remove()" class="absolute top-1 right-2 text-xl opacity-70 hover:opacity-100">&times;</button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        /**
+         * Modal oynani ochish
+         */
+        function openModal(modal) {
+            modal.classList.remove('hidden');
+            // Tailwind tranzitsiyalarini ta'minlash uchun
+            setTimeout(() => modal.classList.add('opacity-100'), 10);
+        }
+
+        /**
+         * Modal oynani yopish
+         */
+        function closeModal(modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('opacity-100');
+        }
+
+        /**
+         * Bemor ma'lumotlarini tahrirlash formasini ochish
+         */
+        function openEditPatientForm(patient) {
+            for (const key in patient) {
+                // Tahrirlash formasidagi elementlarni ma'lumotlar bilan to'ldirish
+                if (editPatientForm.elements[key]) {
+                    editPatientForm.elements[key].value = patient[key];
+                }
+            }
+            
+            // ID ni yashirin maydonda saqlash (agar mavjud bo'lmasa yaratiladi)
+            let inputId = editPatientForm.elements['id'];
+            if (!inputId) {
+                inputId = document.createElement('input');
+                inputId.type = 'hidden';
+                inputId.name = 'id';
+                editPatientForm.appendChild(inputId);
+            }
+            inputId.value = patient.id;
+
+            openModal(editPatientModal);
+        }
+
+        
+        function renderDetailItem(key, value, label, icon, color) {
+            let displayValue = value;
+            
+            if ((key === 'birthDate' || key === 'lastVisit') && value) {
+                const parts = value.split('-');
+                if (parts.length === 3) {
+                    displayValue = `${parts[2]}.${parts[1]}.${parts[0]}`; 
+                }
+            }
+
+            if (key === 'price' && (value !== null && value !== undefined && value !== '')) {
+                 const numericValue = typeof value === 'number' ? value : parseFloat(value);
+                 if (!isNaN(numericValue)) {
+                    displayValue = numericValue.toLocaleString('uz-UZ') + ' so‘m'; 
+                 } else {
+                    displayValue = '—';
+                 }
+            }
+            
+            // Telefon raqami uchun havola yaratish
+            const valueContent = key === 'phone' && displayValue !== '—' ? 
+                `<a href="tel:${displayValue}" class="hover:text-p text-semibold transition">${displayValue}</a>` :
+                displayValue;
+
+
+            // Agar qiymat bo'sh bo'lsa '—' qilib belgilash
+            displayValue = displayValue === null || displayValue === undefined || displayValue === '' ? '—' : valueContent;
+
+            return `
+                <div class="flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                    <i class="${icon} text-2xl text-${color} mt-0.5"></i>
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-500 tracking-wider">${label}</p>
+                        <p class="text-lg font-bold text-gray-800">${displayValue}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        /**
+         * Bemor ma'lumotlarini HTMLga chiqarish
+         */
+        function renderPatientDetails(patient) {
+            // Asosiy sarlavhani yangilash
+            patientNameHeader.innerHTML = `<i class="ri-user-heart-line text-2xl text-primary"> </i> ${patient.name} Tafsilotlari`;
+
+            const statusBadge = `<span id="patientStatusBadge" class="px-4 py-1.5 rounded-full text-sm font-bold shadow-sm ${patient.status === "Faol"
+                ? "bg-primary/10 text-primary border border-primary/20"
+                : patient.status === "Kutilmoqda"
+                    ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                    : "bg-gray-200 text-gray-600 border border-gray-300"
+                }">${patient.status}</span>`;
+
+            const age = getAge(patient.birthDate);
+
+            // Tahrirlash tugmasi HTMLsi yangi joyga moslandi
+            const editButtonHtml = `
+                <button id="editPatientBtn" 
+                    class="px-5 py-2.5 bg-accent text-white rounded-full font-semibold hover:bg-blue-700 transition flex items-center gap-2 shadow-lg shadow-accent/40 text-sm md:text-base">
+                    <i class="ri-edit-line"></i> Tahrirlash
+                </button>
+            `;
+
+            // Bemor Tafsilotlari (Kattaroq p-6, rounded-3xl)
+            const detailsHtml = `
+                <div class="space-y-8">
+                    <div class="flex justify-between items-center">
+                       <h2 class="text-2xl font-bold text-gray-800">${patient.name}</h2> 
+                       <div class="flex-shrink-0">${statusBadge}</div>
+                    </div> 
+
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                        <div class="flex justify-between items-center mb-5">
+                            <h4 class="text-xl font-bold text-gray-800 flex items-center gap-2 text-primary">
+                                <i class="ri-user-3-line"></i> Shaxsiy ma’lumotlar
+                            </h4>
+                            ${editButtonHtml}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            ${renderDetailItem('phone', patient.phone, 'Telefon', 'ri-phone-line', 'primary')}
+                            ${renderDetailItem('birthDate', patient.birthDate, 'Tug\'ilgan sana', 'ri-calendar-line', 'accent')}
+                            ${renderDetailItem('age', age + (age !== '—' ? ' yosh' : ''), 'Yoshi', 'ri-cake-line', 'orange-600')}
+                            ${renderDetailItem('gender', patient.gender, 'Jins', 'ri-men-line', 'purple-600')}
+                            ${renderDetailItem('lastVisit', patient.lastVisit, 'Oxirgi Tashrif', 'ri-calendar-check-line', 'indigo-500')}
+                            ${renderDetailItem('price', patient.price, 'To\'langan Narx', 'ri-bank-card-line', 'teal-600')}
+                        </div>
+                        <div class="mt-5">
+                            ${renderDetailItem('address', patient.address || 'Ma’lumot yo‘q', 'Manzil', 'ri-map-pin-line', 'red-600')}
+                        </div>
+                    </div>
+        
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                        <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 text-primary">
+                            <i class="ri-file-text-line"></i> Qo‘shimcha Izoh
+                        </h4>
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 text-base text-gray-700 min-h-24 whitespace-pre-wrap">
+                            ${patient.description || "Bemor bo‘yicha qo‘shimcha izoh kiritilmagan."}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Kontentni birgalikda joylashtirish
+            patientDetailsContainer.innerHTML = detailsHtml;
+
+            // Tahrirlash tugmasiga event listener qo'shish
+            const editBtn = document.getElementById("editPatientBtn");
+            if (editBtn) editBtn.onclick = () => openEditPatientForm(patient);
+        }
+
+        /**
+         * Bemor ma'lumotlarini yuklash va sahifada ko'rsatish
+         */
+        async function loadPatientDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = urlParams.get('id');
+
+            if (!patientId) {
+                showToast("Bemor ID si topilmadi.", "error");
+                document.getElementById('loadingError').classList.remove('hidden');
+                patientDetailsContainer.innerHTML = '';
+                return;
+            }
+
+            patientDetailsContainer.innerHTML = `<p class="text-center text-gray-500 py-10"><i class="ri-loader-4-line text-2xl animate-spin mr-2"></i>Ma'lumotlar yuklanmoqda...</p>`;
+            document.getElementById('loadingError').classList.add('hidden');
+
+
+            try {
+                // GET so'rovi orqali bemor ma'lumotlarini yuklash
+                const res = await fetch(`${API_URL}/${patientId}`);
+
+                if (!res.ok) {
+                    throw new Error(`API dan bemor topilmadi. Status: ${res.status}`);
+                }
+
+                const patient = await res.json();
+
+                if (!patient || Object.keys(patient).length === 0) {
+                    throw new Error('Server bo‘sh javob qaytardi');
+                }
+
+                renderPatientDetails(patient);
+                document.getElementById('loadingError').classList.add('hidden');
+
+            } catch (error) {
+                console.error("Bemor yuklashda xato:", error);
+                showToast(`❌ Xato: Bemor topilmadi. ID: ${patientId}`, "error");
+                document.getElementById('loadingError').classList.remove('hidden');
+                patientDetailsContainer.innerHTML = '';
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatientDetails();
+
+            const sidebar = document.getElementById('sidebar');
+            const openSidebar = document.getElementById('openSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            openSidebar.addEventListener('click', () => {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.remove('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            /**
+             * Bemor ma'lumotlarini tahrirlash va saqlash funksiyasi (PUT)
+             * Ma'lumotlar db.json fayliga yuboriladi.
+             */
+            editPatientForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(editPatientForm);
+                const patientData = Object.fromEntries(formData.entries());
+                const patientId = patientData.id;
+
+                // Narx maydonini to'g'ri raqam formatiga o'tkazish
+                if (patientData.price !== undefined) {
+                    // Agar bo'sh bo'lsa 0 ga, aks holda butun songa aylantirish
+                    patientData.price = patientData.price === '' ? 0 : parseInt(patientData.price); 
+                }
+                
+                // Formadan ID maydonini API so'roviga kiritmaslik
+                delete patientData.id;
+
+
+                try {
+                    // PUT so'rovi orqali ma'lumotni yangilash
+                    const res = await fetch(`${API_URL}/${patientId}`, {
+                        method: 'PUT', // ✅ JSON Serverda ma'lumotni yangilash uchun
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(patientData) // JSON formatida yuborish
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`Ma'lumotlarni saqlashda xato: ${res.status}`);
+                    }
+
+                    // const updatedPatient = await res.json(); // Yangilangan ma'lumotlarni qabul qilish
+
+                    closeModal(editPatientModal);
+
+                    showToast("✅ Bemor ma'lumotlari muvaffaqiyatli saqlandi va db.json ga yuborildi!", "success");
+                    
+                    setTimeout(() => {
+                        window.location.href = './patients.html';
+                    }, 500); 
+                    
+
+                } catch (error) {
+                    console.error("Ma'lumotlarni saqlash xatosi:", error);
+                    showToast(`❌ Ma'lumotlarni saqlashda xato yuz berdi. Iltimos, server (JSON Server) ishlayotganiga ishonch hosil qiling.`, "error");
+                }
+            });
+
+
+        });
+
+        window.closeModal = closeModal;
+    </script>
+</body>
+
+</html>

@@ -202,22 +202,37 @@
                 <div
                     class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm hover:bg-gray-200 transition">
                     <div id="profileAvatar"
-                        class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm"><i class="ri-user-line"></i></div>
-                        <p class="text-[17px] font-bold hidden lg:block text-gray-800">Profil</p>
+                        class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    <p id="doctorName" class="text-[17px] font-bold hidden lg:block text-gray-800">Profil</p>
                 </div>
             </a>
         </header>
 
-        <div class="bg-white p-4 md:p-6 shadow-md">
-
-            <div class="flex sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
-                <!-- Qidiruv -->
+        <div class="bg-white p-4 md:p-6 shadow-md  overflow-y-auto ">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
                 <div class="flex-1 min-w-[180px]">
                     <input id="searchInput" type="text" placeholder="Bemor qidirish..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none text-sm">
                 </div>
 
-                <!-- Tugma -->
+                <div class="w-full sm:w-auto">
+                    <select id="statusFilter"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:outline-none text-sm bg-white">
+                        <option value="">Barcha Statuslar</option>
+                        <option value="Faol">Faol</option>
+                        <option value="Kutilmoqda">Kutilmoqda</option>
+                        <option value="Yakunlangan">Yakunlangan</option>
+                    </select>
+                </div>
+
+                <button id="exportExcelBtn"
+                    class="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 sm:w-auto">
+                    <i class="ri-file-excel-2-line text-lg"></i>
+                    <span class="hidden sm:inline">Excelga Eksport</span>
+                </button>
+
                 <button id="addPatientBtn"
                     class="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 flex items-center justify-center gap-2 sm:w-auto">
                     <i class="ri-user-add-line text-lg"></i>
@@ -227,56 +242,81 @@
 
 
             <div class="overflow-x-auto rounded-lg">
-                <table class="w-full min-w-[600px] border-collapse border border-gray-200">
-                    <thead class="bg-gray-100 text-sm text-gray-700">
-                        <tr>
-                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('name')">
-                                <div class="flex items-center gap-1">
-                                    <i class="ri-user-line text-gray-500"></i>
-                                    <span>F.I.O.</span>
-                                    <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
-                                </div>
-                            </th>
-
-                            <th class="border px-4 py-2">
-                                <div class="flex items-center gap-1">
-                                    <i class="ri-phone-line text-green-600"></i>
-                                    <span>Telefon</span>
-                                </div>
-                            </th>
-
-                            <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('lastVisit')">
-                                <div class="flex items-center gap-1">
-                                    <i class="ri-calendar-line text-blue-500"></i>
-                                    <span>Oxirgi tashrif</span>
-                                    <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
-                                </div>
-                            </th>
-
-                            <th class="border px-4 py-2">
-                                <div class="flex items-center gap-1">
-                                    <i class="ri-shield-user-line text-yellow-500"></i>
-                                    <span>Status</span>
-                                </div>
-                            </th>
-
-                            <th class="border px-4 py-2 text-center">
-                                <div class="flex items-center justify-center gap-1">
-                                    <i class="ri-settings-3-line text-gray-600"></i>
-                                    <span>Amallar</span>
-                                </div>
-                            </th>
-
-                        </tr>
-                    </thead>
-                    <tbody id="patientsTableBody" class="text-sm"></tbody>
-                </table>
+                <div class="overflow-x-auto rounded-lg">
+                    <div class="max-h-[330px] overflow-y-auto"> 
+                
+                        <table class="w-full min-w-[600px] border-collapse border border-gray-200">
+                            <thead class="bg-gray-100 text-sm text-gray-700 sticky top-0 ">
+                                <tr>
+                                    <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('name')">
+                                        <div class="flex items-center gap-1">
+                                            <i class="ri-user-line text-gray-500"></i>
+                                            <span>F.I.O.</span>
+                                            <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
+                                        </div>
+                                    </th>
+                                    <th class="border px-4 py-2">
+                                        <div class="flex items-center gap-1">
+                                            <i class="ri-phone-line text-green-600"></i>
+                                            <span>Telefon</span>
+                                        </div>
+                                    </th>
+                                    <th class="border px-4 py-2 cursor-pointer" onclick="sortTable('lastVisit')">
+                                        <div class="flex items-center gap-1">
+                                            <i class="ri-calendar-line text-blue-500"></i>
+                                            <span>Oxirgi tashrif</span>
+                                            <i class="ri-expand-up-down-line text-gray-400 text-xs"></i>
+                                        </div>
+                                    </th>
+                                    <th class="border px-4 py-2">
+                                        <div class="flex items-center gap-1">
+                                            <i class="ri-shield-user-line text-yellow-500"></i>
+                                            <span>Status</span>
+                                        </div>
+                                    </th>
+                                    <th class="border px-4 py-2 text-center">
+                                        <div class="flex items-center justify-center gap-1">
+                                            <i class="ri-settings-3-line text-gray-600"></i>
+                                            <span>Amallar</span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientsTableBody" class="text-sm"></tbody>
+                        </table>
+                
+                    </div>
+                </div>
             </div>
 
+            <div class="flex justify-between items-center mt-6 py-3 border-t border-gray-100">
+                <div class="text-sm text-gray-700">
+                    Jami: <span id="totalPatientsCount" class="font-bold">0</span> bemor
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-700 hidden sm:block">Sahifada:</span>
+                    <select id="patientsPerPage"
+                        class="px-3 py-1 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:outline-none text-sm bg-white">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                    </select>
+                    <div id="paginationControls" class="flex items-center gap-2">
+                        <button id="prevPageBtn" disabled
+                            class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                            <i class="ri-arrow-left-s-line"></i>
+                        </button>
+                        <span id="currentPageIndicator" class="text-sm font-semibold text-gray-800">1 / 1</span>
+                        <button id="nextPageBtn" disabled
+                            class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Modals -->
     <div id="patientModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
         <div class="relative bg-white rounded-2xl shadow-lg p-6 w-96">
             <button onclick="closePatientModal()"
@@ -292,95 +332,103 @@
 
 
     <div id="addPatientModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center z-50 px-4">
+        class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm modal-backdrop flex items-center justify-center z-50 px-4">
 
         <div
-            class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl transform transition-all duration-300 max-h-[90vh] overflow-y-auto">
+            class="bg-white p-6 rounded-2xl w-full max-w-lg lg:max-w-3xl shadow-2xl transform transition-all duration-300 max-h-[90vh] overflow-y-auto border border-gray-100">
 
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800"> Yangi bemor qo‘shish</h3>
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 class="text-2xl font-bold text-primary flex items-center gap-2">
+                    <i class="ri-user-add-line"></i> Yangi bemor qo‘shish
+                </h3>
                 <button id="cancelAddPatient"
-                    class="text-gray-500 hover:text-gray-800 transition font-bold text-2xl leading-none">×</button>
+                    class="text-gray-400 hover:text-red-500 transition font-bold text-3xl leading-none">
+                    <i class="ri-close-line"></i>
+                </button>
             </div>
 
             <form id="addPatientForm" class="space-y-6">
-                <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Shaxsiy ma’lumotlar</h3>
+                <div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-100">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <i class="ri-user-3-line text-accent"></i> Shaxsiy ma’lumotlar
+                    </h4>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Ism Familiya</label>
-                        <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">Jins</label>
-                            <select name="gender" required
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                <option value="">Tanlang</option>
-                                <option value="Erkak">Erkak</option>
-                                <option value="Ayol">Ayol</option>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Ism Familiya</label>
+                            <input type="text" name="name" placeholder="Masalan: Ali Valiyev" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-accent focus:border-accent transition duration-200 focus:shadow-md outline-none">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">Jins</label>
+                                <select name="gender" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-accent focus:border-accent transition duration-200 bg-white appearance-none pr-8 cursor-pointer outline-none">
+                                    <option value="" disabled selected>Jinsni tanlang</option>
+                                    <option value="Erkak">Erkak ♂️</option>
+                                    <option value="Ayol">Ayol ♀️</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">Tug'ilgan sana</label>
+                                <input type="date" name="birthDate" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-accent focus:border-accent transition duration-200 outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">Telefon raqami</label>
+                                <input type="tel" name="phone" placeholder="+998 90 123 45 67" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-accent focus:border-accent transition duration-200 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">Yashash joyi</label>
+                                <input type="text" name="address" placeholder="Masalan: Toshkent shahri, Chilonzor"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-accent focus:border-accent transition duration-200 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-100">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <i class="ri-file-list-line text-primary"></i> Tibbiy ma’lumotlar
+                    </h4>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
+                            <input type="date" name="lastVisit" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
+                            <select name="status" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 bg-white appearance-none pr-8 cursor-pointer outline-none">
+                                <option value="Faol">Faol</option>
+                                <option value="Kutilmoqda">Kutilmoqda</option>
+                                <option value="Yakunlangan">Yakunlangan</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">Tug'ilgan sana</label>
-                            <input type="date" name="birthDate" required
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Telefon</label>
-                        <input type="text" name="phone" placeholder="+998 90 123 45 67" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Yashash joyi</label>
-                        <input type="text" name="address" placeholder="Masalan: Toshkent shahri, Chilonzor" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                    </div>
-                </div>
-
-
-                <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Tibbiy ma’lumotlar</h3>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Oxirgi tashrif sanasi</label>
-                        <input type="date" name="lastVisit" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
-                        <select name="status" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                            <option value="Faol">Faol</option>
-                            <option value="Kutilmoqda">Kutilmoqda</option>
-                            <option value="Yakunlangan">Yakunlangan</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Narx (so‘m)</label>
-                        <input type="number" name="price" placeholder="Masalan: 150000" required
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                    </div>
-
-                    <div>
+                    <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-600 mb-1">Izoh</label>
                         <textarea name="description" rows="3" placeholder="Bemor haqida qo‘shimcha ma’lumot..."
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"></textarea>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-inner focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 outline-none"></textarea>
                     </div>
 
                 </div>
 
-                <div class="flex justify-end gap-2 pt-4">
+                <div class="flex justify-end pt-4 border-t border-gray-100">
                     <button type="submit"
-                        class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition disabled:opacity-50">
-                        Saqlash
+                        class="bg-primary text-white px-6 py-3 rounded-full hover:bg-green-700 transition duration-300 flex items-center gap-2 font-semibold shadow-lg shadow-green-200/50">
+                        <i class="ri-save-line"></i> Saqlash
                     </button>
                 </div>
             </form>
@@ -388,7 +436,6 @@
     </div>
 
 
-    <!-- Bemor tafsilotlari MODAL -->
     <div id="viewPatientModal"
         class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
         <div
@@ -412,7 +459,7 @@
 
                 <button id="editPatientBtn"
                     class="px-5 py-2.5 rounded-xl bg-secondary text-white font-medium shadow-lg hover:opacity-90 transition">
-                    ✏️ Tahrirlash
+                    Tahrirlash
                 </button>
             </div>
         </div>

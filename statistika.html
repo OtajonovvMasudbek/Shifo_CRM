@@ -217,7 +217,7 @@
             document.getElementById("doctorName").textContent = doctor.name;
             document.getElementById("doctorAvatar").src = doctor.avatar && doctor.avatar !== "default_avatar.png"
                 ? doctor.avatar
-                : "https://ui-avatars.com/api/?name=AD&background=16A34A&color=fff";
+                : "https://ui-avatars.com/api/?name=SM&background=16A34A&color=fff";
         }
 
         // --- Filtrlar funksiyasi ---
@@ -313,12 +313,11 @@
             const activePatientsCount = patients.filter(p => p.status === 'Faol' || p.status === 'Kutilmoqda').length;
             const newPatientsCount = patients.filter(p => p.status === 'Kutilmoqda' || p.status === 'Faol').length;
             const finishedTreatmentsCount = charts.filter(c => c.teeth && c.teeth.some(t => t.status === 'filled' || t.status === 'crown' || t.status === 'root_canal')).length;
-
             document.getElementById('totalPatients').textContent = totalPatientsCount;
             document.getElementById('activePatients').textContent = activePatientsCount;
             document.getElementById('newPatients').textContent = newPatientsCount;
             document.getElementById('finishedTreatments').textContent = finishedTreatmentsCount;
-
+console.log(charts);
             const monthlyData = generateMonthlyData(patients);
             renderMonthlyPatientsChart(monthlyData);
 
@@ -326,7 +325,6 @@
             renderDentalStatusChart(statusCounts);
         }
 
-        // --- Yordamchi Funksiyalar (getDentalStatusCounts, generateMonthlyData, Chart render funksiyalari o'zgarishsiz qoldi) ---
 
         function getDentalStatusCounts(charts) {
             const counts = {};
@@ -380,12 +378,11 @@
         function renderMonthlyPatientsChart(data) {
             if (monthlyChartInstance) monthlyChartInstance.destroy();
 
-            // Grafik balandligini to'g'rilash uchun yangi tanlov:
-            // aspectRatio: 2 - Grafik eniga nisbatan 2:1 nisbatda bo'ladi (eni 2 barobar balandligidan katta)
+            
             const chartOptions = {
                 responsive: true,
-                maintainAspectRatio: true, // Auto heightni o'chiramiz, nisbatni o'zimiz beramiz
-                aspectRatio: 1.8,         // Eng mos keladigan nisbatni tanlashingiz mumkin (Masalan, 1.8 yoki 2)
+                maintainAspectRatio: true, 
+                aspectRatio: 1.8,         
                 scales: {
                     y: {
                         beginAtZero: true
@@ -449,19 +446,16 @@
                 }
             });
         }
-        // Sahifani ishga tushirish
         async function initialize() {
-            loggedInDoctorId = getLoggedInDoctorId(); // Kirilgan shifokor ID sini olamiz
+            loggedInDoctorId = getLoggedInDoctorId(); 
             renderDoctorInfo();
             await loadAllData();
             await loadDoctorsForFilter();
 
-            // 🔑 Lokal ID bo'yicha filtrni standart qiymat qilib o'rnatish
             if (loggedInDoctorId && document.getElementById('doctorFilter').querySelector(`option[value="${loggedInDoctorId}"]`)) {
                 document.getElementById('doctorFilter').value = loggedInDoctorId;
             }
 
-            // O'rnatilgan filtrlar (yoki default filtr) bo'yicha statistikani yuklash
             applyFilters();
         }
 

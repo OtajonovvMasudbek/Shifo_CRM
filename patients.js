@@ -4,7 +4,6 @@
 const API_URL = "http://localhost:5001/patients";
 const sidebar = document.getElementById("sidebar");
 const openSidebar = document.getElementById("openSidebar");
-const closeSidebar = document.getElementById("closeSidebar");
 const sidebarOverlay = document.getElementById("sidebarOverlay");
 const tableBody = document.getElementById("patientsTableBody");
 const addPatientBtn = document.getElementById("addPatientBtn");
@@ -15,14 +14,25 @@ const searchInput = document.getElementById("searchInput");
 const viewPatientModal = document.getElementById("viewPatientModal");
 const patientDetails = document.getElementById("patientDetails");
 const toastContainer = document.getElementById("toastContainer");
-const profileNameEl = document.getElementById("profileName");
+
+// --- YANGI QO'SHILGAN O'ZGARUVCHILAR ---
+const statusFilter = document.getElementById("statusFilter");
+const exportExcelBtn = document.getElementById("exportExcelBtn");
+const patientsPerPageEl = document.getElementById("patientsPerPage");
+const prevPageBtn = document.getElementById("prevPageBtn");
+const nextPageBtn = document.getElementById("nextPageBtn");
+const currentPageIndicator = document.getElementById("currentPageIndicator");
+const totalPatientsCountEl = document.getElementById("totalPatientsCount");
+const doctorNameEl = document.getElementById("doctorName");
 const profileAvatarEl = document.getElementById("profileAvatar");
 
-
-
+// --- PAGINATSIYA VA FILTR O'ZGARUVCHILARI ---
 let patientsData = [];
 let sortKey = null;
 let sortAsc = true;
+let currentPage = 1; // Hozirgi sahifa
+let patientsPerPage = 10; // Sahifadagi bemorlar soni
+let currentFilteredPatients = []; // Filtrdan o'tgan bemorlar ro'yxati
 
 // === Asosiy yordamchi funksiyalar ===
 function showToast(message, type = "info") {
@@ -56,13 +66,6 @@ if (openSidebar) {
   });
 }
 
-if (closeSidebar) {
-  closeSidebar.addEventListener("click", () => {
-    sidebar.classList.remove("active");
-    sidebarOverlay.classList.add("hidden");
-  });
-}
-
 if (sidebarOverlay) {
   sidebarOverlay.addEventListener("click", () => {
     sidebar.classList.remove("active");
@@ -83,22 +86,26 @@ function getAge(birthDate) {
   return age >= 0 ? age : "—";
 }
 
-// === Ma’lumotlarni yuklash ===
-async function loadPatients(query = "") {
+// === Ma’lumotlarni yuklash va filtrlash (O'ZGARGAN QISM) ===
+async function loadPatients(query = "", status = "") {
   try {
     const res = await fetch(API_URL);
     const raw = await res.json();
     patientsData = Array.isArray(raw) ? raw : [];
 
-    // 👇 localStorage'dagi doctor.id bo‘yicha filter
-    const doctor = JSON.parse(localStorage.getItem("doctor") || "null");
+    // 👇 Barcha ma’lumotlarni qabul qilish. Doktor ID bo‘yicha filtrlash olib tashlandi.
     let filtered = patientsData;
-    if (doctor && doctor.id) {
-      filtered = filtered.filter((p) => String(p.doctorId) === String(doctor.id));
+
+    // 👇 Status bo‘yicha filter
+    const currentStatus = status || (statusFilter ? statusFilter.value : "");
+    if (currentStatus) {
+      filtered = filtered.filter((p) => p.status === currentStatus);
     }
 
-    if (query) {
-      const q = query.toLowerCase();
+    // 👇 Qidiruv bo‘yicha filter
+    const currentQuery = query || (searchInput ? searchInput.value : "");
+    if (currentQuery) {
+      const q = currentQuery.toLowerCase();
       filtered = filtered.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
@@ -107,7 +114,9 @@ async function loadPatients(query = "") {
       );
     }
 
-    renderPatients(filtered);
+    currentFilteredPatients = filtered;
+    currentPage = 1; // Yangi filtrlashda sahifani 1 ga qaytarish
+    updateView(); // Paginatsiya va jadvalni yangilash
   } catch (err) {
     console.error("loadPatients error:", err);
     if (tableBody) {
@@ -116,7 +125,50 @@ async function loadPatients(query = "") {
   }
 }
 
-// === Jadvalni chiqarish ===
+// === Paginatsiya, ma'lumotlarni saralash va jadvalni yangilash (YANGI) ===
+function updateView() {
+  // Saralash amali 
+  if (sortKey) {
+    currentFilteredPatients.sort((a, b) => {
+      const aVal = a[sortKey] || "";
+      const bVal = b[sortKey] || "";
+      if (aVal < bVal) return sortAsc ? -1 : 1;
+      if (aVal > bVal) return sortAsc ? 1 : -1;
+      return 0;
+    });
+  }
+
+  // Paginatsiya logikasi
+  const totalPatients = currentFilteredPatients.length;
+  const totalPages = Math.ceil(totalPatients / patientsPerPage);
+
+  if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+  else if (currentPage < 1) currentPage = 1;
+
+  const start = (currentPage - 1) * patientsPerPage;
+  const end = start + patientsPerPage;
+  const patientsOnPage = currentFilteredPatients.slice(start, end);
+
+  renderPatients(patientsOnPage);
+
+  // Paginatsiya boshqaruvini yangilash
+  if (totalPatientsCountEl) totalPatientsCountEl.textContent = totalPatients;
+  if (currentPageIndicator) currentPageIndicator.textContent = `${totalPages > 0 ? currentPage : 0} / ${totalPages}`;
+  if (prevPageBtn) prevPageBtn.disabled = currentPage === 1 || totalPages === 0;
+  if (nextPageBtn) nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+}
+
+// === Saralash funksiyasi (HTMLda onclickga bog'langan) (YANGI) ===
+window.sortTable = function (key) {
+  if (sortKey === key) {
+    sortAsc = !sortAsc;
+  } else {
+    sortKey = key;
+    sortAsc = true;
+  }
+  updateView();
+}
+
 function renderPatients(patients) {
   if (!tableBody) return;
   tableBody.innerHTML = "";
@@ -143,39 +195,42 @@ function renderPatients(patients) {
           : "bg-gray-100 text-gray-700"
       }">${p.status}</span>
       </td>
-      <td class="px-4 py-3 flex items-center justify-center gap-3">
-        <button class="text-blue-600 hover:text-blue-800" title="Tafsilotlar">
-          <i class="ri-user-heart-line text-lg"></i>
-        </button>
-        <button class="text-red-500 hover:text-red-700" title="O‘chirish">
-          <i class="ri-delete-bin-6-line text-lg"></i>
-        </button>
-      </td>
+      <td class="p-4 text-center">
+    <a href="./description.html?id=${p.id}"
+        class="inline-flex items-center justify-center w-9 h-9 text-lg text-accent hover:text-blue-700 hover:bg-blue-50/50 transition duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+        title="Bemor ma'lumotlarini ko'rish"
+        onclick="event.stopPropagation()">
+        <i class="ri-eye-line font-normal"></i>
+    </a>
+    
+    <button data-id="${p.id}" class="delete-btn ml-2 inline-flex items-center justify-center w-9 h-9 text-lg text-red-500 hover:text-red-700 hover:bg-red-50/50 transition duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/50"
+            title="Bemor ma'lumotlarini o'chirish"
+            onclick="event.stopPropagation()">
+        <i class="ri-delete-bin-line font-normal"></i>
+    </button>
+</td>
     `;
 
-    const [btnView, btnDelete] = tr.querySelectorAll("button");
 
-    btnView.addEventListener("click", (e) => {
-      e.stopPropagation();
-      openPatientDetails(p.id);
-    });
+    const btnDelete = tr.querySelector(".delete-btn");
 
-    btnDelete.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      await deletePatient(p.id);
-    });
+    if (btnDelete) {
+      btnDelete.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deletePatient(p.id);
+      });
+    }
 
     tableBody.appendChild(tr);
   });
 }
 
-// === 🧩 O‘chirish funksiyasi ===
 async function deletePatient(id) {
   if (!confirm("Rostdan ham ushbu bemorni o‘chirmoqchimisiz?")) return;
 
   try {
     await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    showToast("🗑️ Bemor o‘chirildi", "success");
+    showToast("Bemor o‘chirildi", "success");
     await loadPatients();
   } catch (err) {
     console.error("delete error:", err);
@@ -183,7 +238,7 @@ async function deletePatient(id) {
   }
 }
 
-// === Yangi bemor qo'shish funksiyasi ===
+// === Yangi bemor qo'shish funksiyasi (O'ZGARISHSIZ) ===
 if (addPatientForm) {
   addPatientForm.onsubmit = async (e) => {
     e.preventDefault();
@@ -215,70 +270,6 @@ if (addPatientForm) {
 }
 
 
-function openPatientDetails(id) {
-  const patient = patientsData.find((p) => String(p.id) === String(id));
-  if (!patient) return showToast("Bemor topilmadi", "error");
-
-  const age = getAge(patient.birthDate);
-  const statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-semibold ${patient.status === "Faol"
-    ? "bg-primary/10 text-primary"
-    : patient.status === "Kutilmoqda"
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-gray-200 text-gray-600"
-    }">${patient.status}</span>`;
-
-  patientDetails.innerHTML = `
-    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b border-gray-100 pb-4 mb-6">
-        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md">
-            ${patient.name.charAt(0).toUpperCase()}
-        </div>
-        <div class="flex-1">
-            <h3 class="text-3xl font-extrabold text-gray-900">${patient.name}</h3>
-            <p class="text-sm text-gray-500">Bemor ID: #${patient.id}</p>
-        </div>
-        <div class="mt-2 sm:mt-0">${statusBadge}</div>
-    </div>
-
-    <div class="space-y-6">
-        <div class="bg-gray-50 p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 text-primary">
-                <i class="ri-user-3-line"></i> Shaxsiy ma’lumotlar
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 text-gray-700 text-sm">
-                ${renderDetailItem('phone', patient.phone, 'Telefon', 'ri-phone-line', 'primary')}
-                ${renderDetailItem('birthDate', patient.birthDate, 'Tug\'ilgan sana', 'ri-calendar-line', 'accent')}
-                ${renderDetailItem('age', age + (age !== '—' ? ' yosh' : ''), 'Yoshi', 'ri-cake-line', 'orange-500')}
-                ${renderDetailItem('gender', patient.gender, 'Jins', 'ri-men-line', 'purple-600')}
-                <div class="md:col-span-3">
-                    ${renderDetailItem('address', patient.address || 'Ma’lumot yo‘q', 'Manzil', 'ri-map-pin-line', 'red-600')}
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-gray-50 p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 text-primary">
-                <i class="ri-money-dollar-circle-line"></i> Tibbiy va Moliyaviy
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-700 text-sm">
-                ${renderDetailItem('lastVisit', patient.lastVisit, 'Oxirgi Tashrif', 'ri-calendar-check-line', 'indigo-500')}
-                ${renderDetailItem('price', patient.price ? patient.price.toLocaleString() + ' so‘m' : '—', 'To\'langan Narx', 'ri-bank-card-line', 'teal-600')}
-            </div>
-        </div>
-        
-        <div class="bg-gray-50 p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h4 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2 text-primary">
-                 <i class="ri-file-text-line"></i> Qo‘shimcha Izoh
-            </h4>
-            <div class="p-3 bg-white rounded-xl border text-sm text-gray-700 min-h-20 whitespace-pre-wrap">
-                ${patient.description || "Bemor bo‘yicha qo‘shimcha izoh kiritilmagan."}
-            </div>
-        </div>
-    </div>
-  `;
-  openModal(viewPatientModal);
-  const editBtn = document.getElementById("editPatientBtn");
-  editBtn.onclick = () => openEditPatientForm(patient);
-}
 
 function renderDetailItem(key, value, label, iconClass, iconColor) {
   return `
@@ -291,141 +282,116 @@ function renderDetailItem(key, value, label, iconClass, iconColor) {
     `;
 }
 
-function openEditPatientForm(patient) {
-  patientDetails.innerHTML = `
-    <form id="editPatientForm" class="space-y-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Ism Familiya</label>
-          <input type="text" name="name" value="${patient.name}" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Tug'ilgan sana</label>
-          <input type="date" name="birthDate" value="${patient.birthDate || ""}"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
-        
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Jins</label>
-          <select name="gender"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-            <option value="Erkak" ${patient.gender === "Erkak" ? "selected" : ""}>Erkak</option>
-            <option value="Ayol" ${patient.gender === "Ayol" ? "selected" : ""}>Ayol</option>
-          </select>
-        </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Telefon</label>
-          <input type="text" name="phone" value="${patient.phone}"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
-        
-        <div class="sm:col-span-2">
-            <label class="block text-sm font-medium text-gray-600 mb-1">Manzil</label>
-            <input type="text" name="address" value="${patient.address || ""}"
-                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Oxirgi tashrif</label>
-          <input type="date" name="lastVisit" value="${patient.lastVisit || ""}"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
+function exportToCSV(patients) {
+  if (patients.length === 0) return showToast("Eksport qilish uchun bemor yo‘q", "info");
 
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
-          <select name="status"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-            <option value="Faol" ${patient.status === "Faol" ? "selected" : ""}>Faol</option>
-            <option value="Kutilmoqda" ${patient.status === "Kutilmoqda" ? "selected" : ""}>Kutilmoqda</option>
-            <option value="Yakunlangan" ${patient.status === "Yakunlangan" ? "selected" : ""}>Yakunlangan</option>
-          </select>
-        </div>
+  const header = ["ID", "F.I.O.", "Telefon", "Tug'ilgan sana", "Jins",  "Status", "To'langan Narx (so'm)", "Manzil", "Izoh"];
 
-        <div class="sm:col-span-2">
-          <label class="block text-sm font-medium text-gray-600 mb-1">Narx (so‘m)</label>
-          <input type="number" name="price" value="${patient.price || ""}"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
-        </div>
-      </div>
+  const rows = patients.map(p => [
+    p.id || '',
+    p.name || '',
+    `'${p.phone || ''}`,
+    p.birthDate || '',
+    p.gender || '',
+    p.status || '',
+    
+    p.price || 0,
+    p.address || '',
+    p.description ? p.description.replace(/"/g, '""').replace(/(\r\n|\n|\r)/gm, " ") : ''
+  ]);
 
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-1">Izoh</label>
-        <textarea name="description" rows="3"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">${patient.description || ""}</textarea>
-      </div>
+  // CSV ma'lumotlarini tayyorlash: qatorlarni qo'shtirnoq ichiga olib, vergul bilan ajratish
+  const csvContent = [
+    header.join(","),
+    // Har bir qiymatni qo'shtirnoq ichiga olamiz
+    ...rows.map(row => row.map(e => `"${e}"`).join(","))
+  ].join("\n");
 
-      <div class="flex justify-end gap-3 pt-3">
-        <button type="button" onclick="openPatientDetails('${patient.id}')"
-          class="px-5 py-2.5 bg-gray-100 rounded-full hover:bg-gray-200 text-gray-700 transition">
-          Bekor qilish
-        </button>
-        <button type="submit"
-          class="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-full hover:opacity-90 transition">
-          💾 Saqlash
-        </button>
-      </div>
-    </form>
-  `;
+  // BOM (\uFEFF) ni qo'shish. Bu o‘zbek (lotin) belgilarini Excelda to‘g‘ri ko‘rsatish uchun muhim.
+  const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.setAttribute('href', url);
+  a.setAttribute('download', `bemorlar_royxati_${new Date().toISOString().slice(0, 10)}.csv`); // Fayl nomiga sana qo'shildi
+  a.click();
 
-  const form = document.getElementById("editPatientForm");
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-    const fd = new FormData(form);
-    const updated = Object.fromEntries(fd.entries());
-
-    updated.price = Number(updated.price) || 0;
-    updated.doctorId = patient.doctorId;
-
-    try {
-      await fetch(`${API_URL}/${patient.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated),
-      });
-      showToast("✅ Ma’lumotlar yangilandi", "success");
-      await loadPatients();
-      openPatientDetails(patient.id);
-    } catch (err) {
-      console.error(err);
-      showToast("❌ Xatolik yuz berdi", "error");
-    }
-  };
+  showToast("✅ Excelga eksport bajarildi!", "success");
 }
 
 // === Qidiruv ===
 if (searchInput) {
+  // Qidiruv maydoni o'zgarganda loadPatients ni chaqirish
   searchInput.addEventListener("input", () => loadPatients(searchInput.value));
 }
 
-// === Modal yopish ===
+// === Modal yopish (O'ZGARISHSIZ) ===
 window.onclick = function (event) {
   if (event.target === viewPatientModal) closeModal(viewPatientModal);
   if (event.target === addPatientModal) closeModal(addPatientModal);
 };
 
-// === Boshlang‘ich yuklash ===
+// === Boshlang‘ich yuklash (YANGILANGAN) ===
 function initializePage() {
   renderDoctorInfo();
   loadPatients();
+
   if (addPatientBtn) addPatientBtn.addEventListener("click", () => openModal(addPatientModal));
   if (cancelAddPatient) cancelAddPatient.addEventListener("click", () => closeModal(addPatientModal));
-}
 
-// === Shifokor ma’lumotini headerga chiqarish ===
+  // --- YANGI HODISA TINGLOVCHILARI ---
+
+  // Status filteri
+  if (statusFilter) statusFilter.addEventListener("change", () => loadPatients(searchInput.value, statusFilter.value));
+
+  // Excelga eksport
+  if (exportExcelBtn) {
+    exportExcelBtn.addEventListener("click", () => exportToCSV(currentFilteredPatients));
+  }
+
+  if (patientsPerPageEl) {
+    patientsPerPageEl.addEventListener("change", (e) => {
+      patientsPerPage = Number(e.target.value);
+      currentPage = 1;
+      updateView();
+    });
+  }
+
+  // Paginatsiya boshqaruvi
+  if (prevPageBtn) prevPageBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      updateView();
+    }
+  });
+
+  if (nextPageBtn) nextPageBtn.addEventListener("click", () => {
+    const totalPages = Math.ceil(currentFilteredPatients.length / patientsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      updateView();
+    }
+  });
+}
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    loadPatients(searchInput.value, statusFilter.value);
+    updateView();
+  }
+});
 function renderDoctorInfo() {
   const doctor = JSON.parse(localStorage.getItem("doctor") || "null");
-  const doctorNameElement = document.getElementById("doctorName");
-  const doctorAvatarElement = document.getElementById("doctorAvatar");
 
   if (doctor && doctor.name) {
-    doctorNameElement.textContent = doctor.name;
-    doctorAvatarElement.textContent = doctor.name.charAt(0).toUpperCase();
-  } 
+    if (doctorNameEl) doctorNameEl.textContent = doctor.name;
+    if (profileAvatarEl) profileAvatarEl.textContent = doctor.name.charAt(0).toUpperCase();
+  } else {
+    if (doctorNameEl) doctorNameEl.textContent = "Profil";
+    if (profileAvatarEl) profileAvatarEl.innerHTML = '<i class="ri-user-line"></i>';
+  }
 }
 
 // Sahifani ishga tushirish
 document.addEventListener("DOMContentLoaded", initializePage);
-

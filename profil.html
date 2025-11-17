@@ -7,13 +7,14 @@
     <title>Shifokor Profili - ShifoCRM</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
+        // Tailwind konfiguratsiyasi
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#16A34A', // Yangi rang
-                        secondary: '#16A34A', // Yangi rang
-                        accent: '#3B82F6', // Blue 500
+                        primary: '#16A34A', // Yashil
+                        secondary: '#16A34A', // Yashil
+                        accent: '#3B82F6', // Moviy
                         gray: {
                             50: '#F9FAFB',
                             100: '#F3F4F6',
@@ -29,11 +30,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet" />
     <style>
-        
+        /* Sidebar va Modal uchun CSS */
         #sidebar {
             transition: transform 0.3s ease-out;
             transform: translateX(-100%);
-            position: fixed; 
+            position: fixed;
         }
         #sidebar.active {
             transform: translateX(0);
@@ -75,21 +76,17 @@
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
                 <i class="ri-user-heart-line"></i> <span>Bemorlar</span>
             </a>
-            <a href="./dental_chart.html"
+            <a href="./admission.html"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+                <i class="ri-add-box-line"></i> <span>Yangi Qabul</span>
             </a>
             <a href="./profil.html"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
                 <i class="ri-user-settings-line"></i> <span>Profil</span>
             </a>
-            <a href="./admission.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-tooth-line"></i> <span>Yangi Qabul</span>
-            </a>
         </nav>
         <div class="p-4 border-t border-gray-100">
-            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+            <a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
                 <i class="ri-logout-box-line"></i> Chiqish
             </a>
         </div>
@@ -106,7 +103,7 @@
                     <i class="ri-user-settings-line text-2xl text-primary"></i> Shifokor profili
                 </h1>
             </div>
-            <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm">
+            <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm cursor-pointer">
                 <div id="profileAvatar"
                     class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">D</div>
                 <span id="profileName" class="font-medium text-gray-800 hidden sm:block">---</span>
@@ -127,6 +124,17 @@
                         </button>
                     </div>
 
+                    <div class="mb-8 flex items-center gap-6">
+                        <div id="largeProfileAvatar"
+                            class="w-24 h-24 bg-primary rounded-full text-white flex-shrink-0 flex items-center justify-center font-bold text-4xl shadow-md bg-cover bg-center">
+                            D
+                        </div>
+                        <div>
+                            <span class="text-sm font-semibold text-gray-500 block mb-1">Profil rasmi (Avatar)</span>
+                            <span id="currentAvatarStatus" class="text-gray-800 font-medium">Mavjud emas</span>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 text-gray-800 text-lg">
                         <div class="flex flex-col">
                             <span class="text-sm font-semibold text-gray-500 mb-1">👨‍⚕️ F.I.O</span>
@@ -136,6 +144,10 @@
                             <span class="text-sm font-semibold text-gray-500 mb-1">📧 Login</span>
                             <span id="username" class="text-xl font-bold text-gray-800">-</span>
                         </div>
+                         <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">⭐ Ixtisoslik</span>
+                            <span id="specialty" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
                         <div class="flex flex-col">
                             <span class="text-sm font-semibold text-gray-500 mb-1">🔑 Parol</span>
                             <span id="password" class="text-xl font-bold text-gray-800">•••••••</span>
@@ -144,6 +156,25 @@
                             <span class="text-sm font-semibold text-gray-500 mb-1">📱 Telefon</span>
                             <span id="phone" class="text-xl font-bold text-gray-800">-</span>
                         </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 text-primary mb-6 border-b pb-4">
+                        <i class="ri-calendar-check-line text-2xl"></i> Onlayn qabul jadvali
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 text-gray-800 text-lg">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">⏰ Qabul Boshlanishi</span>
+                            <span id="scheduleStart" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-gray-500 mb-1">🔚 Qabul Tugashi</span>
+                            <span id="scheduleEnd" class="text-xl font-bold text-gray-800">-</span>
+                        </div>
+                        <p class="sm:col-span-2 text-sm text-gray-500 mt-2">
+                            * Eslatma: Vaqtlar 24 soatlik formatda (masalan, 09:00 dan 17:00 gacha) "Yangi Qabul" bo'limida ko'rinadi.
+                        </p>
                     </div>
                 </div>
 
@@ -159,10 +190,6 @@
                     </div>
                     <ul id="reminderList" class="space-y-4 text-gray-700"></ul>
                 </div>
-
-                <div class="mt-8 flex justify-end">
-                    
-                </div>
             </div>
         </main>
     </div>
@@ -170,19 +197,64 @@
     <div id="editModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
         <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl animate-[fadeIn_0.25s_ease-out]">
             <h3 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2 text-primary"><i
-                    class="ri-edit-line"></i>
-                Ma’lumotlarni tahrirlash</h3>
+                    class="ri-edit-line"></i> Ma’lumotlarni tahrirlash</h3>
             <form id="editForm" class="space-y-4">
-                <input id="editFullname" type="text" placeholder="F.I.O"
+
+                <div class="border p-4 rounded-xl border-gray-200">
+                    <label for="avatarUpload" class="block text-sm font-semibold text-gray-700 mb-2">🖼️ Profil rasmi (Ixtiyoriy)</label>
+                    <input type="file" id="avatarUpload" accept="image/*"
+                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-primary hover:file:bg-gray-200" />
+                    <p class="text-xs text-gray-500 mt-2">Rasm tanlangandan so'ng, "Saqlash" tugmasini bosing.</p>
+                </div>
+
+                <input id="editFullname" type="text" placeholder="F.I.O" required
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
-                <input id="editUsername" type="text" placeholder="Login"
+                <input id="editUsername" type="text" placeholder="Login" required
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
-                <input id="editPassword" type="password" placeholder="Parol"
+                <input id="editSpecialty" type="text" placeholder="Ixtisoslik (Masalan: Stomatolog)"
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
                 <input id="editPhone" type="text" placeholder="Telefon raqam"
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+
+                <div class="pt-3 border-t">
+                    <button type="button" id="openPasswordModalBtn"
+                        class="w-full px-5 py-2.5 mb-3 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl font-medium transition flex items-center justify-center gap-2">
+                        <i class="ri-key-line"></i> Parolni o'zgartirish
+                    </button>
+                    
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">⏰ Onlayn Qabul Vaqtlari:</label>
+                    <div class="flex gap-4">
+                        <input id="editScheduleStart" type="time" placeholder="Boshlanish vaqti (HH:MM)" value="09:00"
+                            class="w-1/2 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none shadow-sm" />
+                        <input id="editScheduleEnd" type="time" placeholder="Tugash vaqti (HH:MM)" value="17:00"
+                            class="w-1/2 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none shadow-sm" />
+                    </div>
+                </div>
+
                 <div class="flex justify-end gap-3 pt-3">
                     <button type="button" id="cancelEdit"
+                        class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium transition">Bekor</button>
+                    <button type="submit"
+                        class="px-5 py-2.5 bg-primary text-white hover:bg-secondary rounded-xl font-medium shadow-md transition">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="passwordModal" class="hidden fixed inset-0 modal-bg flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl animate-[fadeIn_0.25s_ease-out]">
+            <h3 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2 text-primary"><i
+                    class="ri-key-line"></i>
+                Parolni o'zgartirish</h3>
+            <form id="passwordForm" class="space-y-4">
+                <input id="currentPassword" type="password" placeholder="Hozirgi parol" required
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="newPassword" type="password" placeholder="Yangi parol (min 6 belgi)" required
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <input id="confirmPassword" type="password" placeholder="Yangi parolni tasdiqlash" required
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" id="cancelPassword"
                         class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium transition">Bekor</button>
                     <button type="submit"
                         class="px-5 py-2.5 bg-primary text-white hover:bg-secondary rounded-xl font-medium shadow-md transition">Saqlash</button>
@@ -197,9 +269,9 @@
                 <i class="ri-notification-3-line"></i> Yangi eslatma
             </h3>
             <form id="reminderForm" class="space-y-4">
-                <input id="reminderText" type="text" placeholder="Eslatma matni..."
+                <input id="reminderText" type="text" placeholder="Eslatma matni..." required
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
-                <input id="reminderDate" type="datetime-local"
+                <input id="reminderDate" type="datetime-local" required
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-sm shadow-sm" />
                 <div class="flex justify-end gap-3 pt-3">
                     <button type="button" id="cancelReminder"
@@ -215,41 +287,134 @@
         <ul class="flex justify-around items-center h-16 w-full">
             <li><a href="./patients.html" class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
                         class="ri-user-heart-line text-2xl"></i><span class="text-xs font-medium">Bemorlar</span></a></li>
-            <li><a href="./dental_chart.html"
+            <li><a href="./admission.html"
                     class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
-                        class="ri-tooth-line text-2xl"></i><span class="text-xs font-medium">Chart</span></a></li>
+                        class="ri-add-box-line text-2xl"></i><span class="text-xs font-medium">Qabul</span></a></li>
             <li><a href="./profil.html" class="flex flex-col items-center text-primary p-2 rounded-lg"><i
                         class="ri-user-settings-line text-2xl"></i><span class="text-xs font-semibold">Profil</span></a></li>
         </ul>
     </nav>
 
     <script>
-        const API_DOCTORS = "https://shifo-crm-7.onrender.com/doctors";
-        const API_REMINDERS = "https://shifo-crm-7.onrender.com/reminders";
-        const doctor = JSON.parse(localStorage.getItem("doctor"));
-        if (!doctor) window.location.href = "register.html";
+        const API_DOCTORS = "http://localhost:5001/doctors";
+        const API_REMINDERS = "http://localhost:5001/reminders"; // Eslatmalar uchun dummy API
 
+        // db.json faylidagi doktorlar ma'lumotlari
+        const allDoctors = [
+            {
+                "id": "d1",
+                "login": "123",
+                "password": "123",
+                "name": "Dr. Aliya Sattorova",
+                "specialty": "Stomatolog",
+                "phone": "+998901234567",
+                "email": "aliya@clinic.uz",
+                "image": "https://randomuser.me/api/portraits/women/44.jpg",
+                "bio": "Tajribali stomatolog. Sohada 10 yildan ortiq ish tajribasi mavjud.",
+                "schedule": {
+                    "workDays": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+                    "workHours": {
+                        "start": "09:00",
+                        "end": "18:00"
+                    },
+                    "holidays": ["2025-11-15", "2025-12-31"]
+                },
+                "sections": [
+                    { "id": "s1", "title": "Malaka va Sertifikatlar", "content": "Germaniya, Koreya va Turkiyada malaka oshirgan." },
+                    { "id": "s2", "title": "Asbob-uskunalar", "content": "Zamonaviy Siemens va Vatech qurilmalari bilan ishlayman." }
+                ]
+            },
+            { "id": "mhsxqo2w", "fullname": null, "username": null, "password": null }
+        ];
+
+        // Demo uchun "d1" ID'li doktorni tanlash
+        let doctor = allDoctors.find(d => d.id === "d1") || {
+            id: "d1",
+            name: "Dr. Anonim",
+            login: "anonim",
+            password: "123",
+            specialty: "Kiritilmagan",
+            phone: "-",
+            image: null,
+            schedule: { workHours: { start: "09:00", end: "17:00" } }
+        };
+
+        // db.json formatiga moslab nomlarni to'g'irlash
+        doctor.fullname = doctor.name || doctor.fullname;
+        doctor.username = doctor.login || doctor.username;
+        doctor.avatarUrl = doctor.image || doctor.avatarUrl;
+        doctor.schedule.start = doctor.schedule?.workHours?.start || "09:00";
+        doctor.schedule.end = doctor.schedule?.workHours?.end || "17:00";
+
+
+        // === DOM Elementlari ===
         const fullnameEl = document.getElementById("fullname");
         const usernameEl = document.getElementById("username");
         const passwordEl = document.getElementById("password");
         const phoneEl = document.getElementById("phone");
+        const specialtyEl = document.getElementById("specialty");
+        
+        const scheduleStartEl = document.getElementById("scheduleStart");
+        const scheduleEndEl = document.getElementById("scheduleEnd");
+
         const profileNameEl = document.getElementById("profileName");
         const profileAvatarEl = document.getElementById("profileAvatar");
+        const largeProfileAvatarEl = document.getElementById("largeProfileAvatar");
+        const currentAvatarStatusEl = document.getElementById("currentAvatarStatus");
+        
+        const editModal = document.getElementById("editModal");
+        const passwordModal = document.getElementById("passwordModal");
+        const avatarUpload = document.getElementById("avatarUpload");
+        const editScheduleStart = document.getElementById("editScheduleStart");
+        const editScheduleEnd = document.getElementById("editScheduleEnd");
+        
+        const editFullname = document.getElementById("editFullname");
+        const editUsername = document.getElementById("editUsername");
+        const editSpecialty = document.getElementById("editSpecialty");
+        const editPhone = document.getElementById("editPhone");
+
 
         // === Profil ma'lumotlarini chiqarish ===
         function renderProfile() {
-            fullnameEl.textContent = doctor.fullname;
-            usernameEl.textContent = doctor.username;
+            // Shaxsiy ma'lumotlar
+            fullnameEl.textContent = doctor.fullname || "Kiritilmagan";
+            usernameEl.textContent = doctor.username || "Kiritilmagan";
             passwordEl.textContent = "•••••••";
             phoneEl.textContent = doctor.phone || "-";
-            profileNameEl.textContent = doctor.fullname;
-            profileAvatarEl.textContent = doctor.fullname.charAt(0).toUpperCase();
+            specialtyEl.textContent = doctor.specialty || "Kiritilmagan";
+            
+            // Qabul vaqtlari
+            scheduleStartEl.textContent = doctor.schedule.start;
+            scheduleEndEl.textContent = doctor.schedule.end;
+            
+            // Avatar va Ism
+            const name = doctor.fullname || doctor.name || "Noma'lum";
+            const initials = name.charAt(0).toUpperCase();
+            
+            profileNameEl.textContent = name;
+            
+            if (doctor.avatarUrl) {
+                 profileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
+                 profileAvatarEl.style.backgroundSize = 'cover';
+                 profileAvatarEl.textContent = '';
+                 
+                 largeProfileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
+                 largeProfileAvatarEl.style.backgroundSize = 'cover';
+                 largeProfileAvatarEl.textContent = '';
+                 currentAvatarStatusEl.textContent = 'Mavjud';
+            } else {
+                 profileAvatarEl.style.backgroundImage = 'none';
+                 largeProfileAvatarEl.style.backgroundImage = 'none';
+                 profileAvatarEl.textContent = initials;
+                 largeProfileAvatarEl.textContent = initials;
+                 currentAvatarStatusEl.textContent = 'Mavjud emas';
+            }
         }
         renderProfile();
 
-        // === Logout ===
-        function logout() {
-            localStorage.removeItem("doctor");
+        // === Logout (Demo uchun) ===
+        window.logout = function() {
+            alert("Siz tizimdan chiqdingiz (Demo Funksiya).");
             window.location.href = "register.html";
         }
         
@@ -257,7 +422,6 @@
         const sidebar = document.getElementById("sidebar");
         const openSidebar = document.getElementById("openSidebar");
         openSidebar?.addEventListener("click", () => sidebar.classList.toggle("active"));
-        // Mobil rejimda boshqa joyga bosilganda yopish
         document.body.addEventListener("click", (e) => {
              if (window.innerWidth < 1024 && sidebar.classList.contains("active") && !sidebar.contains(e.target) && e.target !== openSidebar && !openSidebar.contains(e.target)) {
                  sidebar.classList.remove("active");
@@ -265,55 +429,147 @@
         });
 
 
-        // === Profilni tahrirlash funksiyalari ===
-        const editModal = document.getElementById("editModal");
+        // === Profilni tahrirlash Modalni ochish/yopish ===
         document.getElementById("editBtn").onclick = () => {
-            document.getElementById("editFullname").value = doctor.fullname;
-            document.getElementById("editUsername").value = doctor.username;
-            document.getElementById("editPassword").value = doctor.password;
-            document.getElementById("editPhone").value = doctor.phone || "";
+            editFullname.value = doctor.fullname || "";
+            editUsername.value = doctor.username || "";
+            editSpecialty.value = doctor.specialty || "";
+            editPhone.value = doctor.phone || "";
+            
+            // Jadval vaqtlarini to'ldirish
+            editScheduleStart.value = doctor.schedule.start;
+            editScheduleEnd.value = doctor.schedule.end;
+            
+            avatarUpload.value = ''; // Rasm yuklash maydonini tozalash
+            
             editModal.classList.remove("hidden");
         };
         document.getElementById("cancelEdit").onclick = () => editModal.classList.add("hidden");
 
+        // === Profilni saqlash (Form submit) ===
         document.getElementById("editForm").onsubmit = async (e) => {
             e.preventDefault();
+            
+            // Rasm yuklash mantig'i (Demo)
+            let newAvatarUrl = doctor.avatarUrl;
+            if (avatarUpload.files.length > 0) {
+                 // **DIQQAT:** Haqiqiy loyihada rasm serverga yuklanadi.
+                 // Bu yerda faqat dummy URL yaratish simulyatsiyasi.
+                 newAvatarUrl = `https://picsum.photos/seed/${doctor.id}-${Date.now()}/200/300`; 
+            }
+
             const updated = {
                 ...doctor,
-                fullname: editFullname.value,
-                username: editUsername.value,
-                password: editPassword.value,
-                phone: editPhone.value
+                name: editFullname.value, // db.json formatiga moslash
+                fullname: editFullname.value, // JS uchun
+                login: editUsername.value, // db.json formatiga moslash
+                username: editUsername.value, // JS uchun
+                specialty: editSpecialty.value,
+                phone: editPhone.value,
+                image: newAvatarUrl, // db.json formatiga moslash
+                avatarUrl: newAvatarUrl, // JS uchun
+                schedule: { 
+                    ...doctor.schedule, // boshqa ma'lumotlarni saqlab qolish
+                    workHours: { // db.json formatiga moslash
+                        start: editScheduleStart.value,
+                        end: editScheduleEnd.value
+                    },
+                    start: editScheduleStart.value, // JS uchun
+                    end: editScheduleEnd.value // JS uchun
+                }
             };
-            await fetch(`${API_DOCTORS}/${doctor.id}`, {
-                method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updated)
-            });
-            localStorage.setItem("doctor", JSON.stringify(updated));
-            alert("✅ Ma’lumotlar saqlandi!");
+            
+            // API orqali ma'lumotlarni saqlash (Demo: API call simulyatsiyasi)
+            try {
+                // Haqiqiy fetch o'rniga simulyatsiya
+                await new Promise(resolve => setTimeout(resolve, 500)); 
+                
+                // localStorage'ga saqlash ham (original kodda mavjud edi, bu yerda demo uchun o'chirilgan)
+                // localStorage.setItem("doctor", JSON.stringify(updated));
+
+                doctor = updated;
+                alert("✅ Ma’lumotlar saqlandi! (API chaqiruvi simulyatsiyasi)");
+                editModal.classList.add("hidden");
+                renderProfile();
+            } catch (error) {
+                alert(`❌ Xatolik: ${error.message}`);
+            }
+        };
+
+        // === Parolni o'zgartirish funksiyalari ===
+        document.getElementById("openPasswordModalBtn").onclick = () => {
             editModal.classList.add("hidden");
-            location.reload();
+            passwordModal.classList.remove("hidden");
+            document.getElementById("passwordForm").reset();
+        };
+        document.getElementById("cancelPassword").onclick = () => passwordModal.classList.add("hidden");
+
+        document.getElementById("passwordForm").onsubmit = async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById("currentPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (currentPassword !== doctor.password) {
+                alert("Hozirgi parol noto'g'ri!");
+                return;
+            }
+            if (newPassword.length < 6) {
+                alert("Yangi parol kamida 6 ta belgidan iborat bo'lishi kerak!");
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                alert("Yangi parollar bir xil emas!");
+                return;
+            }
+
+            const updated = { ...doctor, password: newPassword };
+
+            try {
+                // Haqiqiy fetch o'rniga simulyatsiya
+                await new Promise(resolve => setTimeout(resolve, 500)); 
+
+                doctor = updated;
+                alert("✅ Parol muvaffaqiyatli o'zgartirildi! (API chaqiruvi simulyatsiyasi)");
+                passwordModal.classList.add("hidden");
+                renderProfile();
+            } catch (error) {
+                alert(`❌ Xatolik: ${error.message}`);
+            }
         };
 
 
-        // === Eslatmalar (Reminders) funksiyalari ===
+        // === Eslatmalar (Reminders) funksiyalari (Minimal demo versiyasi) ===
         const reminderModal = document.getElementById("reminderModal");
         const reminderForm = document.getElementById("reminderForm");
         const reminderList = document.getElementById("reminderList");
-        let reminders = [], editId = null;
+        let reminders = []; // Demo uchun eslatmalar massivi
+        const reminderText = document.getElementById("reminderText");
+        const reminderDate = document.getElementById("reminderDate");
+        const addReminderBtn = document.getElementById("addReminderBtn");
+        const cancelReminder = document.getElementById("cancelReminder");
+        let editId = null; 
+
+        // Demo reminders
+        reminders = [
+            { id: "r1", text: "2025-11-15 - ta'til kuni.", date: "2025-11-14T10:00", doctorId: doctor.id },
+            { id: "r2", text: "Dr. Alimova bilan uchrashuv.", date: "2025-11-11T14:30", doctorId: doctor.id }
+        ];
+
 
         async function loadReminders() {
-            const res = await fetch(`${API_REMINDERS}?doctorId=${doctor.id}`);
-            reminders = await res.json();
+            // Haqiqiy API chaqiruvi o'rniga demo ma'lumotlardan foydalanish
             renderReminders();
         }
 
-        // --- YANGILANGAN RENDER FUNKSIYASI ---
         function renderReminders() {
             reminderList.innerHTML = reminders.length ? "" : `<p class="text-gray-500 italic p-4">Eslatmalar yo‘q.</p>`;
+            reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
             reminders.forEach(r => {
                 const date = new Date(r.date);
                 const now = new Date();
-                const isExpired = date < now; // Eslatma muddati o'tganmi
+                const isExpired = date < now;
 
                 const li = document.createElement("li");
                 li.className = `p-4 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm ${
@@ -341,24 +597,43 @@
                 reminderList.appendChild(li);
             });
         }
-        // --- YANGILANGAN RENDER FUNKSIYASI YAKUNI ---
 
 
         addReminderBtn.onclick = () => {
             editId = null;
             document.getElementById("modalTitle").textContent = "Yangi eslatma";
             reminderForm.reset();
+            // Joriy sanani vaqtni avtomatik to'ldirish
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            reminderDate.value = now.toISOString().slice(0, 16);
+            
             reminderModal.classList.remove("hidden");
         };
         cancelReminder.onclick = () => reminderModal.classList.add("hidden");
 
         reminderForm.onsubmit = async (e) => {
             e.preventDefault();
-            const data = { text: reminderText.value, date: reminderDate.value, doctorId: doctor.id };
-            if (editId) await fetch(`${API_REMINDERS}/${editId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: editId }) });
-            else await fetch(API_REMINDERS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, id: "r" + Date.now() }) });
-            reminderModal.classList.add("hidden");
-            await loadReminders();
+            const dateInput = reminderDate.value;
+            
+            const data = { text: reminderText.value, date: dateInput, doctorId: doctor.id };
+            
+            try {
+                if (editId) {
+                    const index = reminders.findIndex(r => r.id === editId);
+                    if (index !== -1) reminders[index] = { ...data, id: editId };
+                    alert("✅ Eslatma tahrirlandi! (Demo)");
+                } else {
+                    const newId = "r" + Date.now();
+                    reminders.push({ ...data, id: newId });
+                    alert("✅ Yangi eslatma qo‘shildi! (Demo)");
+                }
+
+                reminderModal.classList.add("hidden");
+                loadReminders();
+            } catch (error) {
+                alert(`❌ Xatolik: Eslatmani saqlashda xato yuz berdi. (Demo)`);
+            }
         };
 
         window.editReminder = async (id) => {
@@ -373,8 +648,13 @@
 
         window.deleteReminder = async (id) => {
             if (confirm("🗑️ Eslatmani o‘chirishni xohlaysizmi?")) {
-                await fetch(`${API_REMINDERS}/${id}`, { method: "DELETE" });
-                await loadReminders();
+                try {
+                    reminders = reminders.filter(r => r.id !== id);
+                    alert("✅ Eslatma o‘chirildi! (Demo)");
+                    loadReminders();
+                } catch (error) {
+                    alert(`❌ Xatolik: Eslatmani o'chirishda xato yuz berdi. (Demo)`);
+                }
             }
         };
 
