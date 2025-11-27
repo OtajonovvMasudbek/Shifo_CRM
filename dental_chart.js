@@ -1,6 +1,6 @@
-const API_PATIENTS = "http://localhost:5001/patients";
-const API_CHARTS = "http://localhost:5001/dentalCharts";
-const API_SERVICES = "http://localhost:5001/services_list"; // YANGI: Xizmatlar ro'yxati uchun API
+const API_PATIENTS = "https://shifo-crm-8.onrender.com/patients";
+const API_CHARTS = "https://shifo-crm-8.onrender.com/dentalCharts";
+const API_SERVICES = "https://shifo-crm-8.onrender.com/services_list"; // YANGI: Xizmatlar ro'yxati uchun API
 
 // Hardcoded Service Data (UZS - O'zbekiston So'mi) -> Endi dinamik
 let DENTAL_SERVICES = []; // Dinamik ma'lumotlarni saqlash uchun o'zgaruvchi
