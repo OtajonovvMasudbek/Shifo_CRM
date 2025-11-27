@@ -36,58 +36,84 @@
             transform: translateX(-100%);
             position: fixed;
         }
+
         #sidebar.active {
             transform: translateX(0);
         }
+
         @media (min-width: 1024px) {
             #sidebar {
                 transform: translateX(0);
                 position: relative;
             }
         }
+
         .modal-bg {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
-        .desktop-sidebar { display: none; }
-        .mobile-bottom-nav { display: flex; }
+
+        .desktop-sidebar {
+            display: none;
+        }
+
+        .mobile-bottom-nav {
+            display: flex;
+        }
+
         @media (min-width: 1024px) {
-            .desktop-sidebar { display: flex; }
-            .mobile-bottom-nav { display: none; }
+            .desktop-sidebar {
+                display: flex;
+            }
+
+            .mobile-bottom-nav {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body class="bg-gray-50 flex min-h-screen">
 
-    <aside id="sidebar" class="desktop-sidebar w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
+    <aside id="sidebar" class="w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
         <div class="p-6 border-b border-gray-100 flex items-center gap-3">
             <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
                 <i class="ri-hospital-line text-xl"></i>
             </div>
             <div>
-                <h1 class="font-bold text-gray-800 text-[22px]">ShifoCRM</h1>
+                <h1 class="font-bold text-gray-800  font-sans text-[22px]">ShifoCRM</h1>
                 <span
                     class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
             </div>
         </div>
+
         <nav class="flex-1 p-4 space-y-2">
             <a href="./patients.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-user-heart-line"></i> <span>Bemorlar</span>
+                class="flex items-center  gap-3 px-4 py-3 rounded-xl text-sm font-medium bg-primary text-white  transition">
+                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+            </a>
+            <a href="./dental_chart.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
             </a>
             <a href="./admission.html"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-add-box-line"></i> <span>Yangi Qabul</span>
+                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
             </a>
-            <a href="./profil.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
-                <i class="ri-user-settings-line"></i> <span>Profil</span>
+            <a href="./calendar.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-calendar-line"></i><span>Kalendar</span>
+            </a>
+
+            <a href="./statistika.html"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                <i class="ri-bar-chart-line"></i><span>Statistika</span>
             </a>
         </nav>
+
         <div class="p-4 border-t border-gray-100">
-            <a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
-                <i class="ri-logout-box-line"></i> Chiqish
+            <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
             </a>
         </div>
     </aside>
@@ -103,9 +129,11 @@
                     <i class="ri-user-settings-line text-2xl text-primary"></i> Shifokor profili
                 </h1>
             </div>
-            <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm cursor-pointer">
+            <div
+                class="flex items-center gap-2 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl shadow-sm cursor-pointer">
                 <div id="profileAvatar"
-                    class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">D</div>
+                    class="w-9 h-9 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                    D</div>
                 <span id="profileName" class="font-medium text-gray-800 hidden sm:block">---</span>
             </div>
         </header>
@@ -144,7 +172,7 @@
                             <span class="text-sm font-semibold text-gray-500 mb-1">📧 Login</span>
                             <span id="username" class="text-xl font-bold text-gray-800">-</span>
                         </div>
-                         <div class="flex flex-col">
+                        <div class="flex flex-col">
                             <span class="text-sm font-semibold text-gray-500 mb-1">⭐ Ixtisoslik</span>
                             <span id="specialty" class="text-xl font-bold text-gray-800">-</span>
                         </div>
@@ -160,7 +188,8 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
-                    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 text-primary mb-6 border-b pb-4">
+                    <h2
+                        class="text-2xl font-bold text-gray-800 flex items-center gap-2 text-primary mb-6 border-b pb-4">
                         <i class="ri-calendar-check-line text-2xl"></i> Onlayn qabul jadvali
                     </h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 text-gray-800 text-lg">
@@ -173,7 +202,8 @@
                             <span id="scheduleEnd" class="text-xl font-bold text-gray-800">-</span>
                         </div>
                         <p class="sm:col-span-2 text-sm text-gray-500 mt-2">
-                            * Eslatma: Vaqtlar 24 soatlik formatda (masalan, 09:00 dan 17:00 gacha) "Yangi Qabul" bo'limida ko'rinadi.
+                            * Eslatma: Vaqtlar 24 soatlik formatda (masalan, 09:00 dan 17:00 gacha) "Yangi Qabul"
+                            bo'limida ko'rinadi.
                         </p>
                     </div>
                 </div>
@@ -201,7 +231,8 @@
             <form id="editForm" class="space-y-4">
 
                 <div class="border p-4 rounded-xl border-gray-200">
-                    <label for="avatarUpload" class="block text-sm font-semibold text-gray-700 mb-2">🖼️ Profil rasmi (Ixtiyoriy)</label>
+                    <label for="avatarUpload" class="block text-sm font-semibold text-gray-700 mb-2">🖼️ Profil rasmi
+                        (Ixtiyoriy)</label>
                     <input type="file" id="avatarUpload" accept="image/*"
                         class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-primary hover:file:bg-gray-200" />
                     <p class="text-xs text-gray-500 mt-2">Rasm tanlangandan so'ng, "Saqlash" tugmasini bosing.</p>
@@ -221,7 +252,7 @@
                         class="w-full px-5 py-2.5 mb-3 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl font-medium transition flex items-center justify-center gap-2">
                         <i class="ri-key-line"></i> Parolni o'zgartirish
                     </button>
-                    
+
                     <label class="block text-sm font-semibold text-gray-700 mb-3">⏰ Onlayn Qabul Vaqtlari:</label>
                     <div class="flex gap-4">
                         <input id="editScheduleStart" type="time" placeholder="Boshlanish vaqti (HH:MM)" value="09:00"
@@ -285,13 +316,16 @@
 
     <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100">
         <ul class="flex justify-around items-center h-16 w-full">
-            <li><a href="./patients.html" class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
-                        class="ri-user-heart-line text-2xl"></i><span class="text-xs font-medium">Bemorlar</span></a></li>
+            <li><a href="./patients.html"
+                    class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
+                        class="ri-user-heart-line text-2xl"></i><span class="text-xs font-medium">Bemorlar</span></a>
+            </li>
             <li><a href="./admission.html"
                     class="flex flex-col items-center text-gray-500 hover:text-primary transition p-2 rounded-lg"><i
                         class="ri-add-box-line text-2xl"></i><span class="text-xs font-medium">Qabul</span></a></li>
             <li><a href="./profil.html" class="flex flex-col items-center text-primary p-2 rounded-lg"><i
-                        class="ri-user-settings-line text-2xl"></i><span class="text-xs font-semibold">Profil</span></a></li>
+                        class="ri-user-settings-line text-2xl"></i><span class="text-xs font-semibold">Profil</span></a>
+            </li>
         </ul>
     </nav>
 
@@ -353,7 +387,7 @@
         const passwordEl = document.getElementById("password");
         const phoneEl = document.getElementById("phone");
         const specialtyEl = document.getElementById("specialty");
-        
+
         const scheduleStartEl = document.getElementById("scheduleStart");
         const scheduleEndEl = document.getElementById("scheduleEnd");
 
@@ -361,13 +395,13 @@
         const profileAvatarEl = document.getElementById("profileAvatar");
         const largeProfileAvatarEl = document.getElementById("largeProfileAvatar");
         const currentAvatarStatusEl = document.getElementById("currentAvatarStatus");
-        
+
         const editModal = document.getElementById("editModal");
         const passwordModal = document.getElementById("passwordModal");
         const avatarUpload = document.getElementById("avatarUpload");
         const editScheduleStart = document.getElementById("editScheduleStart");
         const editScheduleEnd = document.getElementById("editScheduleEnd");
-        
+
         const editFullname = document.getElementById("editFullname");
         const editUsername = document.getElementById("editUsername");
         const editSpecialty = document.getElementById("editSpecialty");
@@ -382,50 +416,50 @@
             passwordEl.textContent = "•••••••";
             phoneEl.textContent = doctor.phone || "-";
             specialtyEl.textContent = doctor.specialty || "Kiritilmagan";
-            
+
             // Qabul vaqtlari
             scheduleStartEl.textContent = doctor.schedule.start;
             scheduleEndEl.textContent = doctor.schedule.end;
-            
+
             // Avatar va Ism
             const name = doctor.fullname || doctor.name || "Noma'lum";
             const initials = name.charAt(0).toUpperCase();
-            
+
             profileNameEl.textContent = name;
-            
+
             if (doctor.avatarUrl) {
-                 profileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
-                 profileAvatarEl.style.backgroundSize = 'cover';
-                 profileAvatarEl.textContent = '';
-                 
-                 largeProfileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
-                 largeProfileAvatarEl.style.backgroundSize = 'cover';
-                 largeProfileAvatarEl.textContent = '';
-                 currentAvatarStatusEl.textContent = 'Mavjud';
+                profileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
+                profileAvatarEl.style.backgroundSize = 'cover';
+                profileAvatarEl.textContent = '';
+
+                largeProfileAvatarEl.style.backgroundImage = `url(${doctor.avatarUrl})`;
+                largeProfileAvatarEl.style.backgroundSize = 'cover';
+                largeProfileAvatarEl.textContent = '';
+                currentAvatarStatusEl.textContent = 'Mavjud';
             } else {
-                 profileAvatarEl.style.backgroundImage = 'none';
-                 largeProfileAvatarEl.style.backgroundImage = 'none';
-                 profileAvatarEl.textContent = initials;
-                 largeProfileAvatarEl.textContent = initials;
-                 currentAvatarStatusEl.textContent = 'Mavjud emas';
+                profileAvatarEl.style.backgroundImage = 'none';
+                largeProfileAvatarEl.style.backgroundImage = 'none';
+                profileAvatarEl.textContent = initials;
+                largeProfileAvatarEl.textContent = initials;
+                currentAvatarStatusEl.textContent = 'Mavjud emas';
             }
         }
         renderProfile();
 
         // === Logout (Demo uchun) ===
-        window.logout = function() {
+        window.logout = function () {
             alert("Siz tizimdan chiqdingiz (Demo Funksiya).");
             window.location.href = "register.html";
         }
-        
+
         // === Sidebar funksiyalari ===
         const sidebar = document.getElementById("sidebar");
         const openSidebar = document.getElementById("openSidebar");
         openSidebar?.addEventListener("click", () => sidebar.classList.toggle("active"));
         document.body.addEventListener("click", (e) => {
-             if (window.innerWidth < 1024 && sidebar.classList.contains("active") && !sidebar.contains(e.target) && e.target !== openSidebar && !openSidebar.contains(e.target)) {
-                 sidebar.classList.remove("active");
-             }
+            if (window.innerWidth < 1024 && sidebar.classList.contains("active") && !sidebar.contains(e.target) && e.target !== openSidebar && !openSidebar.contains(e.target)) {
+                sidebar.classList.remove("active");
+            }
         });
 
 
@@ -435,13 +469,13 @@
             editUsername.value = doctor.username || "";
             editSpecialty.value = doctor.specialty || "";
             editPhone.value = doctor.phone || "";
-            
+
             // Jadval vaqtlarini to'ldirish
             editScheduleStart.value = doctor.schedule.start;
             editScheduleEnd.value = doctor.schedule.end;
-            
+
             avatarUpload.value = ''; // Rasm yuklash maydonini tozalash
-            
+
             editModal.classList.remove("hidden");
         };
         document.getElementById("cancelEdit").onclick = () => editModal.classList.add("hidden");
@@ -449,13 +483,13 @@
         // === Profilni saqlash (Form submit) ===
         document.getElementById("editForm").onsubmit = async (e) => {
             e.preventDefault();
-            
+
             // Rasm yuklash mantig'i (Demo)
             let newAvatarUrl = doctor.avatarUrl;
             if (avatarUpload.files.length > 0) {
-                 // **DIQQAT:** Haqiqiy loyihada rasm serverga yuklanadi.
-                 // Bu yerda faqat dummy URL yaratish simulyatsiyasi.
-                 newAvatarUrl = `https://picsum.photos/seed/${doctor.id}-${Date.now()}/200/300`; 
+                // **DIQQAT:** Haqiqiy loyihada rasm serverga yuklanadi.
+                // Bu yerda faqat dummy URL yaratish simulyatsiyasi.
+                newAvatarUrl = `https://picsum.photos/seed/${doctor.id}-${Date.now()}/200/300`;
             }
 
             const updated = {
@@ -468,7 +502,7 @@
                 phone: editPhone.value,
                 image: newAvatarUrl, // db.json formatiga moslash
                 avatarUrl: newAvatarUrl, // JS uchun
-                schedule: { 
+                schedule: {
                     ...doctor.schedule, // boshqa ma'lumotlarni saqlab qolish
                     workHours: { // db.json formatiga moslash
                         start: editScheduleStart.value,
@@ -478,12 +512,12 @@
                     end: editScheduleEnd.value // JS uchun
                 }
             };
-            
+
             // API orqali ma'lumotlarni saqlash (Demo: API call simulyatsiyasi)
             try {
                 // Haqiqiy fetch o'rniga simulyatsiya
-                await new Promise(resolve => setTimeout(resolve, 500)); 
-                
+                await new Promise(resolve => setTimeout(resolve, 500));
+
                 // localStorage'ga saqlash ham (original kodda mavjud edi, bu yerda demo uchun o'chirilgan)
                 // localStorage.setItem("doctor", JSON.stringify(updated));
 
@@ -527,7 +561,7 @@
 
             try {
                 // Haqiqiy fetch o'rniga simulyatsiya
-                await new Promise(resolve => setTimeout(resolve, 500)); 
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 doctor = updated;
                 alert("✅ Parol muvaffaqiyatli o'zgartirildi! (API chaqiruvi simulyatsiyasi)");
@@ -548,7 +582,7 @@
         const reminderDate = document.getElementById("reminderDate");
         const addReminderBtn = document.getElementById("addReminderBtn");
         const cancelReminder = document.getElementById("cancelReminder");
-        let editId = null; 
+        let editId = null;
 
         // Demo reminders
         reminders = [
@@ -565,16 +599,15 @@
         function renderReminders() {
             reminderList.innerHTML = reminders.length ? "" : `<p class="text-gray-500 italic p-4">Eslatmalar yo‘q.</p>`;
             reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
+
             reminders.forEach(r => {
                 const date = new Date(r.date);
                 const now = new Date();
                 const isExpired = date < now;
 
                 const li = document.createElement("li");
-                li.className = `p-4 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm ${
-                    isExpired ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200 hover:bg-gray-50'
-                } transition`;
+                li.className = `p-4 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm ${isExpired ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200 hover:bg-gray-50'
+                    } transition`;
 
                 li.innerHTML = `
                     <div class="mb-2 sm:mb-0">
@@ -607,7 +640,7 @@
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
             reminderDate.value = now.toISOString().slice(0, 16);
-            
+
             reminderModal.classList.remove("hidden");
         };
         cancelReminder.onclick = () => reminderModal.classList.add("hidden");
@@ -615,9 +648,9 @@
         reminderForm.onsubmit = async (e) => {
             e.preventDefault();
             const dateInput = reminderDate.value;
-            
+
             const data = { text: reminderText.value, date: dateInput, doctorId: doctor.id };
-            
+
             try {
                 if (editId) {
                     const index = reminders.findIndex(r => r.id === editId);

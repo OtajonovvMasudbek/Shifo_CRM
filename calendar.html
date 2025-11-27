@@ -154,66 +154,48 @@
 
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity lg:hidden"
         onclick="closeSidebar()"></div>
-    <aside id="sidebar"
-        class="w-64 bg-white shadow-2xl flex-col h-screen fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 z-50 lg:flex lg:relative lg:translate-x-0 lg:sticky top-0">
-        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 primary-bg rounded-xl flex items-center justify-center text-white shadow-md">
+        <aside id="sidebar" class="w-64 bg-white shadow-2xl flex flex-col h-screen fixed lg:relative z-40">
+            <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-md">
                     <i class="ri-hospital-line text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-gray-800 text-[22px]">ShifoCRM</h1>
+                    <h1 class="font-bold text-gray-800  font-sans text-[22px]">ShifoCRM</h1>
                     <span
                         class="text-xs bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full">DEMO</span>
                 </div>
             </div>
-            <button id="closeSidebar" class="p-2 rounded-full hover:bg-gray-100 transition lg:hidden">
-                <i class="ri-close-line text-2xl"></i>
-            </button>
-        </div>
-        <nav class="flex-1 p-4 space-y-2">
-
-            <a href="./patients.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
-            </a>
-
-            <a href="./dental_chart.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-tooth-line"></i> <span>Dental Chart</span>
-            </a>
-
-            <a href="./admission.html"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
-            </a>
-
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white shadow-md">
-                <i class="ri-calendar-line"></i><span>Kalendar</span>
-            </a>
-
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-notification-line"></i><span>Eslatmalar</span>
-            </a>
-
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-                <i class="ri-bar-chart-line"></i><span>Statistika</span>
-            </a>
-
-        </nav>
-
-        <div class="p-4 border-t border-gray-100">
-
-            <a href="./register.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
-                <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
-            </a>
-
-        </div>
-
-    </aside>
+    
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="./patients.html"
+                    class="flex items-center  gap-3 px-4 py-3 rounded-xl text-sm font-medium bg-primary text-white  transition">
+                    <i class="ri-user-heart-line"></i> <span>Bemorlar ro'yxati</span>
+                </a>
+                <a href="./dental_chart.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+                    <i class="ri-tooth-line"></i> <span>Dental Chart</span>
+                </a>
+                <a href="./admission.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                    <i class="ri-calendar-check-line"></i><span>Yangi qabul</span>
+                </a>
+                <a href="./calendar.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                    <i class="ri-calendar-line"></i><span>Kalendar</span>
+                </a>
+                
+                <a href="./statistika.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+                    <i class="ri-bar-chart-line"></i><span>Statistika</span>
+                </a>
+            </nav>
+    
+            <div class="p-4 border-t border-gray-100">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
+                    <i class="ri-logout-box-line"></i> Demo rejimdan chiqish
+                </a>
+            </div>
+        </aside>
     <div class="flex-1 min-w-0 p-4 md:p-8">
 
         <header class="lg:hidden flex justify-between items-center mb-6">
@@ -238,7 +220,7 @@
             </h1>
 
         </header>
-        <div class="bg-white shadow-xl rounded-xl p-4 lg:p-6">
+        <div class="bg-white shadow-xl rounded-xl p-4 lg:p-6 max-h-[510px]  overflow-y-auto">
 
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
 
@@ -411,7 +393,6 @@
                     const [doctorsRes, patientsRes, appointmentsRes] = await Promise.all([
                         fetch(`${BASE_URL}/doctors`),
                         fetch(`${BASE_URL}/patients`),
-                        fetch(`${BASE_URL}/appointments`)
                     ]);
 
                     if (!doctorsRes.ok || !patientsRes.ok || !appointmentsRes.ok) {
